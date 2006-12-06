@@ -40,7 +40,7 @@ public class GameBoardFrm extends JFrame {
 	public static final ImageIcon INSIDE_ORANGE = new ImageIcon("images/inside_orange.jpg");
 	public static final ImageIcon OUTSIDE_EMPTY = new ImageIcon("images/outside_empty.jpg");
 	public static final ImageIcon OUTSIDE_GREEN = new ImageIcon("images/outside_green.jpg");
-	public static final ImageIcon OUTSIDE_ORANGE = new ImageIcon("images/outside_orange.jpg");  //  @jve:decl-index=0:
+	public static final ImageIcon OUTSIDE_ORANGE = new ImageIcon("images/outside_orange.jpg");
 
 	private JPanel content = null;
 	private JMenuBar menu = null;
@@ -77,7 +77,7 @@ public class GameBoardFrm extends JFrame {
 	 * 
 	 */
 	private void initialize() {
-		this.setSize(new Dimension(334, 456));
+		this.setSize(new Dimension(334, 448));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setJMenuBar(getMenu());
@@ -357,7 +357,7 @@ public class GameBoardFrm extends JFrame {
 			MovePnl = new JPanel();
 			MovePnl.setLayout(new BoxLayout(getMovePnl(), BoxLayout.X_AXIS));
 			MovePnl.setBorder(BorderFactory.createTitledBorder(null, "Move", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", Font.PLAIN, 11), new Color(51, 94, 168)));
-			MovePnl.setBounds(new Rectangle(184, 328, 141, 73));
+			MovePnl.setBounds(new Rectangle(186, 328, 143, 73));
 			MovePnl.add(getResetBtn(), null);
 			MovePnl.add(getSubmitBtn(), null);
 		}
@@ -375,13 +375,13 @@ public class GameBoardFrm extends JFrame {
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.gridy = 0;
 			currTurnLbl = new JLabel();
-			currTurnLbl.setIcon(new ImageIcon("C:/Java/Workspace/Supercheckers/images/outside_green.jpg"));
+			currTurnLbl.setIcon(new ImageIcon("images/outside_green.jpg"));
 			turnPnl = new JPanel();
 			turnPnl.setLayout(new GridBagLayout());
-			turnPnl.setBounds(new Rectangle(4, 328, 73, 73));
+			turnPnl.setBounds(new Rectangle(0, 328, 73, 73));
 			turnPnl.setBorder(BorderFactory.createTitledBorder(null, "Turn", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", Font.PLAIN, 11), new Color(51, 94, 168)));
 			turnPnl.add(currTurnLbl, gridBagConstraints);
 		}
 		return turnPnl;
 	}
-}  //  @jve:decl-index=0:visual-constraint="-7,11"
+}  //  @jve:decl-index=0:visual-constraint="71,13"
