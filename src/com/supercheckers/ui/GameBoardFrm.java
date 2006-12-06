@@ -1,12 +1,19 @@
 package com.supercheckers.ui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -14,8 +21,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import javax.swing.border.EtchedBorder;
+import javax.swing.UIManager;
+import javax.swing.border.TitledBorder;
 
 /**
  * Supercheckers Game Board
@@ -28,6 +35,13 @@ import javax.swing.border.EtchedBorder;
 public class GameBoardFrm extends JFrame {
 
 	private static final long serialVersionUID = -4212234804742120343L;
+	public static final ImageIcon INSIDE_EMPTY = new ImageIcon("images/inside_empty.jpg");
+	public static final ImageIcon INSIDE_GREEN = new ImageIcon("images/inside_green.jpg");
+	public static final ImageIcon INSIDE_ORANGE = new ImageIcon("images/inside_orange.jpg");
+	public static final ImageIcon OUTSIDE_EMPTY = new ImageIcon("images/outside_empty.jpg");
+	public static final ImageIcon OUTSIDE_GREEN = new ImageIcon("images/outside_green.jpg");
+	public static final ImageIcon OUTSIDE_ORANGE = new ImageIcon("images/outside_orange.jpg");  //  @jve:decl-index=0:
+
 	private JPanel content = null;
 	private JMenuBar menu = null;
 	private JMenu gameMnu = null;
@@ -39,21 +53,22 @@ public class GameBoardFrm extends JFrame {
 	private JMenuItem exitMnuItem = null;
 	private JMenu helpMnu = null;
 	private JMenuItem aboutMnuItem = null;
-	private JPanel p1Pnl = null;
-	private JLabel p1ImgLbl = null;
-	private JLabel p1NameLbl = null;
-	private JLabel p1TypeLbl = null;
-	private JLabel titleLbl = null;
-	private JPanel p2Pnl = null;
-	private JLabel p2ImgLbl = null;
-	private JLabel p2NameLbl = null;
-	private JLabel p2TypeLbl = null;
+	private JPanel boardPnl = null;
+	private JButton[][] board = null;
+	private JButton submitBtn = null;
+	private JButton resetBtn = null;
+	private JPanel MovePnl = null;
+	private JPanel turnPnl = null;
+	private JLabel currTurnLbl = null;
 	/**
 	 * This method initializes 
 	 * 
 	 */
 	public GameBoardFrm() {
 		super();
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {}
 		initialize();
 	}
 
@@ -62,12 +77,13 @@ public class GameBoardFrm extends JFrame {
 	 * 
 	 */
 	private void initialize() {
-		this.setSize(new Dimension(590, 475));
+		this.setSize(new Dimension(334, 456));
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setJMenuBar(getMenu());
 		this.setContentPane(getContent());
 		this.setTitle("Supercheckers");
-
+		this.setLocationRelativeTo(null);
 	}
 
 	/**
@@ -77,16 +93,11 @@ public class GameBoardFrm extends JFrame {
 	 */
 	private JPanel getContent() {
 		if (content == null) {
-			titleLbl = new JLabel();
-			titleLbl.setBounds(new Rectangle(180, 4, 225, 49));
-			titleLbl.setHorizontalAlignment(SwingConstants.CENTER);
-			titleLbl.setFont(new Font("Tahoma", Font.BOLD, 24));
-			titleLbl.setText("Supercheckers");
 			content = new JPanel();
 			content.setLayout(null);
-			content.add(getP1Pnl(), null);
-			content.add(titleLbl, null);
-			content.add(getP2Pnl(), null);
+			content.add(getBoardPnl(), null);
+			content.add(getTurnPnl(), null);
+			content.add(getMovePnl(), null);
 		}
 		return content;
 	}
@@ -185,62 +196,6 @@ public class GameBoardFrm extends JFrame {
 	}
 
 	/**
-	 * This method initializes p1Pnl	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getP1Pnl() {
-		if (p1Pnl == null) {
-			p1TypeLbl = new JLabel();
-			p1TypeLbl.setText("Type: Human");
-			p1TypeLbl.setBounds(new Rectangle(52, 28, 117, 17));
-			p1NameLbl = new JLabel();
-			p1NameLbl.setFont(new Font("Tahoma", Font.BOLD, 14));
-			p1NameLbl.setBounds(new Rectangle(52, 4, 117, 21));
-			p1NameLbl.setText("Player 1");
-			p1ImgLbl = new JLabel();
-			p1ImgLbl.setIcon(new ImageIcon("images/outside_green.jpg"));
-			p1ImgLbl.setBounds(new Rectangle(4, 4, 41, 41));
-			p1Pnl = new JPanel();
-			p1Pnl.setLayout(null);
-			p1Pnl.setBounds(new Rectangle(4, 4, 173, 49));
-			p1Pnl.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-			p1Pnl.add(p1ImgLbl, null);
-			p1Pnl.add(p1NameLbl, null);
-			p1Pnl.add(p1TypeLbl, null);
-		}
-		return p1Pnl;
-	}
-
-	/**
-	 * This method initializes p2Pnl	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getP2Pnl() {
-		if (p2Pnl == null) {
-			p2TypeLbl = new JLabel();
-			p2TypeLbl.setBounds(new Rectangle(48, 28, 121, 17));
-			p2TypeLbl.setText("Type: Medium Computer");
-			p2NameLbl = new JLabel();
-			p2NameLbl.setBounds(new Rectangle(48, 4, 121, 21));
-			p2NameLbl.setFont(new Font("Tahoma", Font.BOLD, 14));
-			p2NameLbl.setText("Player 2");
-			p2ImgLbl = new JLabel();
-			p2ImgLbl.setBounds(new Rectangle(4, 4, 41, 41));
-			p2ImgLbl.setIcon(new ImageIcon("images/outside_orange.jpg"));
-			p2Pnl = new JPanel();
-			p2Pnl.setLayout(null);
-			p2Pnl.setBounds(new Rectangle(408, 4, 173, 49));
-			p2Pnl.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-			p2Pnl.add(p2ImgLbl, null);
-			p2Pnl.add(p2NameLbl, null);
-			p2Pnl.add(p2TypeLbl, null);
-		}
-		return p2Pnl;
-	}
-
-	/**
 	 * This method initializes easyMnuItem	
 	 * 	
 	 * @return javax.swing.JCheckBoxMenuItem	
@@ -293,4 +248,140 @@ public class GameBoardFrm extends JFrame {
 		return multiplayerMnuItem;
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="4,12"
+	/**
+	 * This method initializes boardPnl	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getBoardPnl() {
+		if (boardPnl == null) {
+			GridLayout gridLayout = new GridLayout();
+			gridLayout.setRows(8);
+			gridLayout.setColumns(8);
+			boardPnl = new JPanel();
+			boardPnl.setBounds(new Rectangle(0, 0, 328, 328));
+			boardPnl.setLayout(gridLayout);
+			populateBoardPnl();
+		}
+		return boardPnl;
+	}
+
+	private void populateBoardPnl() {
+		board = new JButton[8][8];
+		for (int row = 0; row <= 8 - 1; row++) {
+			for (int col = 0; col <= 8 - 1 ; col++) {
+				board[row][col] = new JButton();
+			}
+		}
+		for (int row = 0; row < 8; row++) {
+			for (int col = 0; col < 8; col++) {
+				if (row < 2 || row >= 6 || col < 2 || col >= 6) { // not center area
+					if ((row + col) % 2 == 0) {
+						board[row][col].setIcon(OUTSIDE_GREEN);
+					} else { // if ((row + col) % 2 == 1)
+						board[row][col].setIcon(OUTSIDE_ORANGE);
+					}
+				} else { // center area
+					board[row][col].setIcon(INSIDE_EMPTY);
+				}
+				board[row][col].setMargin(new Insets(0, 0, 0, 0));
+				board[row][col].setFocusPainted(false);
+				board[row][col].setActionCommand(row + "," + col);
+//				board[row][col].addActionListener(this);
+				boardPnl.add(board[row][col]);
+			}
+		}
+//		char type;
+//		for (int row = 0; row <= 8 - 1; row++) {
+//		for (int col = 0; col <= 8 - 1; col++) {
+////		type = manager.getTeam(row, col);
+//		if (row >= 2 && row <= 5 && col >= 2 && col <= 5) {
+//		if (type == ' ')
+//		board[row][col].setIcon(INSIDE_EMPTY);
+//		else if (type == 'O')
+//		board[row][col].setIcon(INSIDE_ORANGE);
+//		else  // if (type == 'X')
+//		board[row][col].setIcon(INSIDE_GREEN);
+//		} else {
+//		if (type == ' ')
+//		board[row][col].setIcon(OUTSIDE_EMPTY);
+//		else if (type == 'O')
+//		board[row][col].setIcon(OUTSIDE_ORANGE);
+//		else // if (type == 'X')
+//		board[row][col].setIcon(OUTSIDE_GREEN);
+//		}
+//		board[row][col].setMargin(new Insets(0, 0, 0, 0));
+//		board[row][col].setFocusPainted(false);
+//		board[row][col].setActionCommand(row + "," + col);
+////		board[row][col].addActionListener(this);
+//		boardPanel.add(board[row][col]);
+//		}
+//		}
+	}
+
+	/**
+	 * This method initializes submitBtn	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getSubmitBtn() {
+		if (submitBtn == null) {
+			submitBtn = new JButton();
+			submitBtn.setMnemonic(KeyEvent.VK_E);
+			submitBtn.setText("Submit");
+		}
+		return submitBtn;
+	}
+
+	/**
+	 * This method initializes resetBtn	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getResetBtn() {
+		if (resetBtn == null) {
+			resetBtn = new JButton();
+			resetBtn.setText("Reset");
+			resetBtn.setEnabled(false);
+		}
+		return resetBtn;
+	}
+
+	/**
+	 * This method initializes MovePnl	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getMovePnl() {
+		if (MovePnl == null) {
+			MovePnl = new JPanel();
+			MovePnl.setLayout(new BoxLayout(getMovePnl(), BoxLayout.X_AXIS));
+			MovePnl.setBorder(BorderFactory.createTitledBorder(null, "Move", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", Font.PLAIN, 11), new Color(51, 94, 168)));
+			MovePnl.setBounds(new Rectangle(184, 328, 141, 73));
+			MovePnl.add(getResetBtn(), null);
+			MovePnl.add(getSubmitBtn(), null);
+		}
+		return MovePnl;
+	}
+
+	/**
+	 * This method initializes turnPnl	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getTurnPnl() {
+		if (turnPnl == null) {
+			GridBagConstraints gridBagConstraints = new GridBagConstraints();
+			gridBagConstraints.gridx = 0;
+			gridBagConstraints.gridy = 0;
+			currTurnLbl = new JLabel();
+			currTurnLbl.setIcon(new ImageIcon("C:/Java/Workspace/Supercheckers/images/outside_green.jpg"));
+			turnPnl = new JPanel();
+			turnPnl.setLayout(new GridBagLayout());
+			turnPnl.setBounds(new Rectangle(4, 328, 73, 73));
+			turnPnl.setBorder(BorderFactory.createTitledBorder(null, "Turn", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", Font.PLAIN, 11), new Color(51, 94, 168)));
+			turnPnl.add(currTurnLbl, gridBagConstraints);
+		}
+		return turnPnl;
+	}
+}  //  @jve:decl-index=0:visual-constraint="-7,11"
