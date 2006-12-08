@@ -4,28 +4,38 @@ import com.supercheckers.constants.SCConstants;
 
 /**
  * Supercheckers Board Data Structure
- * 
+ *
  * @author Mike Goodspeed
  * @url http://www.mikegoodspeed.com/blog/projects/supercheckers/
- * @id $Id$
+ * @version $Id$
  * @headurl $HeadURL$
  */
-public class Board {
+public class Board implements Cloneable {
 	private Team board[][] = null;
 
 	public Board() {
 		this.board = new Team[8][8];
 		reset();
 	}
-	
+
 	public void insert(Team t, int row, int col) {
 		board[row][col] = t;
 	}
-	
+
 	public Team get(int row, int col) {
 		return board[row][col];
 	}
-	
+
+	public Board clone() {
+		Board b = new Board();
+		for (int row = 0; row < 8; row++) {
+			for (int col = 0; col < 8; col++) {
+				b.insert(get(row, col), row, col);
+			}
+		}
+		return b;
+	}
+
 	/**
 	 * Reset the board to its default state.
 	 */
@@ -45,4 +55,7 @@ public class Board {
 		}
 	}
 
+	public boolean validate(Move move, Team team) {
+		return true;
+	}
 }

@@ -2,14 +2,18 @@ package com.supercheckers.ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FocusTraversalPolicy;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -27,13 +31,14 @@ import javax.swing.border.TitledBorder;
 import com.supercheckers.Supercheckers;
 import com.supercheckers.constants.SCConstants;
 import com.supercheckers.datastructures.Team;
+import com.supercheckers.utils.GUIInput;
 
 /**
  * Supercheckers Game Board
  *
  * @author Mike Goodspeed
  * @url http://www.mikegoodspeed.com/blog/projects/supercheckers/
- * @id $Id$
+ * @version $Id$
  * @headurl $HeadURL$
  */
 public class GameBoardFrm extends JFrame {
@@ -59,15 +64,37 @@ public class GameBoardFrm extends JFrame {
 	private JPanel MovePnl = null;
 	private JPanel turnPnl = null;
 	private JLabel turnLbl = null;
-	
+	private GUIInput inputListener = new GUIInput();
+	private boolean listenForInput = false;
+
 	private MouseListener buttonMouseListener = new MouseListener() {
 		public void mouseEntered(MouseEvent e) {}
 		public void mouseExited(MouseEvent e) {}
 		public void mousePressed(MouseEvent e) {}
 		public void mouseReleased(MouseEvent e) {}
 		public void mouseClicked(MouseEvent e) {
-			String[] loc = ((JLabel) e.getSource()).getName().split(",");
-			System.out.println("clicked on: " + loc[0] + "," + loc[1]);
+			if (listenForInput) {
+				inputListener.addCoordinate(((JLabel) e.getSource()).getName());
+				if (inputListener.getCoordinates().size() >= 2) {
+					getSubmitBtn().setEnabled(true);
+				}
+				getResetBtn().setEnabled(true);
+			}
+		}
+	};
+	private ActionListener submitBtnActionListener = new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			inputListener.setReady();
+			getSubmitBtn().setEnabled(false);
+			getResetBtn().setEnabled(false);
+		}
+	};
+	private ActionListener resetBtnActionListener = new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			inputListener.clearCoordinates();
+			getSubmitBtn().setEnabled(false);
+			getResetBtn().setEnabled(false);
+			getBoardPnl().requestFocus();
 		}
 	};
 
@@ -288,6 +315,8 @@ public class GameBoardFrm extends JFrame {
 			submitBtn = new JButton();
 			submitBtn.setMnemonic(KeyEvent.VK_E);
 			submitBtn.setText("Submit");
+			submitBtn.setEnabled(false);
+			submitBtn.addActionListener(submitBtnActionListener);
 		}
 		return submitBtn;
 	}
@@ -302,6 +331,7 @@ public class GameBoardFrm extends JFrame {
 			resetBtn = new JButton();
 			resetBtn.setText("Reset");
 			resetBtn.setEnabled(false);
+			resetBtn.addActionListener(resetBtnActionListener);
 		}
 		return resetBtn;
 	}
@@ -317,8 +347,8 @@ public class GameBoardFrm extends JFrame {
 			MovePnl.setLayout(new BoxLayout(getMovePnl(), BoxLayout.X_AXIS));
 			MovePnl.setBorder(BorderFactory.createTitledBorder(null, "Move", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", Font.PLAIN, 11), new Color(51, 94, 168)));
 			MovePnl.setBounds(new Rectangle(192, 336, 143, 73));
-			MovePnl.add(getResetBtn(), null);
 			MovePnl.add(getSubmitBtn(), null);
+			MovePnl.add(getResetBtn(), null);
 		}
 		return MovePnl;
 	}
@@ -381,12 +411,28 @@ public class GameBoardFrm extends JFrame {
 			}
 		}
 	}
-	
+
 	public void setTurn(Team t) {
 		if (SCConstants.TEAM1.equals(t)) {
 			turnLbl.setIcon(SCConstants.OUTSIDE_TEAM1);
 		} else {
 			turnLbl.setIcon(SCConstants.OUTSIDE_TEAM2);
 		}
+	}
+
+	public void waitForInput() {
+		listenForInput = true;
+		inputListener.start();
+		try {
+			inputListener.join();
+		} catch (Exception e) {}
+		listenForInput = false;
+		getSubmitBtn().setEnabled(false);
+		getResetBtn().setEnabled(false);
+		getBoardPnl().requestFocus();
+	}
+	
+	public List<String> getCoordinates() {
+		return inputListener.getCoordinates();
 	}
 }  //  @jve:decl-index=0:visual-constraint="71,13"

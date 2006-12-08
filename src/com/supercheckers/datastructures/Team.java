@@ -2,11 +2,11 @@ package com.supercheckers.datastructures;
 
 /**
  * A move performed during a turn.
- * 
+ *
  * @author Mike Goodspeed
- * @see http://www.mikegoodspeed.com/supercheckers/
- * @headurl $HeadURL$
+ * @url http://www.mikegoodspeed.com/blog/projects/supercheckers/
  * @version $Id$
+ * @headurl $HeadURL$
  */
 public class Team {
 	private char team;

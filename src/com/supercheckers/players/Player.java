@@ -2,48 +2,48 @@ package com.supercheckers.players;
 
 import com.supercheckers.Supercheckers;
 import com.supercheckers.datastructures.Move;
+import com.supercheckers.datastructures.Team;
 
 /**
  * Abstract Player Class, to be used as the superclass for actual players.
  *
  * @author Mike Goodspeed
  * @url http://www.mikegoodspeed.com/blog/projects/supercheckers/
- * @id $Id$
+ * @version $Id$
  * @headurl $HeadURL$
  */
 public abstract class Player {
-	private String name;
-	private char team;
+
+	private Supercheckers manager = null;
+	private Team team = null;
 
 	/**
 	 * @param name - Name of the player
 	 * @param team - Team representation
 	 */
-	public Player(String name, char team) {
-		this.name = new String(name);
+	public Player(Supercheckers manager, Team team) {
+		this.manager = manager;
 		this.team = team;
 	}
 
 	/**
-	 * @return the name
+	 * @return the manager
 	 */
-	public String getName() {
-		return name;
+	public Supercheckers getManager() {
+		return manager;
 	}
 
 	/**
 	 * @return the team
 	 */
-	public char getTeam() {
+	public Team getTeam() {
 		return team;
 	}
 
 	/**
 	 * Abstract method to be created by the subclass.
-	 *   
-	 * @param manager - Supercheckers manager
-	 * @param turnNumber - 0-based turn number
-	 * @return Move - the selected move
+	 * 
+	 * @return the selected Move
 	 */
-	public abstract Move playMove(Supercheckers manager, int turnNumber);
+	public abstract Move getMove();
 }
