@@ -72,14 +72,21 @@ public class GameBoardFrm extends JFrame {
 	private MouseListener buttonMouseListener = new MouseListener() {
 		public void mouseEntered(MouseEvent e) {
 			JLabel source = ((JLabel) e.getSource());
-			if (SCConstants.OUTSIDE_TEAM1.equals(turnLbl.getIcon())) {
-				if (SCConstants.OUTSIDE_TEAM1.equals(source.getIcon()) ||
-						SCConstants.INSIDE_TEAM1.equals(source.getIcon())) {
-					setCursor(new Cursor(Cursor.HAND_CURSOR));
+			if (getCoordinates().size() == 0) {
+				if (SCConstants.OUTSIDE_TEAM1.equals(turnLbl.getIcon())) {
+					if (SCConstants.OUTSIDE_TEAM1.equals(source.getIcon()) ||
+							SCConstants.INSIDE_TEAM1.equals(source.getIcon())) {
+						setCursor(new Cursor(Cursor.HAND_CURSOR));
+					}
+				} else {
+					if (SCConstants.OUTSIDE_TEAM2.equals(source.getIcon()) ||
+							SCConstants.INSIDE_TEAM2.equals(source.getIcon())) {
+						setCursor(new Cursor(Cursor.HAND_CURSOR));
+					}
 				}
 			} else {
-				if (SCConstants.OUTSIDE_TEAM2.equals(source.getIcon()) ||
-						SCConstants.INSIDE_TEAM2.equals(source.getIcon())) {
+				if (SCConstants.OUTSIDE_EMPTY.equals(source.getIcon()) ||
+						SCConstants.INSIDE_EMPTY.equals(source.getIcon())) {
 					setCursor(new Cursor(Cursor.HAND_CURSOR));
 				}
 			}
@@ -117,6 +124,7 @@ public class GameBoardFrm extends JFrame {
 						}
 					}
 				}
+				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 				inputListener.addCoordinate(name);
 				if (inputListener.getCoordinates().size() >= 2) {
 					getSubmitBtn().setEnabled(true);

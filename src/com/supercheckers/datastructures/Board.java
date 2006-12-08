@@ -87,4 +87,8 @@ public class Board implements Cloneable {
 		}
 		return sb.toString();
 	}
+	
+	public boolean isNewGame() {
+		return equals(new Board());
+	}
 }
