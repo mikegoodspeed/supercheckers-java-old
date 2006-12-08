@@ -1,5 +1,7 @@
 package com.supercheckers.datastructures;
 
+import java.util.Arrays;
+
 import com.supercheckers.constants.SCConstants;
 
 /**
@@ -42,7 +44,7 @@ public class Board implements Cloneable {
 	public void reset() {
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
-				if (row < 2 || row >= 6 || col < 2 || col >= 6) { // not center area
+				if (!Board.isInCenter(row, col)) { // not center area
 					if ((row + col) % 2 == 0) {
 						insert(SCConstants.TEAM1, row, col);
 					} else { // if ((row + col) % 2 == 1)
@@ -54,8 +56,35 @@ public class Board implements Cloneable {
 			}
 		}
 	}
+	
+	public static boolean isInCenter(int row, int col) {
+		return row >= 2 && row < 6 && col >= 2 && col < 6;
+	}
 
 	public boolean validate(Move move, Team team) {
 		return true;
+	}
+
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		final Board other = (Board) obj;
+		if (!Arrays.equals(board, other.board))
+			return false;
+		return true;
+	}
+	
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		for (int row = 0; row < 8; row++) {
+			for (int col = 0; col < 8; col++) {
+				sb.append(get(row, col).getTeam());
+			}
+		}
+		return sb.toString();
 	}
 }

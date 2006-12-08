@@ -1,13 +1,9 @@
 package com.supercheckers.ui;
 
-import java.awt.Color;
+import java.awt.BorderLayout;
+import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.FocusTraversalPolicy;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -16,20 +12,19 @@ import java.awt.event.MouseListener;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.UIManager;
-import javax.swing.border.TitledBorder;
 
 import com.supercheckers.Supercheckers;
 import com.supercheckers.constants.SCConstants;
+import com.supercheckers.datastructures.Board;
 import com.supercheckers.datastructures.Team;
 import com.supercheckers.utils.GUIInput;
 
@@ -50,14 +45,11 @@ public class GameBoardFrm extends JFrame {
 	private JMenuBar menu = null;
 	private JMenu gameMnu = null;
 	private JMenuItem newMnuItem = null;
-	private JCheckBoxMenuItem easyMnuItem = null;
-	private JCheckBoxMenuItem mediumMnuItem = null;
-	private JCheckBoxMenuItem hardMnuItem = null;
-	private JCheckBoxMenuItem multiplayerMnuItem = null;
 	private JMenuItem exitMnuItem = null;
 	private JMenu helpMnu = null;
 	private JMenuItem aboutMnuItem = null;
 	private JPanel boardPnl = null;
+	private JPanel uiPanel = null;
 	private JLabel[][] buttons = null;
 	private JButton submitBtn = null;
 	private JButton resetBtn = null;
@@ -67,14 +59,65 @@ public class GameBoardFrm extends JFrame {
 	private GUIInput inputListener = new GUIInput();
 	private boolean listenForInput = false;
 
+	private ActionListener newMnuItemActionListener = new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("show new game dialog");
+		}
+	};
+	private ActionListener exitMnuItemActionListener = new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			System.exit(0);
+		}
+	};
 	private MouseListener buttonMouseListener = new MouseListener() {
-		public void mouseEntered(MouseEvent e) {}
-		public void mouseExited(MouseEvent e) {}
+		public void mouseEntered(MouseEvent e) {
+			JLabel source = ((JLabel) e.getSource());
+			if (SCConstants.OUTSIDE_TEAM1.equals(turnLbl.getIcon())) {
+				if (SCConstants.OUTSIDE_TEAM1.equals(source.getIcon()) ||
+						SCConstants.INSIDE_TEAM1.equals(source.getIcon())) {
+					setCursor(new Cursor(Cursor.HAND_CURSOR));
+				}
+			} else {
+				if (SCConstants.OUTSIDE_TEAM2.equals(source.getIcon()) ||
+						SCConstants.INSIDE_TEAM2.equals(source.getIcon())) {
+					setCursor(new Cursor(Cursor.HAND_CURSOR));
+				}
+			}
+		}
+		public void mouseExited(MouseEvent e) {
+			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}
 		public void mousePressed(MouseEvent e) {}
 		public void mouseReleased(MouseEvent e) {}
 		public void mouseClicked(MouseEvent e) {
 			if (listenForInput) {
-				inputListener.addCoordinate(((JLabel) e.getSource()).getName());
+				JLabel source = ((JLabel) e.getSource());
+				String name = source.getName();
+				String[] loc = name.split(",");
+				int row = new Integer(loc[0]).intValue();
+				int col = new Integer(loc[1]).intValue();
+				if (inputListener.getCoordinates().size() == 0) {
+					if (Board.isInCenter(row, col)) {
+						source.setIcon(SCConstants.INSIDE_EMPTY);
+					} else {
+						source.setIcon(SCConstants.OUTSIDE_EMPTY);
+					}
+				} else {
+					if (SCConstants.OUTSIDE_TEAM1.equals(turnLbl.getIcon())) {
+						if (Board.isInCenter(row, col)) {
+							source.setIcon(SCConstants.INSIDE_TEAM1);
+						} else {
+							source.setIcon(SCConstants.OUTSIDE_TEAM1);
+						}
+					} else {
+						if (Board.isInCenter(row, col)) {
+							source.setIcon(SCConstants.INSIDE_TEAM2);
+						} else {
+							source.setIcon(SCConstants.OUTSIDE_TEAM2);
+						}
+					}
+				}
+				inputListener.addCoordinate(name);
 				if (inputListener.getCoordinates().size() >= 2) {
 					getSubmitBtn().setEnabled(true);
 				}
@@ -92,6 +135,7 @@ public class GameBoardFrm extends JFrame {
 	private ActionListener resetBtnActionListener = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			inputListener.clearCoordinates();
+			updateBoardPnl();
 			getSubmitBtn().setEnabled(false);
 			getResetBtn().setEnabled(false);
 			getBoardPnl().requestFocus();
@@ -109,6 +153,7 @@ public class GameBoardFrm extends JFrame {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {}
 		initialize();
+		pack();
 	}
 
 	/**
@@ -116,7 +161,7 @@ public class GameBoardFrm extends JFrame {
 	 *
 	 */
 	private void initialize() {
-		this.setSize(new Dimension(342, 458));
+		this.setSize(new Dimension(400, 400));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setJMenuBar(getMenu());
@@ -133,10 +178,9 @@ public class GameBoardFrm extends JFrame {
 	private JPanel getContent() {
 		if (content == null) {
 			content = new JPanel();
-			content.setLayout(null);
-			content.add(getBoardPnl(), null);
-			content.add(getTurnPnl(), null);
-			content.add(getMovePnl(), null);
+			content.setLayout(new BorderLayout());
+			content.add(getBoardPnl(), BorderLayout.WEST);
+			content.add(getUiPanel(), BorderLayout.EAST);
 		}
 		return content;
 	}
@@ -166,11 +210,6 @@ public class GameBoardFrm extends JFrame {
 			gameMnu.setText("Game");
 			gameMnu.setMnemonic(KeyEvent.VK_G);
 			gameMnu.add(getNewMnuItem());
-			gameMnu.addSeparator();
-			gameMnu.add(getEasyMnuItem());
-			gameMnu.add(getMediumMnuItem());
-			gameMnu.add(getHardMnuItem());
-			gameMnu.add(getMultiplayerMnuItem());
 			gameMnu.addSeparator();
 			gameMnu.add(getExitMnuItem());
 		}
@@ -202,6 +241,7 @@ public class GameBoardFrm extends JFrame {
 			exitMnuItem = new JMenuItem();
 			exitMnuItem.setText("Exit");
 			exitMnuItem.setMnemonic(KeyEvent.VK_X);
+			exitMnuItem.addActionListener(exitMnuItemActionListener);
 		}
 		return exitMnuItem;
 	}
@@ -214,8 +254,10 @@ public class GameBoardFrm extends JFrame {
 	private JMenuItem getNewMnuItem() {
 		if (newMnuItem == null) {
 			newMnuItem = new JMenuItem();
-			newMnuItem.setText("New");
+			newMnuItem.setText("New...");
 			newMnuItem.setMnemonic(KeyEvent.VK_N);
+			newMnuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
+			newMnuItem.addActionListener(newMnuItemActionListener);
 		}
 		return newMnuItem;
 	}
@@ -235,59 +277,6 @@ public class GameBoardFrm extends JFrame {
 	}
 
 	/**
-	 * This method initializes easyMnuItem
-	 *
-	 * @return javax.swing.JCheckBoxMenuItem
-	 */
-	private JCheckBoxMenuItem getEasyMnuItem() {
-		if (easyMnuItem == null) {
-			easyMnuItem = new JCheckBoxMenuItem();
-			easyMnuItem.setText("Easy");
-		}
-		return easyMnuItem;
-	}
-
-	/**
-	 * This method initializes mediumMnuItem
-	 *
-	 * @return javax.swing.JCheckBoxMenuItem
-	 */
-	private JCheckBoxMenuItem getMediumMnuItem() {
-		if (mediumMnuItem == null) {
-			mediumMnuItem = new JCheckBoxMenuItem();
-			mediumMnuItem.setText("Medium");
-			mediumMnuItem.setSelected(true);
-		}
-		return mediumMnuItem;
-	}
-
-	/**
-	 * This method initializes hardMnuItem
-	 *
-	 * @return javax.swing.JCheckBoxMenuItem
-	 */
-	private JCheckBoxMenuItem getHardMnuItem() {
-		if (hardMnuItem == null) {
-			hardMnuItem = new JCheckBoxMenuItem();
-			hardMnuItem.setText("Hard");
-		}
-		return hardMnuItem;
-	}
-
-	/**
-	 * This method initializes multiplayerMnuItem
-	 *
-	 * @return javax.swing.JCheckBoxMenuItem
-	 */
-	private JCheckBoxMenuItem getMultiplayerMnuItem() {
-		if (multiplayerMnuItem == null) {
-			multiplayerMnuItem = new JCheckBoxMenuItem();
-			multiplayerMnuItem.setText("Multiplayer");
-		}
-		return multiplayerMnuItem;
-	}
-
-	/**
 	 * This method initializes boardPnl
 	 *
 	 * @return javax.swing.JPanel
@@ -298,7 +287,6 @@ public class GameBoardFrm extends JFrame {
 			gridLayout.setRows(8);
 			gridLayout.setColumns(8);
 			boardPnl = new JPanel();
-			boardPnl.setBounds(new Rectangle(0, 0, 336, 336));
 			boardPnl.setLayout(gridLayout);
 			populateBoardPnl();
 		}
@@ -313,7 +301,7 @@ public class GameBoardFrm extends JFrame {
 	private JButton getSubmitBtn() {
 		if (submitBtn == null) {
 			submitBtn = new JButton();
-			submitBtn.setMnemonic(KeyEvent.VK_E);
+			submitBtn.setMnemonic(KeyEvent.VK_S);
 			submitBtn.setText("Submit");
 			submitBtn.setEnabled(false);
 			submitBtn.addActionListener(submitBtnActionListener);
@@ -330,6 +318,7 @@ public class GameBoardFrm extends JFrame {
 		if (resetBtn == null) {
 			resetBtn = new JButton();
 			resetBtn.setText("Reset");
+			resetBtn.setMnemonic(KeyEvent.VK_R);
 			resetBtn.setEnabled(false);
 			resetBtn.addActionListener(resetBtnActionListener);
 		}
@@ -344,11 +333,10 @@ public class GameBoardFrm extends JFrame {
 	private JPanel getMovePnl() {
 		if (MovePnl == null) {
 			MovePnl = new JPanel();
-			MovePnl.setLayout(new BoxLayout(getMovePnl(), BoxLayout.X_AXIS));
-			MovePnl.setBorder(BorderFactory.createTitledBorder(null, "Move", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", Font.PLAIN, 11), new Color(51, 94, 168)));
-			MovePnl.setBounds(new Rectangle(192, 336, 143, 73));
-			MovePnl.add(getSubmitBtn(), null);
-			MovePnl.add(getResetBtn(), null);
+			MovePnl.setLayout(new BorderLayout());
+			MovePnl.setBorder(BorderFactory.createTitledBorder("Move"));
+			MovePnl.add(getSubmitBtn(), BorderLayout.CENTER);
+			MovePnl.add(getResetBtn(), BorderLayout.WEST);
 		}
 		return MovePnl;
 	}
@@ -360,16 +348,12 @@ public class GameBoardFrm extends JFrame {
 	 */
 	private JPanel getTurnPnl() {
 		if (turnPnl == null) {
-			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.gridx = 0;
-			gridBagConstraints.gridy = 0;
 			turnLbl = new JLabel();
 			turnLbl.setIcon(SCConstants.OUTSIDE_TEAM1);
 			turnPnl = new JPanel();
-			turnPnl.setLayout(new GridBagLayout());
-			turnPnl.setBounds(new Rectangle(0, 336, 73, 73));
-			turnPnl.setBorder(BorderFactory.createTitledBorder(null, "Turn", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Tahoma", Font.PLAIN, 11), new Color(51, 94, 168)));
-			turnPnl.add(turnLbl, gridBagConstraints);
+			turnPnl.setLayout(new BorderLayout());
+			turnPnl.setBorder(BorderFactory.createTitledBorder("Turn"));
+			turnPnl.add(turnLbl, BorderLayout.WEST);
 		}
 		return turnPnl;
 	}
@@ -391,7 +375,7 @@ public class GameBoardFrm extends JFrame {
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
 				Team t = manager.getBoard().get(row, col);
-				if (row < 2 || row >= 6 || col < 2 || col >= 6) { // not center area
+				if (!Board.isInCenter(row, col)) {
 					if (SCConstants.TEAM1.equals(t)) {
 						buttons[row][col].setIcon(SCConstants.OUTSIDE_TEAM1);
 					} else if (SCConstants.TEAM2.equals(t)) {
@@ -422,6 +406,7 @@ public class GameBoardFrm extends JFrame {
 
 	public void waitForInput() {
 		listenForInput = true;
+		inputListener = new GUIInput();
 		inputListener.start();
 		try {
 			inputListener.join();
@@ -434,5 +419,20 @@ public class GameBoardFrm extends JFrame {
 	
 	public List<String> getCoordinates() {
 		return inputListener.getCoordinates();
+	}
+
+	/**
+	 * This method initializes uiPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getUiPanel() {
+		if (uiPanel == null) {
+			uiPanel = new JPanel();
+			uiPanel.setLayout(new BorderLayout());
+			uiPanel.add(getTurnPnl(), BorderLayout.NORTH);
+			uiPanel.add(getMovePnl(), BorderLayout.SOUTH);
+		}
+		return uiPanel;
 	}
 }  //  @jve:decl-index=0:visual-constraint="71,13"
