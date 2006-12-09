@@ -94,13 +94,14 @@ public class Board implements Cloneable {
 	}
 
 	public void doMove(Team team, Move move) {
-		if (team != null && team.isValid() && move != null && move.size() > 1 && 
-				isValidMove(team, move)) {
-			boolean isJump = isValidJump(this, team, move.getRow(0), move.getRow(1),
-					move.getCol(0), move.getCol(1));
+		if (team != null && team.isValid() && move != null && move.size() > 1) {
+			boolean isJump = isValidJump(this, team, move.getRow(0), move.getCol(0), 
+					move.getRow(1), move.getCol(1));
+			int jumpedRow;
+			int jumpedCol;
 			for (int i = 1; i < move.size(); i++) {
-				int jumpedRow = (move.getRow(i - 1) + move.getRow(i)) / 2;
-				int jumpedCol = (move.getCol(i - 1) + move.getCol(i)) / 2;
+				jumpedRow = (move.getRow(i - 1) + move.getRow(i)) / 2;
+				jumpedCol = (move.getCol(i - 1) + move.getCol(i)) / 2;
 				if (isJump && !team.equals(get(jumpedRow, jumpedCol))) {
 					insert(SCConstants.EMPTY, jumpedRow, jumpedCol);
 				}
@@ -111,6 +112,7 @@ public class Board implements Cloneable {
 	}
 
 	public boolean isValidMove(Team team, Move move) {
+		System.out.println("validating " + move);
 		if (team == null || !team.isValid() || SCConstants.EMPTY.equals(team)) {
 			// Team must be valid and from either player 1 or player 2.
 			return false;
@@ -137,23 +139,28 @@ public class Board implements Cloneable {
 			return false;
 		}
 		for (int i = 1; i < move.size(); i++) {
+			if (isSlide && i > 1) {
+				// Moves can only contain one slide
+				return false;
+			}
 			rowEnd = move.getRow(i);
 			colEnd = move.getCol(i);
 			if (isValidSlide(b, team, rowStart, rowEnd, colStart, colEnd)) {
 				isSlide = true;
-			} else if (isValidJump(b, team, rowStart, rowEnd, colStart, colEnd)) {
+			} else if (isValidJump(b, team, rowStart, colStart, rowEnd, colEnd)) {
 				isJump = true;
 			}
 			if ((isSlide && isJump) || (!isSlide && !isJump)) {
 				// Moves must always either be a jump or a slide, and never both.
 				return false;
 			}
-			rowStart = rowEnd;
-			colStart = colEnd;
 			m = new Move();
 			m.add(rowStart, colStart);
 			m.add(rowEnd, colEnd);
 			b.doMove(team, m);
+			b.print();
+			rowStart = rowEnd;
+			colStart = colEnd;
 		}
 		return true;
 	}
@@ -176,8 +183,8 @@ public class Board implements Cloneable {
 		return (horizontalSlide && !verticalSlide) || (!horizontalSlide && verticalSlide);
 	}
 
-	public static boolean isValidJump(Board board, Team team, int rowStart, int rowEnd,
-			int colStart, int colEnd) {
+	public static boolean isValidJump(Board board, Team team, int rowStart, int colStart,
+			int rowEnd, int colEnd) {
 		if (board == null || !isValidSpot(rowStart, colStart) || !isValidSpot(rowEnd, colEnd)) {
 			// The board and all spots must be valid.
 			return false;
@@ -192,11 +199,15 @@ public class Board implements Cloneable {
 		boolean southJump = rowStart - rowEnd == 2;
 		boolean westJump = colStart - colEnd == -2;
 		boolean eastJump = colStart - colEnd == 2;
+		if (!northJump || !southJump || !westJump || !eastJump) {
+			// Jumps must go in at least one direction.
+			return false;
+		}
 		if ((northJump && (southJump || westJump || eastJump)) ||
 				(southJump && (northJump || westJump || eastJump)) ||
 				(westJump && (northJump || southJump || eastJump)) ||
 				(eastJump && (northJump || southJump || westJump))) {
-			// Jumps must only go in one direction.
+			// Jumps must go in exactly one direction.
 			return false;
 		}
 		if (SCConstants.EMPTY.equals(board.get((rowStart + rowEnd) / 2, (colStart + colEnd) / 2))) {

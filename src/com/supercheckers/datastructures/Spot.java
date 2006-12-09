@@ -35,4 +35,25 @@ public class Spot {
 	public int getRow() {
 		return row;
 	}
+	
+	public String toString() {
+		return row + "," + col;
+	}
+
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		} else if (obj == null) {
+			return false;
+		} else if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final Spot other = (Spot) obj;
+		if (col != other.col) {
+			return false;
+		} else if (row != other.row) {
+			return false;
+		}
+		return true;
+	}
 }

@@ -35,14 +35,16 @@ public class Supercheckers {
 				move = p1.getMove();
 			} while (!board.isValidMove(p1.getTeam(), move));
 			board.doMove(p1.getTeam(), move);
-//			board.print();
+			System.out.println("new board after valid move:");
+			board.print();
 			window.setTurn(p2.getTeam());
 			do {
 				window.updateBoardPnl();
 				move = p2.getMove();
 			} while (!board.isValidMove(p2.getTeam(), move));
 			board.doMove(p2.getTeam(), move);
-//			board.print();
+			System.out.println("new board after valid move:");
+			board.print();
 		}		
 	}
 

@@ -61,4 +61,12 @@ public class Move {
 	public int getCol(int index) throws IndexOutOfBoundsException {
 		return points.get(index).getCol();
 	}
+	
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < size(); i++) {
+			sb.append(" " + points.get(i));
+		}
+		return sb.toString();
+	}
 }

@@ -72,12 +72,10 @@ public class GameBoardFrm extends JFrame {
 	};
 	private MouseListener buttonMouseListener = new MouseListener() {
 		public void mouseEntered(MouseEvent e) {
-			JLabel source = ((JLabel) e.getSource());
-			String name = source.getName();
-			String[] loc = name.split(",");
+			String[] loc = ((JLabel) e.getSource()).getName().split(",");
 			int row = new Integer(loc[0]).intValue();
 			int col = new Integer(loc[1]).intValue();
-			if (manager.getBoard().isAvailableSpot(currTeam, inputListener.getCoordinates(), row, col)) {
+			if (manager.getBoard().isAvailableSpot(currTeam, inputListener.getMove(), row, col)) {
 				setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
 		}
@@ -93,7 +91,7 @@ public class GameBoardFrm extends JFrame {
 				String[] loc = name.split(",");
 				int row = new Integer(loc[0]).intValue();
 				int col = new Integer(loc[1]).intValue();
-				if (inputListener.getCoordinates().size() == 0) {
+				if (inputListener.getMove().size() == 0) {
 					if (Board.isInCenter(row, col)) {
 						source.setIcon(SCConstants.INSIDE_EMPTY);
 					} else {
@@ -115,8 +113,8 @@ public class GameBoardFrm extends JFrame {
 					}
 				}
 				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-				inputListener.addCoordinate(row, col);
-				if (inputListener.getCoordinates().size() >= 2) {
+				inputListener.addSpot(row, col);
+				if (inputListener.getMove().size() >= 2) {
 					getSubmitBtn().setEnabled(true);
 				}
 				getResetBtn().setEnabled(true);
@@ -132,7 +130,7 @@ public class GameBoardFrm extends JFrame {
 	};
 	private ActionListener resetBtnActionListener = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-			inputListener.clearCoordinates();
+			inputListener.clearMove();
 			updateBoardPnl();
 			getSubmitBtn().setEnabled(false);
 			getResetBtn().setEnabled(false);
@@ -356,6 +354,21 @@ public class GameBoardFrm extends JFrame {
 		return turnPnl;
 	}
 
+	/**
+	 * This method initializes uiPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getUiPanel() {
+		if (uiPanel == null) {
+			uiPanel = new JPanel();
+			uiPanel.setLayout(new BorderLayout());
+			uiPanel.add(getTurnPnl(), BorderLayout.NORTH);
+			uiPanel.add(getMovePnl(), BorderLayout.SOUTH);
+		}
+		return uiPanel;
+	}
+
 	private void populateBoardPnl() {
 		buttons = new JLabel[8][8];
 		for (int row = 0; row <= 8 - 1; row++) {
@@ -416,22 +429,7 @@ public class GameBoardFrm extends JFrame {
 		getBoardPnl().requestFocus();
 	}
 
-	public Move getCoordinates() {
-		return inputListener.getCoordinates();
-	}
-
-	/**
-	 * This method initializes uiPanel	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getUiPanel() {
-		if (uiPanel == null) {
-			uiPanel = new JPanel();
-			uiPanel.setLayout(new BorderLayout());
-			uiPanel.add(getTurnPnl(), BorderLayout.NORTH);
-			uiPanel.add(getMovePnl(), BorderLayout.SOUTH);
-		}
-		return uiPanel;
+	public Move getMove() {
+		return inputListener.getMove();
 	}
 }  //  @jve:decl-index=0:visual-constraint="71,13"

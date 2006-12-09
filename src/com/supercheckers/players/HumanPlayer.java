@@ -29,7 +29,7 @@ public class HumanPlayer extends Player {
 	public Move getMove() {
 //		int row1, col1, row2, col2;
 		window.waitForInput();
-		Move move = window.getCoordinates();
+		Move move = window.getMove();
 		return move;
 //		row1 = getManager().getSelectedRow();
 //		col1 = getManager().getSelectedCol();

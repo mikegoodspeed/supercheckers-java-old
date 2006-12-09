@@ -13,7 +13,7 @@ import com.supercheckers.datastructures.Move;
 public class GUIInput extends Thread {
 
 	boolean ready = false;
-	Move coordinates = null;
+	Move move = null;
 
 	public GUIInput() {
 		super();
@@ -22,7 +22,7 @@ public class GUIInput extends Thread {
 
 	private void reset() {
 		ready = false;
-		clearCoordinates();
+		clearMove();
 	}
 
 	public void run() {
@@ -39,15 +39,15 @@ public class GUIInput extends Thread {
 		ready = true;
 	}
 
-	public void addCoordinate(int row, int col) {
-		coordinates.add(row, col);
+	public void addSpot(int row, int col) {
+		move.add(row, col);
 	}
 
-	public void clearCoordinates() {
-		coordinates = new Move();
+	public void clearMove() {
+		move = new Move();
 	}
 
-	public Move getCoordinates() {
-		return coordinates;
+	public Move getMove() {
+		return move;
 	}
 }
