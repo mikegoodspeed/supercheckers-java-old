@@ -4,10 +4,10 @@ import com.supercheckers.constants.SCConstants;
 
 /**
  * A move performed during a turn.
- *
- * project	Supercheckers
+ * <p>
+ * project	Supercheckers <br />
  * url		http://www.mikegoodspeed.com/blog/projects/supercheckers/
- * 
+ *
  * @author 	Mike Goodspeed
  * @version	$Id$
  */
@@ -15,6 +15,11 @@ public class Team {
 
 	private char team;
 	
+	/**
+	 * Constructor to create new Team
+	 * 
+	 * @param team
+	 */
 	public Team(char team) {
 		this.team = team; 
 	}
@@ -43,6 +48,12 @@ public class Team {
 		}
 	}
 	
+	/**
+	 * Determines if the team is valid, where validity is determined by being equal to one of the
+	 * predefined Teams.
+	 * 
+	 * @return true if the team is valid, false otherwise
+	 */
 	public boolean isValid() {
 		return SCConstants.EMPTY.equals(this) || SCConstants.TEAM1.equals(this) ||
 				SCConstants.TEAM2.equals(this);

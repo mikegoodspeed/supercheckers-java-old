@@ -30,10 +30,10 @@ import com.supercheckers.utils.GUIInput;
 
 /**
  * Supercheckers Game Board
- *
- * project	Supercheckers
+ * <p>
+ * project	Supercheckers <br />
  * url		http://www.mikegoodspeed.com/blog/projects/supercheckers/
- * 
+ *
  * @author 	Mike Goodspeed
  * @version	$Id$
  */
@@ -141,7 +141,8 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes
-	 *
+	 * 
+	 * @param manager
 	 */
 	public GameBoardFrm(Supercheckers manager) {
 		super();
@@ -383,6 +384,9 @@ public class GameBoardFrm extends JFrame {
 		updateBoardPnl();
 	}
 
+	/**
+	 * Update the GUI board to reflect the actual board.
+	 */
 	public void updateBoardPnl() {
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
@@ -408,6 +412,11 @@ public class GameBoardFrm extends JFrame {
 		}
 	}
 
+	/**
+	 * Set the turn so the game board reflects who'se turn it is.
+	 * 
+	 * @param team
+	 */
 	public void setTurn(Team team) {
 		this.currTeam = team;
 		if (SCConstants.TEAM1.equals(team)) {
@@ -417,6 +426,9 @@ public class GameBoardFrm extends JFrame {
 		}
 	}
 
+	/**
+	 * This method blocks until the submit button is pressed.
+	 */
 	public void waitForInput() {
 		listenForInput = true;
 		inputListener = new GUIInput();
@@ -430,7 +442,12 @@ public class GameBoardFrm extends JFrame {
 		getBoardPnl().requestFocus();
 	}
 
+	/**
+	 * Returns user-chosen move after the submit button has been pressed.
+	 * 
+	 * @return the move as chosen by the user
+	 */
 	public Move getMove() {
 		return inputListener.getMove();
 	}
-}  //  @jve:decl-index=0:visual-constraint="71,13"
+}

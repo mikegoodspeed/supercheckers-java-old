@@ -5,11 +5,11 @@ import java.util.Arrays;
 import com.supercheckers.constants.SCConstants;
 
 /**
- * Supercheckers Board Data Structure
- *
- * project	Supercheckers
+ * Supercheckers Board Data Structure.
+ * <p>
+ * project	Supercheckers <br />
  * url		http://www.mikegoodspeed.com/blog/projects/supercheckers/
- * 
+ *
  * @author 	Mike Goodspeed
  * @version	$Id$
  */
@@ -17,15 +17,32 @@ public class Board implements Cloneable {
 
 	private Team board[][] = null;
 
+	/**
+	 * Constructor to create a new board
+	 */
 	public Board() {
 		this.board = new Team[8][8];
 		reset();
 	}
 
+	/**
+	 * Insert a team to a given Spot, specified by a row and a column
+	 * 
+	 * @param team
+	 * @param row
+	 * @param col
+	 */
 	public void insert(Team team, int row, int col) {
 		board[row][col] = team;
 	}
 
+	/**
+	 * Get the Team at a given spot, specified by a row and a column
+	 * 
+	 * @param row
+	 * @param col
+	 * @return the team
+	 */
 	public Team get(int row, int col) {
 		return board[row][col];
 	}
@@ -59,12 +76,15 @@ public class Board implements Cloneable {
 		}
 	}
 
+	/**
+	 * Returns true if the spot, specified by a row and a column, is in the center of the board
+	 * 
+	 * @param row
+	 * @param col
+	 * @return true if the spot is in the center, false otherwise
+	 */
 	public static boolean isInCenter(int row, int col) {
 		return row >= 2 && row < 6 && col >= 2 && col < 6;
-	}
-
-	public boolean validate(Move move, Team team) {
-		return true;
 	}
 
 	public boolean equals(Object obj) {
@@ -90,10 +110,22 @@ public class Board implements Cloneable {
 		return sb.toString();
 	}
 
+	/**
+	 * Determine if this game is a new game
+	 * 
+	 * @return true if this game is a new game, false otherwise
+	 */
 	public boolean isNewGame() {
 		return equals(new Board());
 	}
 
+	/**
+	 * Perform a move on a board.  This does not take into account if the move is valid.
+	 * 
+	 * @param team
+	 * @param move
+	 * @see #isValidMove(Team, Move)
+	 */
 	public void doMove(Team team, Move move) {
 		if (team != null && team.isValid() && move != null && move.size() > 1) {
 			boolean isJump = isValidJump(this, team, move.getRow(0), move.getCol(0), 
@@ -112,6 +144,13 @@ public class Board implements Cloneable {
 		}
 	}
 
+	/**
+	 * Determines if a given move is valid based on a specific team and this board.
+	 * 
+	 * @param team
+	 * @param move
+	 * @return true if move is valid, false otherwise
+	 */
 	public boolean isValidMove(Team team, Move move) {
 		System.out.println("validating " + move);
 		if (team == null || !team.isValid() || SCConstants.EMPTY.equals(team)) {
@@ -146,7 +185,7 @@ public class Board implements Cloneable {
 			}
 			rowEnd = move.getRow(i);
 			colEnd = move.getCol(i);
-			if (isValidSlide(b, team, rowStart, rowEnd, colStart, colEnd)) {
+			if (isValidSlide(b, team, rowStart, colStart, rowEnd, colEnd)) {
 				isSlide = true;
 			} else if (isValidJump(b, team, rowStart, colStart, rowEnd, colEnd)) {
 				isJump = true;
@@ -166,8 +205,20 @@ public class Board implements Cloneable {
 		return true;
 	}
 
-	public static boolean isValidSlide(Board board, Team team, int rowStart, int rowEnd,
-			int colStart, int colEnd) {
+	/**
+	 * Determines if the the move, specified by two (row, col) pairs, is a valid slide for the
+	 * specified team on the specified board.
+	 * 
+	 * @param board
+	 * @param team
+	 * @param rowStart
+	 * @param colStart
+	 * @param rowEnd
+	 * @param colEnd
+	 * @return true if the move is a valid slide, false otherwise
+	 */
+	public static boolean isValidSlide(Board board, Team team, int rowStart, int colStart,
+			int rowEnd, int colEnd) {
 		if (board == null || !isValidSpot(rowStart, colStart) || !isValidSpot(rowEnd, colEnd)) {
 			// The board and all spots must be valid.
 			return false;
@@ -184,6 +235,18 @@ public class Board implements Cloneable {
 		return (horizontalSlide && !verticalSlide) || (!horizontalSlide && verticalSlide);
 	}
 
+	/**
+	 * Determines if the the move, specified by two (row, col) pairs, is a valid jump for the
+	 * specified team on the specified board.
+	 * 
+	 * @param board
+	 * @param team
+	 * @param rowStart
+	 * @param colStart
+	 * @param rowEnd
+	 * @param colEnd
+	 * @return true if the move is a valid jump, false otherwise
+	 */
 	public static boolean isValidJump(Board board, Team team, int rowStart, int colStart,
 			int rowEnd, int colEnd) {
 		if (board == null || !isValidSpot(rowStart, colStart) || !isValidSpot(rowEnd, colEnd)) {
@@ -218,18 +281,39 @@ public class Board implements Cloneable {
 		return true;
 	}
 
+	/**
+	 * Determines is a spot, specified by a row and a column, is valid on the board.
+	 * 
+	 * @param row
+	 * @param col
+	 * @return true if the spot is valid, false otherwise
+	 */
 	public static boolean isValidSpot(int row, int col) {
 		return row >= 0 && row < 8 && col >= 0 && col < 8;
 	}
 	
+	/**
+	 * Determines if the spot, specified by a row and a column, can be added to the specified move
+	 * and have the move still be valid.
+	 * 
+	 * @param team
+	 * @param currentMove
+	 * @param row
+	 * @param col
+	 * @return true if the spot is viable as the next spot in the move, false otherwise
+	 */
 	public boolean isAvailableSpot(Team team, Move currentMove, int row, int col) {
 		if (team == null) {
+			// Must have a valid Team
 			return false;
 		}
 		if (currentMove == null || currentMove.size() == 0) {
+			// Moves must start on the current Team
 			return team.equals(get(row, col));
 		}
-		return false;
+		Move proposedMove = currentMove.clone();
+		proposedMove.add(row, col);
+		return isValidMove(team, proposedMove);
 	}
 
 	/**

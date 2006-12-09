@@ -4,14 +4,14 @@ import java.util.ArrayList;
 
 /**
  * A move performed during a turn.
- *
- * project	Supercheckers
+ * <p>
+ * project	Supercheckers <br />
  * url		http://www.mikegoodspeed.com/blog/projects/supercheckers/
- * 
+ *
  * @author 	Mike Goodspeed
  * @version	$Id$
  */
-public class Move {
+public class Move implements Cloneable {
 
 	ArrayList<Spot> points = null;
 
@@ -69,5 +69,13 @@ public class Move {
 			sb.append(" " + points.get(i));
 		}
 		return sb.toString();
+	}
+	
+	protected Move clone() {
+		Move m = new Move();
+		for (int i = 0; i < size(); i++) {
+			m.add(getRow(i), getCol(i));
+		}
+		return m;
 	}
 }

@@ -2,10 +2,10 @@ package com.supercheckers.datastructures;
 
 /**
  * A spot selected during a move.
- *
- * project	Supercheckers
+ * <p>
+ * project	Supercheckers <br />
  * url		http://www.mikegoodspeed.com/blog/projects/supercheckers/
- * 
+ *
  * @author 	Mike Goodspeed
  * @version	$Id$
  */

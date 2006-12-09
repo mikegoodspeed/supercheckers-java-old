@@ -9,10 +9,10 @@ import com.supercheckers.ui.GameBoardFrm;
 
 /**
  * Supercheckers main class
- *
- * project	Supercheckers
+ * <p>
+ * project	Supercheckers <br />
  * url		http://www.mikegoodspeed.com/blog/projects/supercheckers/
- * 
+ *
  * @author 	Mike Goodspeed
  * @version	$Id$
  */
@@ -21,6 +21,9 @@ public class Supercheckers {
 	private Board board = null;
 	private GameBoardFrm window = null;
 
+	/**
+	 * Constructor to create a new game of Supercheckers.
+	 */
 	public Supercheckers() {
 		board = new Board();
 		window = new GameBoardFrm(this);
@@ -28,7 +31,6 @@ public class Supercheckers {
 		Move move;
 		Player p1 = new HumanPlayer(this, SCConstants.TEAM1);
 		Player p2 = new HumanPlayer(this, SCConstants.TEAM2);
-//		board.print();
 		while (true) {
 			window.setTurn(p1.getTeam());
 			do {

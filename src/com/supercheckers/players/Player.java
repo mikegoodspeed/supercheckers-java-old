@@ -6,10 +6,10 @@ import com.supercheckers.main.Supercheckers;
 
 /**
  * Abstract Player Class, to be used as the superclass for actual players.
- *
- * project	Supercheckers
+ * <p>
+ * project	Supercheckers <br />
  * url		http://www.mikegoodspeed.com/blog/projects/supercheckers/
- * 
+ *
  * @author 	Mike Goodspeed
  * @version	$Id$
  */
