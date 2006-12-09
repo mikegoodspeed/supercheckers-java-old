@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -25,6 +24,7 @@ import javax.swing.UIManager;
 import com.supercheckers.Supercheckers;
 import com.supercheckers.constants.SCConstants;
 import com.supercheckers.datastructures.Board;
+import com.supercheckers.datastructures.Move;
 import com.supercheckers.datastructures.Team;
 import com.supercheckers.utils.GUIInput;
 
@@ -56,6 +56,7 @@ public class GameBoardFrm extends JFrame {
 	private JPanel MovePnl = null;
 	private JPanel turnPnl = null;
 	private JLabel turnLbl = null;
+	private Team currTeam = SCConstants.TEAM1;
 	private GUIInput inputListener = new GUIInput();
 	private boolean listenForInput = false;
 
@@ -72,23 +73,12 @@ public class GameBoardFrm extends JFrame {
 	private MouseListener buttonMouseListener = new MouseListener() {
 		public void mouseEntered(MouseEvent e) {
 			JLabel source = ((JLabel) e.getSource());
-			if (getCoordinates().size() == 0) {
-				if (SCConstants.OUTSIDE_TEAM1.equals(turnLbl.getIcon())) {
-					if (SCConstants.OUTSIDE_TEAM1.equals(source.getIcon()) ||
-							SCConstants.INSIDE_TEAM1.equals(source.getIcon())) {
-						setCursor(new Cursor(Cursor.HAND_CURSOR));
-					}
-				} else {
-					if (SCConstants.OUTSIDE_TEAM2.equals(source.getIcon()) ||
-							SCConstants.INSIDE_TEAM2.equals(source.getIcon())) {
-						setCursor(new Cursor(Cursor.HAND_CURSOR));
-					}
-				}
-			} else {
-				if (SCConstants.OUTSIDE_EMPTY.equals(source.getIcon()) ||
-						SCConstants.INSIDE_EMPTY.equals(source.getIcon())) {
-					setCursor(new Cursor(Cursor.HAND_CURSOR));
-				}
+			String name = source.getName();
+			String[] loc = name.split(",");
+			int row = new Integer(loc[0]).intValue();
+			int col = new Integer(loc[1]).intValue();
+			if (manager.getBoard().isAvailableSpot(currTeam, inputListener.getCoordinates(), row, col)) {
+				setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
 		}
 		public void mouseExited(MouseEvent e) {
@@ -110,7 +100,7 @@ public class GameBoardFrm extends JFrame {
 						source.setIcon(SCConstants.OUTSIDE_EMPTY);
 					}
 				} else {
-					if (SCConstants.OUTSIDE_TEAM1.equals(turnLbl.getIcon())) {
+					if (SCConstants.TEAM1.equals(currTeam)) {
 						if (Board.isInCenter(row, col)) {
 							source.setIcon(SCConstants.INSIDE_TEAM1);
 						} else {
@@ -125,7 +115,7 @@ public class GameBoardFrm extends JFrame {
 					}
 				}
 				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-				inputListener.addCoordinate(name);
+				inputListener.addCoordinate(row, col);
 				if (inputListener.getCoordinates().size() >= 2) {
 					getSubmitBtn().setEnabled(true);
 				}
@@ -404,8 +394,9 @@ public class GameBoardFrm extends JFrame {
 		}
 	}
 
-	public void setTurn(Team t) {
-		if (SCConstants.TEAM1.equals(t)) {
+	public void setTurn(Team team) {
+		this.currTeam = team;
+		if (SCConstants.TEAM1.equals(team)) {
 			turnLbl.setIcon(SCConstants.OUTSIDE_TEAM1);
 		} else {
 			turnLbl.setIcon(SCConstants.OUTSIDE_TEAM2);
@@ -424,8 +415,8 @@ public class GameBoardFrm extends JFrame {
 		getResetBtn().setEnabled(false);
 		getBoardPnl().requestFocus();
 	}
-	
-	public List<String> getCoordinates() {
+
+	public Move getCoordinates() {
 		return inputListener.getCoordinates();
 	}
 

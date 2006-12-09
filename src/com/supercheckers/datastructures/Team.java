@@ -1,5 +1,7 @@
 package com.supercheckers.datastructures;
 
+import com.supercheckers.constants.SCConstants;
+
 /**
  * A move performed during a turn.
  *
@@ -9,6 +11,7 @@ package com.supercheckers.datastructures;
  * @headurl $HeadURL$
  */
 public class Team {
+
 	private char team;
 	
 	public Team(char team) {
@@ -35,7 +38,16 @@ public class Team {
 			return false;
 		} else {
 			final Team other = (Team) obj;
-			return team == other.team;
+			return getTeam() == other.getTeam();
 		}
+	}
+	
+	public boolean isValid() {
+		return SCConstants.EMPTY.equals(this) || SCConstants.TEAM1.equals(this) ||
+				SCConstants.TEAM2.equals(this);
+	}
+	
+	public String toString() {
+		return new String(new char[] {team});
 	}
 }

@@ -2,6 +2,7 @@ package com.supercheckers;
 
 import com.supercheckers.constants.SCConstants;
 import com.supercheckers.datastructures.Board;
+import com.supercheckers.datastructures.Move;
 import com.supercheckers.players.HumanPlayer;
 import com.supercheckers.players.Player;
 import com.supercheckers.ui.GameBoardFrm;
@@ -23,12 +24,25 @@ public class Supercheckers {
 		board = new Board();
 		window = new GameBoardFrm(this);
 		window.setVisible(true);
+		Move move;
 		Player p1 = new HumanPlayer(this, SCConstants.TEAM1);
+		Player p2 = new HumanPlayer(this, SCConstants.TEAM2);
+//		board.print();
 		while (true) {
-			window.setTurn(SCConstants.TEAM1);
-			p1.getMove();
-			window.setTurn(SCConstants.TEAM2);
-			p1.getMove();
+			window.setTurn(p1.getTeam());
+			do {
+				window.updateBoardPnl();
+				move = p1.getMove();
+			} while (!board.isValidMove(p1.getTeam(), move));
+			board.doMove(p1.getTeam(), move);
+//			board.print();
+			window.setTurn(p2.getTeam());
+			do {
+				window.updateBoardPnl();
+				move = p2.getMove();
+			} while (!board.isValidMove(p2.getTeam(), move));
+			board.doMove(p2.getTeam(), move);
+//			board.print();
 		}		
 	}
 

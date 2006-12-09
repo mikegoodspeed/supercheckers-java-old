@@ -29,7 +29,8 @@ public class HumanPlayer extends Player {
 	public Move getMove() {
 //		int row1, col1, row2, col2;
 		window.waitForInput();
-		window.getCoordinates();
+		Move move = window.getCoordinates();
+		return move;
 //		row1 = getManager().getSelectedRow();
 //		col1 = getManager().getSelectedCol();
 //		getManager().waitForInput();
@@ -56,6 +57,5 @@ public class HumanPlayer extends Player {
 //		} while (!getManager().isEndButtonPressed());
 //		previousMove.setNext(null);
 //		return firstMove;
-		return null;
 	}
 }

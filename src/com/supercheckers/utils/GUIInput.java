@@ -1,7 +1,6 @@
 package com.supercheckers.utils;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.supercheckers.datastructures.Move;
 
 /**
  * GUI Input Thread.
@@ -12,8 +11,9 @@ import java.util.List;
  * @headurl $HeadURL$
  */
 public class GUIInput extends Thread {
+
 	boolean ready = false;
-	List<String> coordinates = null;
+	Move coordinates = null;
 
 	public GUIInput() {
 		super();
@@ -39,15 +39,15 @@ public class GUIInput extends Thread {
 		ready = true;
 	}
 
-	public void addCoordinate(String coords) {
-		coordinates.add(coords);
+	public void addCoordinate(int row, int col) {
+		coordinates.add(row, col);
 	}
 
 	public void clearCoordinates() {
-		coordinates = new ArrayList<String>();
+		coordinates = new Move();
 	}
 
-	public List<String> getCoordinates() {
+	public Move getCoordinates() {
 		return coordinates;
 	}
 }

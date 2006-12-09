@@ -13,6 +13,7 @@ import com.supercheckers.datastructures.Team;
  * @headurl $HeadURL$
  */
 public interface SCConstants {
+
 	// Teams
 	public Team TEAM1 = new Team('X');
 	public Team TEAM2 = new Team('0');

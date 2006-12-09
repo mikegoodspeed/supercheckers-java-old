@@ -1,5 +1,7 @@
 package com.supercheckers.datastructures;
 
+import java.util.ArrayList;
+
 /**
  * A move performed during a turn.
  *
@@ -10,76 +12,53 @@ package com.supercheckers.datastructures;
  */
 public class Move {
 
-	private char type;
-	private int row1;
-	private int col1;
-	private int row2;
-	private int col2;
-	private Move next;
+	ArrayList<Spot> points = null;
 
 	/**
-	 * @param type
-	 * @param row1
-	 * @param col1
-	 * @param row2
-	 * @param col2
-	 * @param next - the next move
+	 * Constructor to create a new move.
 	 */
-	public Move(char type, int row1, int col1, int row2, int col2, Move next) {
-		this.type = type;
-		this.row1 = row1;
-		this.col1 = col1;
-		this.row2 = row2;
-		this.col2 = col2;
-		this.next = next;
+	public Move() {
+		points = new ArrayList<Spot>();
 	}
 
 	/**
-	 * @return the next
+	 * Find the size of the current move.
+	 * 
+	 * @return the number of spots in this move
 	 */
-	public Move getNext() {
-		return next;
+	public int size() {
+		return points.size();
 	}
-
+	
 	/**
-	 * @param next - the next move to set
+	 * Add a spot to the move.
+	 * 
+	 * @param row - the spot's row
+	 * @param col - the spot's col
 	 */
-	public void setNext(Move next) {
-		this.next = next;
+	public void add(int row, int col) {
+		points.add(new Spot(row, col));
 	}
-
+	
 	/**
-	 * @return the col1
+	 * Get the row of the spot at a given index.
+	 * 
+	 * @param index - index of a spot
+	 * @return the row of the selected spot
+	 * @throws IndexOutOfBoundsException - if index is out of range (index < 0 || index >= size())
 	 */
-	public int getCol1() {
-		return col1;
+	public int getRow(int index) throws IndexOutOfBoundsException {
+		return points.get(index).getRow();
 	}
-
+	
 	/**
-	 * @return the col2
+	 * Get the col of the spot at a given index.
+	 * 
+	 * @param index - index of a spot
+	 * @return the col of the selected spot
+	 * @throws IndexOutOfBoundsException - if index is out of range (index < 0 || index >= size())
 	 */
-	public int getCol2() {
-		return col2;
-	}
-
-	/**
-	 * @return the row1
-	 */
-	public int getRow1() {
-		return row1;
-	}
-
-	/**
-	 * @return the row2
-	 */
-	public int getRow2() {
-		return row2;
-	}
-
-	/**
-	 * @return the type
-	 */
-	public char getType() {
-		return type;
+	public int getCol(int index) throws IndexOutOfBoundsException {
+		return points.get(index).getCol();
 	}
 }
