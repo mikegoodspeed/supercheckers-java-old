@@ -5,11 +5,11 @@ import com.supercheckers.datastructures.Move;
 /**
  * GUI Input Thread.
  * <p>
- * project	Supercheckers <br />
- * url		http://www.mikegoodspeed.com/blog/projects/supercheckers/
- *
- * @author 	Mike Goodspeed
- * @version	$Id$
+ * project Supercheckers <br />
+ * url http://www.mikegoodspeed.com/blog/projects/supercheckers/
+ * 
+ * @author Mike Goodspeed
+ * @version $Id$
  */
 public class GUIInput extends Thread {
 
@@ -32,10 +32,9 @@ public class GUIInput extends Thread {
 	public void run() {
 		reset();
 		while (!ready) {
-			try { 
-				sleep(100); 
-			}
-			catch(Exception e) { }
+			try {
+				sleep(100);
+			} catch (Exception e) {}
 		}
 	}
 

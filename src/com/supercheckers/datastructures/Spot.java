@@ -3,17 +3,17 @@ package com.supercheckers.datastructures;
 /**
  * A spot selected during a move.
  * <p>
- * project	Supercheckers <br />
- * url		http://www.mikegoodspeed.com/blog/projects/supercheckers/
- *
- * @author 	Mike Goodspeed
- * @version	$Id$
+ * project Supercheckers <br />
+ * url http://www.mikegoodspeed.com/blog/projects/supercheckers/
+ * 
+ * @author Mike Goodspeed
+ * @version $Id$
  */
 public class Spot {
 
 	private int row;
 	private int col;
-	
+
 	/**
 	 * @param row - the spot's row
 	 * @param col - the spot's col
@@ -36,7 +36,7 @@ public class Spot {
 	public int getRow() {
 		return row;
 	}
-	
+
 	public String toString() {
 		return row + "," + col;
 	}

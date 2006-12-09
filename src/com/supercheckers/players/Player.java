@@ -7,11 +7,11 @@ import com.supercheckers.main.Supercheckers;
 /**
  * Abstract Player Class, to be used as the superclass for actual players.
  * <p>
- * project	Supercheckers <br />
- * url		http://www.mikegoodspeed.com/blog/projects/supercheckers/
- *
- * @author 	Mike Goodspeed
- * @version	$Id$
+ * project Supercheckers <br />
+ * url http://www.mikegoodspeed.com/blog/projects/supercheckers/
+ * 
+ * @author Mike Goodspeed
+ * @version $Id$
  */
 public abstract class Player {
 

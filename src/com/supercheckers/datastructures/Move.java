@@ -5,11 +5,11 @@ import java.util.ArrayList;
 /**
  * A move performed during a turn.
  * <p>
- * project	Supercheckers <br />
- * url		http://www.mikegoodspeed.com/blog/projects/supercheckers/
- *
- * @author 	Mike Goodspeed
- * @version	$Id$
+ * project Supercheckers <br />
+ * url http://www.mikegoodspeed.com/blog/projects/supercheckers/
+ * 
+ * @author Mike Goodspeed
+ * @version $Id$
  */
 public class Move implements Cloneable {
 
@@ -30,7 +30,7 @@ public class Move implements Cloneable {
 	public int size() {
 		return points.size();
 	}
-	
+
 	/**
 	 * Add a spot to the move.
 	 * 
@@ -40,7 +40,7 @@ public class Move implements Cloneable {
 	public void add(int row, int col) {
 		points.add(new Spot(row, col));
 	}
-	
+
 	/**
 	 * Get the row of the spot at a given index.
 	 * 
@@ -51,7 +51,7 @@ public class Move implements Cloneable {
 	public int getRow(int index) throws IndexOutOfBoundsException {
 		return points.get(index).getRow();
 	}
-	
+
 	/**
 	 * Get the col of the spot at a given index.
 	 * 
@@ -62,7 +62,7 @@ public class Move implements Cloneable {
 	public int getCol(int index) throws IndexOutOfBoundsException {
 		return points.get(index).getCol();
 	}
-	
+
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < size(); i++) {
@@ -70,7 +70,7 @@ public class Move implements Cloneable {
 		}
 		return sb.toString();
 	}
-	
+
 	protected Move clone() {
 		Move m = new Move();
 		for (int i = 0; i < size(); i++) {

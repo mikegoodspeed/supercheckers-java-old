@@ -31,11 +31,11 @@ import com.supercheckers.utils.GUIInput;
 /**
  * Supercheckers Game Board
  * <p>
- * project	Supercheckers <br />
- * url		http://www.mikegoodspeed.com/blog/projects/supercheckers/
- *
- * @author 	Mike Goodspeed
- * @version	$Id$
+ * project Supercheckers <br />
+ * url http://www.mikegoodspeed.com/blog/projects/supercheckers/
+ * 
+ * @author Mike Goodspeed
+ * @version $Id$
  */
 public class GameBoardFrm extends JFrame {
 
@@ -80,11 +80,15 @@ public class GameBoardFrm extends JFrame {
 				setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
 		}
+
 		public void mouseExited(MouseEvent e) {
 			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}
+
 		public void mousePressed(MouseEvent e) {}
+
 		public void mouseReleased(MouseEvent e) {}
+
 		public void mouseClicked(MouseEvent e) {
 			if (listenForInput) {
 				JLabel source = ((JLabel) e.getSource());
@@ -156,7 +160,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes this
-	 *
+	 * 
 	 */
 	private void initialize() {
 		this.setSize(new Dimension(400, 400));
@@ -170,7 +174,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes content
-	 *
+	 * 
 	 * @return JPanel
 	 */
 	private JPanel getContent() {
@@ -185,7 +189,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes menu
-	 *
+	 * 
 	 * @return JMenuBar
 	 */
 	private JMenuBar getMenu() {
@@ -199,7 +203,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes fileMnu
-	 *
+	 * 
 	 * @return JMenu
 	 */
 	private JMenu getGameMnu() {
@@ -216,7 +220,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes helpMnu
-	 *
+	 * 
 	 * @return JMenu
 	 */
 	private JMenu getHelpMnu() {
@@ -231,7 +235,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes exitMnuItem
-	 *
+	 * 
 	 * @return JMenuItem
 	 */
 	private JMenuItem getExitMnuItem() {
@@ -246,7 +250,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes newMnuItem
-	 *
+	 * 
 	 * @return JMenuItem
 	 */
 	private JMenuItem getNewMnuItem() {
@@ -262,7 +266,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes aboutMnuItem
-	 *
+	 * 
 	 * @return JMenuItem
 	 */
 	private JMenuItem getAboutMnuItem() {
@@ -276,7 +280,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes boardPnl
-	 *
+	 * 
 	 * @return JPanel
 	 */
 	private JPanel getBoardPnl() {
@@ -293,7 +297,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes submitBtn
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getSubmitBtn() {
@@ -309,7 +313,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes resetBtn
-	 *
+	 * 
 	 * @return JButton
 	 */
 	private JButton getResetBtn() {
@@ -325,7 +329,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes MovePnl
-	 *
+	 * 
 	 * @return JPanel
 	 */
 	private JPanel getMovePnl() {
@@ -341,7 +345,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes turnPnl
-	 *
+	 * 
 	 * @return JPanel
 	 */
 	private JPanel getTurnPnl() {
@@ -357,9 +361,9 @@ public class GameBoardFrm extends JFrame {
 	}
 
 	/**
-	 * This method initializes uiPanel	
-	 * 	
-	 * @return JPanel	
+	 * This method initializes uiPanel
+	 * 
+	 * @return JPanel
 	 */
 	private JPanel getUiPanel() {
 		if (uiPanel == null) {
@@ -374,7 +378,7 @@ public class GameBoardFrm extends JFrame {
 	private void populateBoardPnl() {
 		buttons = new JLabel[8][8];
 		for (int row = 0; row <= 8 - 1; row++) {
-			for (int col = 0; col <= 8 - 1 ; col++) {
+			for (int col = 0; col <= 8 - 1; col++) {
 				buttons[row][col] = new JLabel();
 				buttons[row][col].setName(row + "," + col);
 				buttons[row][col].addMouseListener(buttonMouseListener);

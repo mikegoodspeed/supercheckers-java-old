@@ -10,11 +10,11 @@ import com.supercheckers.ui.GameBoardFrm;
 /**
  * Supercheckers main class
  * <p>
- * project	Supercheckers <br />
- * url		http://www.mikegoodspeed.com/blog/projects/supercheckers/
- *
- * @author 	Mike Goodspeed
- * @version	$Id$
+ * project Supercheckers <br />
+ * url http://www.mikegoodspeed.com/blog/projects/supercheckers/
+ * 
+ * @author Mike Goodspeed
+ * @version $Id$
  */
 public class Supercheckers {
 
@@ -48,7 +48,7 @@ public class Supercheckers {
 			board.doMove(p2.getTeam(), move);
 			System.out.println("new board after valid move:");
 			board.print();
-		}		
+		}
 	}
 
 	/**

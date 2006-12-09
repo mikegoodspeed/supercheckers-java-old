@@ -7,11 +7,11 @@ import com.supercheckers.constants.SCConstants;
 /**
  * Supercheckers Board Data Structure.
  * <p>
- * project	Supercheckers <br />
- * url		http://www.mikegoodspeed.com/blog/projects/supercheckers/
- *
- * @author 	Mike Goodspeed
- * @version	$Id$
+ * project Supercheckers <br />
+ * url http://www.mikegoodspeed.com/blog/projects/supercheckers/
+ * 
+ * @author Mike Goodspeed
+ * @version $Id$
  */
 public class Board implements Cloneable {
 
@@ -120,7 +120,7 @@ public class Board implements Cloneable {
 	}
 
 	/**
-	 * Perform a move on a board.  This does not take into account if the move is valid.
+	 * Perform a move on a board. This does not take into account if the move is valid.
 	 * 
 	 * @param team
 	 * @param move
@@ -128,7 +128,7 @@ public class Board implements Cloneable {
 	 */
 	public void doMove(Team team, Move move) {
 		if (team != null && team.isValid() && move != null && move.size() > 1) {
-			boolean isJump = isValidJump(this, team, move.getRow(0), move.getCol(0), 
+			boolean isJump = isValidJump(this, team, move.getRow(0), move.getCol(0),
 					move.getRow(1), move.getCol(1));
 			int jumpedRow;
 			int jumpedCol;
@@ -223,8 +223,8 @@ public class Board implements Cloneable {
 			// The board and all spots must be valid.
 			return false;
 		}
-		if (team == null || !team.equals(board.get(rowStart, colStart)) || 
-				!SCConstants.EMPTY.equals(board.get(rowEnd, colEnd))) {
+		if (team == null || !team.equals(board.get(rowStart, colStart))
+				|| !SCConstants.EMPTY.equals(board.get(rowEnd, colEnd))) {
 			// The team must be valid, and the slide must start on a spot on the given team and end
 			// on an empty spot.
 			return false;
@@ -253,8 +253,8 @@ public class Board implements Cloneable {
 			// The board and all spots must be valid.
 			return false;
 		}
-		if (team == null || !team.equals(board.get(rowStart, colStart)) || 
-				!SCConstants.EMPTY.equals(board.get(rowEnd, colEnd))) {
+		if (team == null || !team.equals(board.get(rowStart, colStart))
+				|| !SCConstants.EMPTY.equals(board.get(rowEnd, colEnd))) {
 			// The team must be valid, and the slide must start on a spot on the given team and end
 			// on an empty spot.
 			return false;
@@ -267,10 +267,10 @@ public class Board implements Cloneable {
 			// Jumps must go in at least one direction.
 			return false;
 		}
-		if ((northJump && (southJump || westJump || eastJump)) ||
-				(southJump && (northJump || westJump || eastJump)) ||
-				(westJump && (northJump || southJump || eastJump)) ||
-				(eastJump && (northJump || southJump || westJump))) {
+		if ((northJump && (southJump || westJump || eastJump))
+				|| (southJump && (northJump || westJump || eastJump))
+				|| (westJump && (northJump || southJump || eastJump))
+				|| (eastJump && (northJump || southJump || westJump))) {
 			// Jumps must go in exactly one direction.
 			return false;
 		}
@@ -291,7 +291,7 @@ public class Board implements Cloneable {
 	public static boolean isValidSpot(int row, int col) {
 		return row >= 0 && row < 8 && col >= 0 && col < 8;
 	}
-	
+
 	/**
 	 * Determines if the spot, specified by a row and a column, can be added to the specified move
 	 * and have the move still be valid.
@@ -320,17 +320,18 @@ public class Board implements Cloneable {
 	 * Prints the current state of the board to standard output.
 	 * <p>
 	 * Example board:
+	 * 
 	 * <pre>
-	 *   0 1 2 3 4 5 6 7
-	 * 0|O|X|O|X|O|X|O|X|0
-	 * 1|X|O|X|O|X|O|X|O|1
-	 * 2|O|X# # # # #O|X|2
-	 * 3|X|O# # # # #X|O|3
-	 * 4|O|X# # # # #O|X|4
-	 * 5|X|O# # # # #X|O|5
-	 * 6|O|X|O|X|O|X|O|X|6
-	 * 7|X|O|X|O|X|O|X|O|7
-	 *   0 1 2 3 4 5 6 7
+	 *    0 1 2 3 4 5 6 7
+	 *  0|O|X|O|X|O|X|O|X|0
+	 *  1|X|O|X|O|X|O|X|O|1
+	 *  2|O|X# # # # #O|X|2
+	 *  3|X|O# # # # #X|O|3
+	 *  4|O|X# # # # #O|X|4
+	 *  5|X|O# # # # #X|O|5
+	 *  6|O|X|O|X|O|X|O|X|6
+	 *  7|X|O|X|O|X|O|X|O|7
+	 *    0 1 2 3 4 5 6 7
 	 * </pre>
 	 */
 	public void print() {
