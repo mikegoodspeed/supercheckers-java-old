@@ -171,7 +171,7 @@ public class GameBoardFrm extends JFrame {
 	/**
 	 * This method initializes content
 	 *
-	 * @return javax.swing.JPanel
+	 * @return JPanel
 	 */
 	private JPanel getContent() {
 		if (content == null) {
@@ -186,7 +186,7 @@ public class GameBoardFrm extends JFrame {
 	/**
 	 * This method initializes menu
 	 *
-	 * @return javax.swing.JMenuBar
+	 * @return JMenuBar
 	 */
 	private JMenuBar getMenu() {
 		if (menu == null) {
@@ -200,7 +200,7 @@ public class GameBoardFrm extends JFrame {
 	/**
 	 * This method initializes fileMnu
 	 *
-	 * @return javax.swing.JMenu
+	 * @return JMenu
 	 */
 	private JMenu getGameMnu() {
 		if (gameMnu == null) {
@@ -217,7 +217,7 @@ public class GameBoardFrm extends JFrame {
 	/**
 	 * This method initializes helpMnu
 	 *
-	 * @return javax.swing.JMenu
+	 * @return JMenu
 	 */
 	private JMenu getHelpMnu() {
 		if (helpMnu == null) {
@@ -232,7 +232,7 @@ public class GameBoardFrm extends JFrame {
 	/**
 	 * This method initializes exitMnuItem
 	 *
-	 * @return javax.swing.JMenuItem
+	 * @return JMenuItem
 	 */
 	private JMenuItem getExitMnuItem() {
 		if (exitMnuItem == null) {
@@ -247,7 +247,7 @@ public class GameBoardFrm extends JFrame {
 	/**
 	 * This method initializes newMnuItem
 	 *
-	 * @return javax.swing.JMenuItem
+	 * @return JMenuItem
 	 */
 	private JMenuItem getNewMnuItem() {
 		if (newMnuItem == null) {
@@ -263,7 +263,7 @@ public class GameBoardFrm extends JFrame {
 	/**
 	 * This method initializes aboutMnuItem
 	 *
-	 * @return javax.swing.JMenuItem
+	 * @return JMenuItem
 	 */
 	private JMenuItem getAboutMnuItem() {
 		if (aboutMnuItem == null) {
@@ -277,7 +277,7 @@ public class GameBoardFrm extends JFrame {
 	/**
 	 * This method initializes boardPnl
 	 *
-	 * @return javax.swing.JPanel
+	 * @return JPanel
 	 */
 	private JPanel getBoardPnl() {
 		if (boardPnl == null) {
@@ -294,7 +294,7 @@ public class GameBoardFrm extends JFrame {
 	/**
 	 * This method initializes submitBtn
 	 *
-	 * @return javax.swing.JButton
+	 * @return JButton
 	 */
 	private JButton getSubmitBtn() {
 		if (submitBtn == null) {
@@ -310,7 +310,7 @@ public class GameBoardFrm extends JFrame {
 	/**
 	 * This method initializes resetBtn
 	 *
-	 * @return javax.swing.JButton
+	 * @return JButton
 	 */
 	private JButton getResetBtn() {
 		if (resetBtn == null) {
@@ -326,7 +326,7 @@ public class GameBoardFrm extends JFrame {
 	/**
 	 * This method initializes MovePnl
 	 *
-	 * @return javax.swing.JPanel
+	 * @return JPanel
 	 */
 	private JPanel getMovePnl() {
 		if (MovePnl == null) {
@@ -342,7 +342,7 @@ public class GameBoardFrm extends JFrame {
 	/**
 	 * This method initializes turnPnl
 	 *
-	 * @return javax.swing.JPanel
+	 * @return JPanel
 	 */
 	private JPanel getTurnPnl() {
 		if (turnPnl == null) {
@@ -359,7 +359,7 @@ public class GameBoardFrm extends JFrame {
 	/**
 	 * This method initializes uiPanel	
 	 * 	
-	 * @return javax.swing.JPanel	
+	 * @return JPanel	
 	 */
 	private JPanel getUiPanel() {
 		if (uiPanel == null) {

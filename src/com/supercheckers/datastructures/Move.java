@@ -34,8 +34,8 @@ public class Move implements Cloneable {
 	/**
 	 * Add a spot to the move.
 	 * 
-	 * @param row - the spot's row
-	 * @param col - the spot's col
+	 * @param row the spot's row
+	 * @param col the spot's col
 	 */
 	public void add(int row, int col) {
 		points.add(new Spot(row, col));
@@ -44,7 +44,7 @@ public class Move implements Cloneable {
 	/**
 	 * Get the row of the spot at a given index.
 	 * 
-	 * @param index - index of a spot
+	 * @param index index of a spot
 	 * @return the row of the selected spot
 	 * @throws IndexOutOfBoundsException - if index is out of range (index < 0 || index >= size())
 	 */
@@ -55,9 +55,9 @@ public class Move implements Cloneable {
 	/**
 	 * Get the col of the spot at a given index.
 	 * 
-	 * @param index - index of a spot
+	 * @param index index of a spot
 	 * @return the col of the selected spot
-	 * @throws IndexOutOfBoundsException - if index is out of range (index < 0 || index >= size())
+	 * @throws IndexOutOfBoundsException if index is out of range (index < 0 || index >= size())
 	 */
 	public int getCol(int index) throws IndexOutOfBoundsException {
 		return points.get(index).getCol();
