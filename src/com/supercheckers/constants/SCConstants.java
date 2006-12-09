@@ -7,10 +7,11 @@ import com.supercheckers.datastructures.Team;
 /**
  * A move performed during a turn.
  *
- * @author Mike Goodspeed
- * @url http://www.mikegoodspeed.com/blog/projects/supercheckers/
- * @version $Id$
- * @headurl $HeadURL$
+ * project	Supercheckers
+ * url		http://www.mikegoodspeed.com/blog/projects/supercheckers/
+ * 
+ * @author 	Mike Goodspeed
+ * @version	$Id$
  */
 public interface SCConstants {
 

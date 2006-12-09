@@ -1,16 +1,17 @@
 package com.supercheckers.players;
 
-import com.supercheckers.Supercheckers;
 import com.supercheckers.datastructures.Move;
 import com.supercheckers.datastructures.Team;
+import com.supercheckers.main.Supercheckers;
 
 /**
  * Abstract Player Class, to be used as the superclass for actual players.
  *
- * @author Mike Goodspeed
- * @url http://www.mikegoodspeed.com/blog/projects/supercheckers/
- * @version $Id$
- * @headurl $HeadURL$
+ * project	Supercheckers
+ * url		http://www.mikegoodspeed.com/blog/projects/supercheckers/
+ * 
+ * @author 	Mike Goodspeed
+ * @version	$Id$
  */
 public abstract class Player {
 
@@ -18,8 +19,8 @@ public abstract class Player {
 	private Team team = null;
 
 	/**
-	 * @param name - Name of the player
-	 * @param team - Team representation
+	 * @param manager
+	 * @param team
 	 */
 	public Player(Supercheckers manager, Team team) {
 		this.manager = manager;

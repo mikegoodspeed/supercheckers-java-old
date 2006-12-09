@@ -1,4 +1,4 @@
-package com.supercheckers;
+package com.supercheckers.main;
 
 import com.supercheckers.constants.SCConstants;
 import com.supercheckers.datastructures.Board;
@@ -10,10 +10,11 @@ import com.supercheckers.ui.GameBoardFrm;
 /**
  * Supercheckers main class
  *
- * @author Mike Goodspeed
- * @url http://www.mikegoodspeed.com/blog/projects/supercheckers/
- * @version $Id$
- * @headurl $HeadURL$
+ * project	Supercheckers
+ * url		http://www.mikegoodspeed.com/blog/projects/supercheckers/
+ * 
+ * @author 	Mike Goodspeed
+ * @version	$Id$
  */
 public class Supercheckers {
 

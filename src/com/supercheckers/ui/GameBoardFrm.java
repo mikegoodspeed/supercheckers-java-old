@@ -21,20 +21,21 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
-import com.supercheckers.Supercheckers;
 import com.supercheckers.constants.SCConstants;
 import com.supercheckers.datastructures.Board;
 import com.supercheckers.datastructures.Move;
 import com.supercheckers.datastructures.Team;
+import com.supercheckers.main.Supercheckers;
 import com.supercheckers.utils.GUIInput;
 
 /**
  * Supercheckers Game Board
  *
- * @author Mike Goodspeed
- * @url http://www.mikegoodspeed.com/blog/projects/supercheckers/
- * @version $Id$
- * @headurl $HeadURL$
+ * project	Supercheckers
+ * url		http://www.mikegoodspeed.com/blog/projects/supercheckers/
+ * 
+ * @author 	Mike Goodspeed
+ * @version	$Id$
  */
 public class GameBoardFrm extends JFrame {
 

@@ -1,24 +1,25 @@
 package com.supercheckers.players;
 
-import com.supercheckers.Supercheckers;
 import com.supercheckers.datastructures.Move;
 import com.supercheckers.datastructures.Team;
+import com.supercheckers.main.Supercheckers;
 import com.supercheckers.ui.GameBoardFrm;
 
 /**
  * A Human Player.
  *
- * @author Mike Goodspeed
- * @url http://www.mikegoodspeed.com/blog/projects/supercheckers/
- * @version $Id$
- * @headurl $HeadURL$
+ * project	Supercheckers
+ * url		http://www.mikegoodspeed.com/blog/projects/supercheckers/
+ * 
+ * @author 	Mike Goodspeed
+ * @version	$Id$
  */
 public class HumanPlayer extends Player {
 
 	public GameBoardFrm window = null;
 
 	/**
-	 * @param getManager()
+	 * @param manager
 	 * @param team
 	 */
 	public HumanPlayer(Supercheckers manager, Team team) {
