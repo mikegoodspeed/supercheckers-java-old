@@ -147,61 +147,50 @@ public class Board implements Cloneable {
 	/**
 	 * Determines if a given move is valid based on a specific team and this board.
 	 * 
-	 * @param team
-	 * @param move
+	 * @param b 
+	 * @param t
+	 * @param m
 	 * @return true if move is valid, false otherwise
 	 */
-	public boolean isValidMove(Team team, Move move) {
-		System.out.println("validating " + move);
-		if (team == null || !team.isValid() || SCConstants.EMPTY.equals(team)) {
-			// Team must be valid and from either player 1 or player 2.
+	public static boolean isValidMove(Board b, Team t, Move m) {
+		System.out.println("validating " + m);
+		if (b == null || t == null || m == null) {
+			// Parameters must not be null.
 			return false;
 		}
-		if (move == null || move.size() < 2) {
-			// Move must contain 2 or more Spots.
+		if (!t.isValid() || m.size() < 2) {
+			// Parameters must be valid.
 			return false;
 		}
-		Board b = clone();
-		b.print();
-		Move m;
-		boolean isSlide = false;
-		boolean isJump = false;
-		int rowStart = move.getRow(0);
-		int colStart = move.getCol(0);
+		if (isValidSlide(b, t, m.getRow(0), m.getCol(0), m.getRow(1), m.getCol(1))) {
+			// If the move is a slide, it must only be a slide.
+			return m.size() == 2;
+		}
+		// Test to see if the move is a legal jump series.
+		Board bClone = b.clone();
+		int rowStart = m.getRow(0);
+		int colStart = m.getCol(0);
 		int rowEnd;
 		int colEnd;
-		if (!isValidSpot(rowStart, colStart)) {
-			// The starting Spot must be valid.
-			return false;
-		}
-		if (!team.equals(b.get(rowStart, colStart))) {
-			// Moves must start at current Team's Spot.
-			return false;
-		}
-		for (int i = 1; i < move.size(); i++) {
-			if (isSlide && i > 1) {
-				// Moves can only contain one slide
+		for (int i = 1; i < m.size(); i++) {
+			rowEnd = m.getRow(i);
+			colEnd = m.getCol(i);
+			if (!isValidJump(bClone, t, rowStart, colStart, rowEnd, colEnd)) {
+				// All moves in a jump series must be a valid jump.
 				return false;
 			}
-			rowEnd = move.getRow(i);
-			colEnd = move.getCol(i);
-			if (isValidSlide(b, team, rowStart, colStart, rowEnd, colEnd)) {
-				isSlide = true;
-			} else if (isValidJump(b, team, rowStart, colStart, rowEnd, colEnd)) {
-				isJump = true;
-			}
-			if ((isSlide && isJump) || (!isSlide && !isJump)) {
-				// Moves must always either be a jump or a slide, and never both.
+			Move mTest = new Move();
+			mTest.add(rowStart, colStart);
+			mTest.add(rowEnd, colEnd);
+			bClone.doMove(t, mTest);
+			if (bClone.isGameOver() && i != m.size() - 1) {
+				// Jump series can not leave the board in a game over state before finishing.
 				return false;
 			}
-			m = new Move();
-			m.add(rowStart, colStart);
-			m.add(rowEnd, colEnd);
-			b.doMove(team, m);
-			b.print();
 			rowStart = rowEnd;
 			colStart = colEnd;
 		}
+		// All tests passed!
 		return true;
 	}
 
@@ -229,10 +218,13 @@ public class Board implements Cloneable {
 			// on an empty spot.
 			return false;
 		}
-		boolean horizontalSlide = rowStart - rowEnd == -1 || rowStart - rowEnd == 1;
-		boolean verticalSlide = colStart - colEnd == -1 || colStart - colEnd == 1;
-		// The slide must be either vertical or horizontal, and never both.
-		return (horizontalSlide && !verticalSlide) || (!horizontalSlide && verticalSlide);
+		boolean north = rowStart - rowEnd == 1;
+		boolean south = rowStart - rowEnd == -1;
+		boolean east = colStart - colEnd == 1;
+		boolean west = colStart - colEnd == -1;
+		boolean vertical = rowStart - rowEnd != 0;
+		boolean horizontal = colStart - colEnd != 0;
+		return ((north || south) && !horizontal) || ((east || west) && !vertical);
 	}
 
 	/**
@@ -255,30 +247,21 @@ public class Board implements Cloneable {
 		}
 		if (team == null || !team.equals(board.get(rowStart, colStart))
 				|| !SCConstants.EMPTY.equals(board.get(rowEnd, colEnd))) {
-			// The team must be valid, and the slide must start on a spot on the given team and end
+			// The team must be valid, and the jump must start on a spot on the given team and end
 			// on an empty spot.
-			return false;
-		}
-		boolean northJump = rowStart - rowEnd == -2;
-		boolean southJump = rowStart - rowEnd == 2;
-		boolean westJump = colStart - colEnd == -2;
-		boolean eastJump = colStart - colEnd == 2;
-		if (!northJump || !southJump || !westJump || !eastJump) {
-			// Jumps must go in at least one direction.
-			return false;
-		}
-		if ((northJump && (southJump || westJump || eastJump))
-				|| (southJump && (northJump || westJump || eastJump))
-				|| (westJump && (northJump || southJump || eastJump))
-				|| (eastJump && (northJump || southJump || westJump))) {
-			// Jumps must go in exactly one direction.
 			return false;
 		}
 		if (SCConstants.EMPTY.equals(board.get((rowStart + rowEnd) / 2, (colStart + colEnd) / 2))) {
 			// Jumps must not jump over a space.
 			return false;
 		}
-		return true;
+		boolean north = rowStart - rowEnd == 2;
+		boolean south = rowStart - rowEnd == -2;
+		boolean east = colStart - colEnd == 2;
+		boolean west = colStart - colEnd == -2;
+		boolean vertical = rowStart - rowEnd != 0;
+		boolean horizontal = colStart - colEnd != 0;
+		return ((north || south) && !horizontal) || ((east || west) && !vertical);
 	}
 
 	/**
@@ -313,7 +296,30 @@ public class Board implements Cloneable {
 		}
 		Move proposedMove = currentMove.clone();
 		proposedMove.add(row, col);
-		return isValidMove(team, proposedMove);
+		return isValidMove(this, team, proposedMove);
+	}
+	
+	/**
+	 * Determines if the board is in a game over state, as determined by one or more players 
+	 * occupying no spots in the center of the board.
+	 * 
+	 * @return true if the game is over, false otherwise
+	 */
+	public boolean isGameOver() {
+		int p1 = 0;
+		int p2 = 0;
+		for (int row = 0; row < 8; row++) {
+			for (int col = 0; col < 8; col++) {
+				if (isInCenter(row, col)) {
+					if (SCConstants.TEAM1.equals(get(row, col))) {
+						p1++;
+					} else if (SCConstants.TEAM2.equals(get(row, col))) {
+						p2++;
+					}
+				}
+			}
+		}
+		return p1 == 0 || p2 == 0;
 	}
 
 	/**
