@@ -25,7 +25,6 @@ import com.supercheckers.constants.SCConstants;
 import com.supercheckers.datastructures.Board;
 import com.supercheckers.datastructures.Move;
 import com.supercheckers.datastructures.Team;
-import com.supercheckers.main.Supercheckers;
 import com.supercheckers.utils.GUIInput;
 
 /**
@@ -41,7 +40,7 @@ public class GameBoardFrm extends JFrame {
 
 	private static final long serialVersionUID = -4212234804742120343L;
 
-	private Supercheckers manager = null;
+	private Board board = null;
 	private JPanel content = null;
 	private JMenuBar menu = null;
 	private JMenu gameMnu = null;
@@ -76,7 +75,7 @@ public class GameBoardFrm extends JFrame {
 			String[] loc = ((JLabel) e.getSource()).getName().split(",");
 			int row = new Integer(loc[0]).intValue();
 			int col = new Integer(loc[1]).intValue();
-			if (manager.getBoard().isAvailableSpot(currTeam, inputListener.getMove(), row, col)) {
+			if (board.isAvailableSpot(currTeam, inputListener.getMove(), row, col)) {
 				setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
 		}
@@ -97,20 +96,20 @@ public class GameBoardFrm extends JFrame {
 				int row = new Integer(loc[0]).intValue();
 				int col = new Integer(loc[1]).intValue();
 				if (inputListener.getMove().size() == 0) {
-					if (Board.isInCenter(row, col)) {
+					if (board.isInMiddle(row, col)) {
 						source.setIcon(SCConstants.INSIDE_EMPTY);
 					} else {
 						source.setIcon(SCConstants.OUTSIDE_EMPTY);
 					}
 				} else {
 					if (SCConstants.TEAM1.equals(currTeam)) {
-						if (Board.isInCenter(row, col)) {
+						if (board.isInMiddle(row, col)) {
 							source.setIcon(SCConstants.INSIDE_TEAM1);
 						} else {
 							source.setIcon(SCConstants.OUTSIDE_TEAM1);
 						}
 					} else {
-						if (Board.isInCenter(row, col)) {
+						if (board.isInMiddle(row, col)) {
 							source.setIcon(SCConstants.INSIDE_TEAM2);
 						} else {
 							source.setIcon(SCConstants.OUTSIDE_TEAM2);
@@ -136,7 +135,7 @@ public class GameBoardFrm extends JFrame {
 	private ActionListener resetBtnActionListener = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			inputListener.clearMove();
-			updateBoardPnl();
+			updateBoard(board);
 			getSubmitBtn().setEnabled(false);
 			getResetBtn().setEnabled(false);
 			getBoardPnl().requestFocus();
@@ -146,11 +145,12 @@ public class GameBoardFrm extends JFrame {
 	/**
 	 * This method initializes
 	 * 
+	 * @param board 
 	 * @param manager
 	 */
-	public GameBoardFrm(Supercheckers manager) {
+	public GameBoardFrm(Board board) {
 		super();
-		this.manager = manager;
+		this.board = board;
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception e) {}
@@ -385,17 +385,20 @@ public class GameBoardFrm extends JFrame {
 				boardPnl.add(buttons[row][col]);
 			}
 		}
-		updateBoardPnl();
+		updateBoard(board);
 	}
 
 	/**
 	 * Update the GUI board to reflect the actual board.
+	 * 
+	 * @param board 
 	 */
-	public void updateBoardPnl() {
+	public void updateBoard(Board board) {
+		this.board = board;
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
-				Team t = manager.getBoard().get(row, col);
-				if (!Board.isInCenter(row, col)) {
+				Team t = board.get(row, col);
+				if (!board.isInMiddle(row, col)) {
 					if (SCConstants.TEAM1.equals(t)) {
 						buttons[row][col].setIcon(SCConstants.OUTSIDE_TEAM1);
 					} else if (SCConstants.TEAM2.equals(t)) {

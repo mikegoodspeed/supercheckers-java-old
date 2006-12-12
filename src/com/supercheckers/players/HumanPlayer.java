@@ -1,8 +1,8 @@
 package com.supercheckers.players;
 
+import com.supercheckers.datastructures.Board;
 import com.supercheckers.datastructures.Move;
 import com.supercheckers.datastructures.Team;
-import com.supercheckers.main.Supercheckers;
 import com.supercheckers.ui.GameBoardFrm;
 
 /**
@@ -16,20 +16,18 @@ import com.supercheckers.ui.GameBoardFrm;
  */
 public class HumanPlayer extends Player {
 
-	private GameBoardFrm window = null;
-
 	/**
-	 * @param manager
+	 * @param window
+	 * @param board
 	 * @param team
 	 */
-	public HumanPlayer(Supercheckers manager, Team team) {
-		super(manager, team);
-		this.window = manager.getWindow();
+	public HumanPlayer(GameBoardFrm window, Board board, Team team) {
+		super(window, board, team);
 	}
 
 	public Move getMove() {
-		window.waitForInput();
-		Move move = window.getMove();
+		getWindow().waitForInput();
+		Move move = getWindow().getMove();
 		return move;
 	}
 }

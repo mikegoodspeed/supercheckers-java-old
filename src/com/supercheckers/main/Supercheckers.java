@@ -26,25 +26,25 @@ public class Supercheckers {
 	 */
 	public Supercheckers() {
 		board = new Board();
-		window = new GameBoardFrm(this);
+		window = new GameBoardFrm(board);
 		window.setVisible(true);
 		Move move;
-		Player p1 = new HumanPlayer(this, SCConstants.TEAM1);
-		Player p2 = new HumanPlayer(this, SCConstants.TEAM2);
+		Player p1 = new HumanPlayer(window, board, SCConstants.TEAM1);
+		Player p2 = new HumanPlayer(window, board, SCConstants.TEAM2);
 		while (true) {
 			window.setTurn(p1.getTeam());
 			do {
-				window.updateBoardPnl();
+				window.updateBoard(board);
 				move = p1.getMove();
-			} while (!Board.isValidMove(board, p1.getTeam(), move));
+			} while (!board.isValidMove(p1.getTeam(), move));
 			board.doMove(p1.getTeam(), move);
 			System.out.println("new board after valid move:");
 			board.print();
 			window.setTurn(p2.getTeam());
 			do {
-				window.updateBoardPnl();
+				window.updateBoard(board);
 				move = p2.getMove();
-			} while (!Board.isValidMove(board, p2.getTeam(), move));
+			} while (!board.isValidMove(p2.getTeam(), move));
 			board.doMove(p2.getTeam(), move);
 			System.out.println("new board after valid move:");
 			board.print();

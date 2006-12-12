@@ -1,37 +1,47 @@
 package com.supercheckers.players;
 
+import com.supercheckers.datastructures.Board;
 import com.supercheckers.datastructures.Move;
 import com.supercheckers.datastructures.Team;
-import com.supercheckers.main.Supercheckers;
+import com.supercheckers.ui.GameBoardFrm;
 
 /**
  * Abstract Player Class, to be used as the superclass for actual players.
  * <p>
  * project Supercheckers <br />
  * url http://www.mikegoodspeed.com/blog/projects/supercheckers/
- * 
+ *
  * @author Mike Goodspeed
  * @version $Id$
  */
 public abstract class Player {
-
-	private Supercheckers manager = null;
+	private GameBoardFrm window = null;
+	private Board board = null;
 	private Team team = null;
 
 	/**
-	 * @param manager
+	 * @param window
+	 * @param board
 	 * @param team
 	 */
-	public Player(Supercheckers manager, Team team) {
-		this.manager = manager;
+	public Player(GameBoardFrm window, Board board, Team team) {
+		this.window = window;
+		this.board = board;
 		this.team = team;
 	}
 
 	/**
-	 * @return the manager
+	 * @return the window
 	 */
-	public Supercheckers getManager() {
-		return manager;
+	public GameBoardFrm getWindow() {
+		return window;
+	}
+
+	/**
+	 * @return the board
+	 */
+	public Board getBoard() {
+		return board;
 	}
 
 	/**
@@ -43,7 +53,7 @@ public abstract class Player {
 
 	/**
 	 * Abstract method to be created by the subclass.
-	 * 
+	 *
 	 * @return the selected Move
 	 */
 	public abstract Move getMove();

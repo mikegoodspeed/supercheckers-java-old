@@ -38,7 +38,7 @@ public class Spot {
 	}
 
 	public String toString() {
-		return row + "," + col;
+		return "(" + row + "," + col + ")";
 	}
 
 	public boolean equals(Object obj) {

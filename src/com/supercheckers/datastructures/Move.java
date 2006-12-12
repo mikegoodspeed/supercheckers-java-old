@@ -68,7 +68,7 @@ public class Move implements Cloneable {
 		for (int i = 0; i < size(); i++) {
 			sb.append(" " + points.get(i));
 		}
-		return sb.toString();
+		return sb.toString().trim();
 	}
 
 	protected Move clone() {

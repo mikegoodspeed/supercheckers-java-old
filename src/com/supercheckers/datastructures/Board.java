@@ -13,7 +13,7 @@ import com.supercheckers.constants.SCConstants;
  * @author Mike Goodspeed
  * @version $Id$
  */
-public class Board implements Cloneable {
+public class Board implements Cloneable, SCConstants {
 
 	private Team board[][] = null;
 
@@ -21,8 +21,149 @@ public class Board implements Cloneable {
 	 * Constructor to create a new board
 	 */
 	public Board() {
-		this.board = new Team[8][8];
+		this.board = new Team[B_MAX + 1][B_MAX + 1];
 		reset();
+	}
+
+	/**
+	 * Returns true if the spot, specified by a row and a column, is in the middle of the board
+	 * 
+	 * @param row
+	 * @param col
+	 * @return true if the spot is in the middle, false otherwise
+	 */
+	public boolean isInMiddle(int row, int col) {
+		return row >= B_MID_MIN && row <= B_MID_MAX && col >= B_MID_MIN && col <= B_MID_MAX;
+	}
+	
+	/**
+	 * Determines if the the move, specified by two (row, col) pairs, is a valid slide for the
+	 * specified team on this board.
+	 * 
+	 * @param team
+	 * @param rowStart
+	 * @param colStart
+	 * @param rowEnd
+	 * @param colEnd
+	 * @return true if the move is a valid slide, false otherwise
+	 */
+	public boolean isValidSlide(Team team, int rowStart, int colStart, int rowEnd, int colEnd) {
+		if (board == null || team == null) {
+			// All parameters must not be null.
+			return false;
+		}
+		if (!isValidSpot(rowStart, colStart) || !isValidSpot(rowEnd, colEnd)) {
+			// The board and all spots must be valid.
+			return false;
+		}
+		if (!team.equals(get(rowStart, colStart))
+				|| !EMPTY.equals(get(rowEnd, colEnd))) {
+			// The team must be valid, and the slide must start on a spot on the given team and end
+			// on an empty spot.
+			return false;
+		}
+		boolean north = rowStart - rowEnd == 1;
+		boolean south = rowStart - rowEnd == -1;
+		boolean east = colStart - colEnd == 1;
+		boolean west = colStart - colEnd == -1;
+		boolean vertical = rowStart - rowEnd != 0;
+		boolean horizontal = colStart - colEnd != 0;
+		return ((north || south) && !horizontal) || ((east || west) && !vertical);
+	}
+
+	/**
+	 * Determines is a spot, specified by a row and a column, is valid on the board.
+	 * 
+	 * @param row
+	 * @param col
+	 * @return true if the spot is valid, false otherwise
+	 */
+	public boolean isValidSpot(int row, int col) {
+		return row >= B_MIN && row < B_MAX && col >= B_MIN && col < B_MAX;
+	}
+	
+	/**
+	 * Determines if the the move, specified by two (row, col) pairs, is a valid jump for the
+	 * specified team on this board.
+	 * 
+	 * @param team
+	 * @param rowStart
+	 * @param colStart
+	 * @param rowEnd
+	 * @param colEnd
+	 * @return true if the move is a valid jump, false otherwise
+	 */
+	public boolean isValidJump(Team team, int rowStart, int colStart, int rowEnd, int colEnd) {
+		if (!isValidSpot(rowStart, colStart) || !isValidSpot(rowEnd, colEnd)) {
+			// The board and all spots must be valid.
+			return false;
+		}
+		if (team == null || !team.equals(get(rowStart, colStart))
+				|| !EMPTY.equals(get(rowEnd, colEnd))) {
+			// The team must be valid, and the jump must start on a spot on the given team and end
+			// on an empty spot.
+			return false;
+		}
+		if (EMPTY.equals(get((rowStart + rowEnd) / 2, (colStart + colEnd) / 2))) {
+			// Jumps must not jump over a space.
+			return false;
+		}
+		boolean north = rowStart - rowEnd == 2;
+		boolean south = rowStart - rowEnd == -2;
+		boolean east = colStart - colEnd == 2;
+		boolean west = colStart - colEnd == -2;
+		boolean vertical = rowStart - rowEnd != 0;
+		boolean horizontal = colStart - colEnd != 0;
+		return ((north || south) && !horizontal) || ((east || west) && !vertical);
+	}
+	
+	/**
+	 * Determines if a given move is valid based on a specific team and this board.
+	 * 
+	 * @param team
+	 * @param move
+	 * @return true if move is valid, false otherwise
+	 */
+	public boolean isValidMove(Team team, Move move) {
+		System.out.println("validating " + move);
+		if (team == null || move == null) {
+			// Parameters must not be null.
+			return false;
+		}
+		if (!team.isValid() || move.size() < 2) {
+			// Parameters must be valid.
+			return false;
+		}
+		if (isValidSlide(team, move.getRow(0), move.getCol(0), move.getRow(1), move.getCol(1))) {
+			// If the move is a slide, it must only be a slide.
+			return move.size() == 2;
+		}
+		// Test to see if the move is a legal jump series.
+		Board boardClone = clone();
+		int rowStart = move.getRow(0);
+		int colStart = move.getCol(0);
+		int rowEnd;
+		int colEnd;
+		for (int i = 1; i < move.size(); i++) {
+			rowEnd = move.getRow(i);
+			colEnd = move.getCol(i);
+			if (!boardClone.isValidJump(team, rowStart, colStart, rowEnd, colEnd)) {
+				// All moves in a jump series must be a valid jump.
+				return false;
+			}
+			Move mTest = new Move();
+			mTest.add(rowStart, colStart);
+			mTest.add(rowEnd, colEnd);
+			boardClone.doMove(team, mTest);
+			if (boardClone.isGameOver() && i != move.size() - 1) {
+				// Jump series can not leave the board in a game over state before finishing.
+				return false;
+			}
+			rowStart = rowEnd;
+			colStart = colEnd;
+		}
+		// All tests passed!
+		return true;
 	}
 
 	/**
@@ -47,78 +188,6 @@ public class Board implements Cloneable {
 		return board[row][col];
 	}
 
-	protected Board clone() {
-		Board b = new Board();
-		for (int row = 0; row < 8; row++) {
-			for (int col = 0; col < 8; col++) {
-				b.insert(get(row, col), row, col);
-			}
-		}
-		return b;
-	}
-
-	/**
-	 * Reset the board to its default state.
-	 */
-	public void reset() {
-		for (int row = 0; row < 8; row++) {
-			for (int col = 0; col < 8; col++) {
-				if (!Board.isInCenter(row, col)) { // not center area
-					if ((row + col) % 2 == 0) {
-						insert(SCConstants.TEAM1, row, col);
-					} else { // if ((row + col) % 2 == 1)
-						insert(SCConstants.TEAM2, row, col);
-					}
-				} else { // center area
-					insert(SCConstants.EMPTY, row, col);
-				}
-			}
-		}
-	}
-
-	/**
-	 * Returns true if the spot, specified by a row and a column, is in the center of the board
-	 * 
-	 * @param row
-	 * @param col
-	 * @return true if the spot is in the center, false otherwise
-	 */
-	public static boolean isInCenter(int row, int col) {
-		return row >= 2 && row < 6 && col >= 2 && col < 6;
-	}
-
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		final Board other = (Board) obj;
-		if (!Arrays.equals(board, other.board))
-			return false;
-		return true;
-	}
-
-	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		for (int row = 0; row < 8; row++) {
-			for (int col = 0; col < 8; col++) {
-				sb.append(get(row, col).getTeam());
-			}
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * Determine if this game is a new game
-	 * 
-	 * @return true if this game is a new game, false otherwise
-	 */
-	public boolean isNewGame() {
-		return equals(new Board());
-	}
-
 	/**
 	 * Perform a move on a board. This does not take into account if the move is valid.
 	 * 
@@ -128,151 +197,59 @@ public class Board implements Cloneable {
 	 */
 	public void doMove(Team team, Move move) {
 		if (team != null && team.isValid() && move != null && move.size() > 1) {
-			boolean isJump = isValidJump(this, team, move.getRow(0), move.getCol(0),
-					move.getRow(1), move.getCol(1));
+			boolean isJump = isValidJump(team, move.getRow(0), move.getCol(0), move.getRow(1),
+					move.getCol(1));
 			int jumpedRow;
 			int jumpedCol;
 			for (int i = 1; i < move.size(); i++) {
 				jumpedRow = (move.getRow(i - 1) + move.getRow(i)) / 2;
 				jumpedCol = (move.getCol(i - 1) + move.getCol(i)) / 2;
 				if (isJump && !team.equals(get(jumpedRow, jumpedCol))) {
-					insert(SCConstants.EMPTY, jumpedRow, jumpedCol);
+					insert(EMPTY, jumpedRow, jumpedCol);
 				}
-				insert(SCConstants.EMPTY, move.getRow(i - 1), move.getCol(i - 1));
+				insert(EMPTY, move.getRow(i - 1), move.getCol(i - 1));
 				insert(team, move.getRow(i), move.getCol(i));
 			}
 		}
 	}
 
 	/**
-	 * Determines if a given move is valid based on a specific team and this board.
-	 * 
-	 * @param b 
-	 * @param t
-	 * @param m
-	 * @return true if move is valid, false otherwise
+	 * Reset the board to its default state.
 	 */
-	public static boolean isValidMove(Board b, Team t, Move m) {
-		System.out.println("validating " + m);
-		if (b == null || t == null || m == null) {
-			// Parameters must not be null.
-			return false;
-		}
-		if (!t.isValid() || m.size() < 2) {
-			// Parameters must be valid.
-			return false;
-		}
-		if (isValidSlide(b, t, m.getRow(0), m.getCol(0), m.getRow(1), m.getCol(1))) {
-			// If the move is a slide, it must only be a slide.
-			return m.size() == 2;
-		}
-		// Test to see if the move is a legal jump series.
-		Board bClone = b.clone();
-		int rowStart = m.getRow(0);
-		int colStart = m.getCol(0);
-		int rowEnd;
-		int colEnd;
-		for (int i = 1; i < m.size(); i++) {
-			rowEnd = m.getRow(i);
-			colEnd = m.getCol(i);
-			if (!isValidJump(bClone, t, rowStart, colStart, rowEnd, colEnd)) {
-				// All moves in a jump series must be a valid jump.
-				return false;
+	public void reset() {
+		for (int row = 0; row < 8; row++) {
+			for (int col = 0; col < 8; col++) {
+				if (!isInMiddle(row, col)) { // not center area
+					if ((row + col) % 2 == 0) {
+						insert(TEAM1, row, col);
+					} else { // if ((row + col) % 2 == 1)
+						insert(TEAM2, row, col);
+					}
+				} else { // center area
+					insert(EMPTY, row, col);
+				}
 			}
-			Move mTest = new Move();
-			mTest.add(rowStart, colStart);
-			mTest.add(rowEnd, colEnd);
-			bClone.doMove(t, mTest);
-			if (bClone.isGameOver() && i != m.size() - 1) {
-				// Jump series can not leave the board in a game over state before finishing.
-				return false;
+		}
+	}
+	
+	/**
+	 * Clear the board by setting all the spots to EMPTY.
+	 */
+	public void clear() {
+		for (int row = B_MIN; row <= B_MAX; row++) {
+			for (int col = B_MIN; col <= B_MAX; col++) {
+				insert(EMPTY, row, col);
 			}
-			rowStart = rowEnd;
-			colStart = colEnd;
 		}
-		// All tests passed!
-		return true;
 	}
 
 	/**
-	 * Determines if the the move, specified by two (row, col) pairs, is a valid slide for the
-	 * specified team on the specified board.
+	 * Determine if this game is a new game
 	 * 
-	 * @param board
-	 * @param team
-	 * @param rowStart
-	 * @param colStart
-	 * @param rowEnd
-	 * @param colEnd
-	 * @return true if the move is a valid slide, false otherwise
+	 * @return true if this game is a new game, false otherwise
 	 */
-	public static boolean isValidSlide(Board board, Team team, int rowStart, int colStart,
-			int rowEnd, int colEnd) {
-		if (board == null || !isValidSpot(rowStart, colStart) || !isValidSpot(rowEnd, colEnd)) {
-			// The board and all spots must be valid.
-			return false;
-		}
-		if (team == null || !team.equals(board.get(rowStart, colStart))
-				|| !SCConstants.EMPTY.equals(board.get(rowEnd, colEnd))) {
-			// The team must be valid, and the slide must start on a spot on the given team and end
-			// on an empty spot.
-			return false;
-		}
-		boolean north = rowStart - rowEnd == 1;
-		boolean south = rowStart - rowEnd == -1;
-		boolean east = colStart - colEnd == 1;
-		boolean west = colStart - colEnd == -1;
-		boolean vertical = rowStart - rowEnd != 0;
-		boolean horizontal = colStart - colEnd != 0;
-		return ((north || south) && !horizontal) || ((east || west) && !vertical);
-	}
-
-	/**
-	 * Determines if the the move, specified by two (row, col) pairs, is a valid jump for the
-	 * specified team on the specified board.
-	 * 
-	 * @param board
-	 * @param team
-	 * @param rowStart
-	 * @param colStart
-	 * @param rowEnd
-	 * @param colEnd
-	 * @return true if the move is a valid jump, false otherwise
-	 */
-	public static boolean isValidJump(Board board, Team team, int rowStart, int colStart,
-			int rowEnd, int colEnd) {
-		if (board == null || !isValidSpot(rowStart, colStart) || !isValidSpot(rowEnd, colEnd)) {
-			// The board and all spots must be valid.
-			return false;
-		}
-		if (team == null || !team.equals(board.get(rowStart, colStart))
-				|| !SCConstants.EMPTY.equals(board.get(rowEnd, colEnd))) {
-			// The team must be valid, and the jump must start on a spot on the given team and end
-			// on an empty spot.
-			return false;
-		}
-		if (SCConstants.EMPTY.equals(board.get((rowStart + rowEnd) / 2, (colStart + colEnd) / 2))) {
-			// Jumps must not jump over a space.
-			return false;
-		}
-		boolean north = rowStart - rowEnd == 2;
-		boolean south = rowStart - rowEnd == -2;
-		boolean east = colStart - colEnd == 2;
-		boolean west = colStart - colEnd == -2;
-		boolean vertical = rowStart - rowEnd != 0;
-		boolean horizontal = colStart - colEnd != 0;
-		return ((north || south) && !horizontal) || ((east || west) && !vertical);
-	}
-
-	/**
-	 * Determines is a spot, specified by a row and a column, is valid on the board.
-	 * 
-	 * @param row
-	 * @param col
-	 * @return true if the spot is valid, false otherwise
-	 */
-	public static boolean isValidSpot(int row, int col) {
-		return row >= 0 && row < 8 && col >= 0 && col < 8;
+	public boolean isNewGame() {
+		return equals(new Board());
 	}
 
 	/**
@@ -296,7 +273,7 @@ public class Board implements Cloneable {
 		}
 		Move proposedMove = currentMove.clone();
 		proposedMove.add(row, col);
-		return isValidMove(this, team, proposedMove);
+		return isValidMove(team, proposedMove);
 	}
 	
 	/**
@@ -308,14 +285,12 @@ public class Board implements Cloneable {
 	public boolean isGameOver() {
 		int p1 = 0;
 		int p2 = 0;
-		for (int row = 0; row < 8; row++) {
-			for (int col = 0; col < 8; col++) {
-				if (isInCenter(row, col)) {
-					if (SCConstants.TEAM1.equals(get(row, col))) {
-						p1++;
-					} else if (SCConstants.TEAM2.equals(get(row, col))) {
-						p2++;
-					}
+		for (int row = B_MID_MIN; row <= B_MID_MAX; row++) {
+			for (int col = B_MID_MIN; col <= B_MID_MAX; col++) {
+				if (TEAM1.equals(get(row, col))) {
+					p1++;
+				} else if (TEAM2.equals(get(row, col))) {
+					p2++;
 				}
 			}
 		}
@@ -343,11 +318,11 @@ public class Board implements Cloneable {
 	public void print() {
 		System.out.println("                    ");
 		System.out.println("   0 1 2 3 4 5 6 7  ");
-		for (int row = 0; row < 8; row++) {
+		for (int row = B_MIN; row <= B_MAX; row++) {
 			System.out.print(" " + row + "|");
-			for (int col = 0; col < 8; col++) {
+			for (int col = B_MIN; col <= B_MAX; col++) {
 				System.out.print(get(row, col));
-				if (col > 0 && col < 6 && row > 1 && row < 6) {
+				if (col > B_MIN && col <= B_MID_MAX && row >= B_MID_MIN && row <= B_MID_MAX) {
 					System.out.print("#");
 				} else {
 					System.out.print("|");
@@ -357,5 +332,38 @@ public class Board implements Cloneable {
 		}
 		System.out.println("   0 1 2 3 4 5 6 7  ");
 		System.out.println("                    ");
+	}
+
+	protected Board clone() {
+		Board b = new Board();
+		for (int row = B_MIN; row <= B_MAX; row++) {
+			for (int col = B_MIN; col <= B_MAX; col++) {
+				b.insert(get(row, col), row, col);
+			}
+		}
+		return b;
+	}
+
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		final Board other = (Board) obj;
+		if (!Arrays.equals(board, other.board))
+			return false;
+		return true;
+	}
+
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		for (int row = B_MIN; row <= B_MAX; row++) {
+			for (int col = B_MIN; col <= B_MAX; col++) {
+				sb.append(get(row, col).getTeam());
+			}
+		}
+		return sb.toString();
 	}
 }
