@@ -89,12 +89,12 @@ public class GameBoardFrm extends JFrame {
 		public void mouseReleased(MouseEvent e) {}
 
 		public void mouseClicked(MouseEvent e) {
-			if (listenForInput) {
-				JLabel source = ((JLabel) e.getSource());
-				String name = source.getName();
-				String[] loc = name.split(",");
-				int row = new Integer(loc[0]).intValue();
-				int col = new Integer(loc[1]).intValue();
+			JLabel source = ((JLabel) e.getSource());
+			String name = source.getName();
+			String[] loc = name.split(",");
+			int row = new Integer(loc[0]).intValue();
+			int col = new Integer(loc[1]).intValue();
+			if (listenForInput && board.isAvailableSpot(currTeam, inputListener.getMove(), row, col)) {
 				if (inputListener.getMove().size() == 0) {
 					if (board.isInMiddle(row, col)) {
 						source.setIcon(SCConstants.getImg(SCConstants.INSIDE_EMPTY));
