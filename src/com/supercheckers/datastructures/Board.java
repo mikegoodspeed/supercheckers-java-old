@@ -13,7 +13,7 @@ import com.supercheckers.constants.SCConstants;
  * @author Mike Goodspeed
  * @version $Id$
  */
-public class Board implements Cloneable, SCConstants {
+public class Board implements Cloneable {
 
 	private Team board[][] = null;
 
@@ -21,7 +21,7 @@ public class Board implements Cloneable, SCConstants {
 	 * Constructor to create a new board
 	 */
 	public Board() {
-		this.board = new Team[B_MAX + 1][B_MAX + 1];
+		this.board = new Team[SCConstants.B_MAX + 1][SCConstants.B_MAX + 1];
 		reset();
 	}
 
@@ -33,7 +33,7 @@ public class Board implements Cloneable, SCConstants {
 	 * @return true if the spot is in the middle, false otherwise
 	 */
 	public boolean isInMiddle(int row, int col) {
-		return row >= B_MID_MIN && row <= B_MID_MAX && col >= B_MID_MIN && col <= B_MID_MAX;
+		return row >= SCConstants.B_MID_MIN && row <= SCConstants.B_MID_MAX && col >= SCConstants.B_MID_MIN && col <= SCConstants.B_MID_MAX;
 	}
 	
 	/**
@@ -57,7 +57,7 @@ public class Board implements Cloneable, SCConstants {
 			return false;
 		}
 		if (!team.equals(get(rowStart, colStart))
-				|| !EMPTY.equals(get(rowEnd, colEnd))) {
+				|| !SCConstants.EMPTY.equals(get(rowEnd, colEnd))) {
 			// The team must be valid, and the slide must start on a spot on the given team and end
 			// on an empty spot.
 			return false;
@@ -79,7 +79,7 @@ public class Board implements Cloneable, SCConstants {
 	 * @return true if the spot is valid, false otherwise
 	 */
 	public boolean isValidSpot(int row, int col) {
-		return row >= B_MIN && row < B_MAX && col >= B_MIN && col < B_MAX;
+		return row >= SCConstants.B_MIN && row < SCConstants.B_MAX && col >= SCConstants.B_MIN && col < SCConstants.B_MAX;
 	}
 	
 	/**
@@ -99,12 +99,12 @@ public class Board implements Cloneable, SCConstants {
 			return false;
 		}
 		if (team == null || !team.equals(get(rowStart, colStart))
-				|| !EMPTY.equals(get(rowEnd, colEnd))) {
+				|| !SCConstants.EMPTY.equals(get(rowEnd, colEnd))) {
 			// The team must be valid, and the jump must start on a spot on the given team and end
 			// on an empty spot.
 			return false;
 		}
-		if (EMPTY.equals(get((rowStart + rowEnd) / 2, (colStart + colEnd) / 2))) {
+		if (SCConstants.EMPTY.equals(get((rowStart + rowEnd) / 2, (colStart + colEnd) / 2))) {
 			// Jumps must not jump over a space.
 			return false;
 		}
@@ -205,9 +205,9 @@ public class Board implements Cloneable, SCConstants {
 				jumpedRow = (move.getRow(i - 1) + move.getRow(i)) / 2;
 				jumpedCol = (move.getCol(i - 1) + move.getCol(i)) / 2;
 				if (isJump && !team.equals(get(jumpedRow, jumpedCol))) {
-					insert(EMPTY, jumpedRow, jumpedCol);
+					insert(SCConstants.EMPTY, jumpedRow, jumpedCol);
 				}
-				insert(EMPTY, move.getRow(i - 1), move.getCol(i - 1));
+				insert(SCConstants.EMPTY, move.getRow(i - 1), move.getCol(i - 1));
 				insert(team, move.getRow(i), move.getCol(i));
 			}
 		}
@@ -221,12 +221,12 @@ public class Board implements Cloneable, SCConstants {
 			for (int col = 0; col < 8; col++) {
 				if (!isInMiddle(row, col)) { // not center area
 					if ((row + col) % 2 == 0) {
-						insert(TEAM1, row, col);
+						insert(SCConstants.TEAM1, row, col);
 					} else { // if ((row + col) % 2 == 1)
-						insert(TEAM2, row, col);
+						insert(SCConstants.TEAM2, row, col);
 					}
 				} else { // center area
-					insert(EMPTY, row, col);
+					insert(SCConstants.EMPTY, row, col);
 				}
 			}
 		}
@@ -236,9 +236,9 @@ public class Board implements Cloneable, SCConstants {
 	 * Clear the board by setting all the spots to EMPTY.
 	 */
 	public void clear() {
-		for (int row = B_MIN; row <= B_MAX; row++) {
-			for (int col = B_MIN; col <= B_MAX; col++) {
-				insert(EMPTY, row, col);
+		for (int row = SCConstants.B_MIN; row <= SCConstants.B_MAX; row++) {
+			for (int col = SCConstants.B_MIN; col <= SCConstants.B_MAX; col++) {
+				insert(SCConstants.EMPTY, row, col);
 			}
 		}
 	}
@@ -285,11 +285,11 @@ public class Board implements Cloneable, SCConstants {
 	public boolean isGameOver() {
 		int p1 = 0;
 		int p2 = 0;
-		for (int row = B_MID_MIN; row <= B_MID_MAX; row++) {
-			for (int col = B_MID_MIN; col <= B_MID_MAX; col++) {
-				if (TEAM1.equals(get(row, col))) {
+		for (int row = SCConstants.B_MID_MIN; row <= SCConstants.B_MID_MAX; row++) {
+			for (int col = SCConstants.B_MID_MIN; col <= SCConstants.B_MID_MAX; col++) {
+				if (SCConstants.TEAM1.equals(get(row, col))) {
 					p1++;
-				} else if (TEAM2.equals(get(row, col))) {
+				} else if (SCConstants.TEAM2.equals(get(row, col))) {
 					p2++;
 				}
 			}
@@ -318,11 +318,11 @@ public class Board implements Cloneable, SCConstants {
 	public void print() {
 		System.out.println("                    ");
 		System.out.println("   0 1 2 3 4 5 6 7  ");
-		for (int row = B_MIN; row <= B_MAX; row++) {
+		for (int row = SCConstants.B_MIN; row <= SCConstants.B_MAX; row++) {
 			System.out.print(" " + row + "|");
-			for (int col = B_MIN; col <= B_MAX; col++) {
+			for (int col = SCConstants.B_MIN; col <= SCConstants.B_MAX; col++) {
 				System.out.print(get(row, col));
-				if (col > B_MIN && col <= B_MID_MAX && row >= B_MID_MIN && row <= B_MID_MAX) {
+				if (col > SCConstants.B_MIN && col <= SCConstants.B_MID_MAX && row >= SCConstants.B_MID_MIN && row <= SCConstants.B_MID_MAX) {
 					System.out.print("#");
 				} else {
 					System.out.print("|");
@@ -336,8 +336,8 @@ public class Board implements Cloneable, SCConstants {
 
 	protected Board clone() {
 		Board b = new Board();
-		for (int row = B_MIN; row <= B_MAX; row++) {
-			for (int col = B_MIN; col <= B_MAX; col++) {
+		for (int row = SCConstants.B_MIN; row <= SCConstants.B_MAX; row++) {
+			for (int col = SCConstants.B_MIN; col <= SCConstants.B_MAX; col++) {
 				b.insert(get(row, col), row, col);
 			}
 		}
@@ -359,8 +359,8 @@ public class Board implements Cloneable, SCConstants {
 
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
-		for (int row = B_MIN; row <= B_MAX; row++) {
-			for (int col = B_MIN; col <= B_MAX; col++) {
+		for (int row = SCConstants.B_MIN; row <= SCConstants.B_MAX; row++) {
+			for (int col = SCConstants.B_MIN; col <= SCConstants.B_MAX; col++) {
 				sb.append(get(row, col).getTeam());
 			}
 		}

@@ -13,15 +13,15 @@ import com.supercheckers.datastructures.Team;
  * @author Mike Goodspeed
  * @version $Id$
  */
-public interface SCConstants {
+public class SCConstants {
 
 	// Teams
 	/** Player 1's team: X */
-	public Team TEAM1 = new Team('X');
+	public static Team TEAM1 = new Team('X');
 	/** Player 2's team: O */
-	public Team TEAM2 = new Team('0');
+	public static Team TEAM2 = new Team('0');
 	/** An empty team: (space) */
-	public Team EMPTY = new Team(' ');
+	public static Team EMPTY = new Team(' ');
 	
 	// Board constants
 	/**
@@ -49,15 +49,29 @@ public interface SCConstants {
 
 	// Board Icons
 	/** Icon for player 1's spot inside the center */
-	public static final ImageIcon INSIDE_TEAM1 = new ImageIcon("images/inside_green.jpg");
+	public static final String INSIDE_TEAM1 = "images/inside_green.jpg";
 	/** Icon for player 2's spot inside the center */
-	public static final ImageIcon INSIDE_TEAM2 = new ImageIcon("images/inside_orange.jpg");
+	public static final String INSIDE_TEAM2 = "images/inside_orange.jpg";
 	/** Icon for an empty spot inside the center */
-	public static final ImageIcon INSIDE_EMPTY = new ImageIcon("images/inside_empty.jpg");
+	public static final String INSIDE_EMPTY = "images/inside_empty.jpg";
 	/** Icon for player 1's spot outside the center */
-	public static final ImageIcon OUTSIDE_TEAM1 = new ImageIcon("images/outside_green.jpg");
+	public static final String OUTSIDE_TEAM1 = "images/outside_green.jpg";
 	/** Icon for player 2's spot outside the center */
-	public static final ImageIcon OUTSIDE_TEAM2 = new ImageIcon("images/outside_orange.jpg");
+	public static final String OUTSIDE_TEAM2 = "images/outside_orange.jpg";
 	/** Icon for an empty spot outside the center */
-	public static final ImageIcon OUTSIDE_EMPTY = new ImageIcon("images/outside_empty.jpg");
+	public static final String OUTSIDE_EMPTY = "images/outside_empty.jpg";
+	
+	/**
+	 * Returns an ImageIcon as specified by the given path.
+	 * 
+	 * @param path
+	 * @return Associated icon for the given path
+	 */
+	public static final ImageIcon getImg(String path) {
+		if (SCConstants.class.getResource("/" + path) == null) {
+			return new ImageIcon(path);
+		} else {
+			return new ImageIcon(SCConstants.class.getResource("/" + path));
+		}
+	}
 }
