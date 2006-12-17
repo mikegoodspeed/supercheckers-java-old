@@ -78,4 +78,29 @@ public class Move implements Cloneable {
 		}
 		return m;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		final Move other = (Move) obj;
+		if (other.size() != size()) {
+			return false;
+		}
+		for (int i = 0; i < size(); i++) {
+			if (other.getRow(i) != getRow(i)) {
+				return false;
+			}
+			if (other.getCol(i) != getCol(i)) {
+				return false;
+			}
+		}
+		return true;
+	}
 }
