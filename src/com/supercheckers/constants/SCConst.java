@@ -13,7 +13,7 @@ import com.supercheckers.datastructures.Team;
  * @author Mike Goodspeed
  * @version $Id$
  */
-public class SCConstants {
+public class SCConst {
 
 	// Teams
 	/** Player 1's team: X */
@@ -68,10 +68,10 @@ public class SCConstants {
 	 * @return Associated icon for the given path
 	 */
 	public static final ImageIcon getImg(String path) {
-		if (SCConstants.class.getResource("/" + path) == null) {
+		if (SCConst.class.getResource("/" + path) == null) {
 			return new ImageIcon(path);
 		} else {
-			return new ImageIcon(SCConstants.class.getResource("/" + path));
+			return new ImageIcon(SCConst.class.getResource("/" + path));
 		}
 	}
 }

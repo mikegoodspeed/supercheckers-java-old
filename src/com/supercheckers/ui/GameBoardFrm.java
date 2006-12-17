@@ -21,7 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
-import com.supercheckers.constants.SCConstants;
+import com.supercheckers.constants.SCConst;
 import com.supercheckers.datastructures.Board;
 import com.supercheckers.datastructures.Move;
 import com.supercheckers.datastructures.Team;
@@ -56,7 +56,7 @@ public class GameBoardFrm extends JFrame {
 	private JPanel MovePnl = null;
 	private JPanel turnPnl = null;
 	private JLabel turnLbl = null;
-	private Team currTeam = SCConstants.TEAM1;
+	private Team currTeam = SCConst.TEAM1;
 	private GUIInput inputListener = new GUIInput();
 	private boolean listenForInput = false;
 
@@ -97,22 +97,22 @@ public class GameBoardFrm extends JFrame {
 			if (listenForInput && board.isAvailableSpot(currTeam, inputListener.getMove(), row, col)) {
 				if (inputListener.getMove().size() == 0) {
 					if (board.isInMiddle(row, col)) {
-						source.setIcon(SCConstants.getImg(SCConstants.INSIDE_EMPTY));
+						source.setIcon(SCConst.getImg(SCConst.INSIDE_EMPTY));
 					} else {
-						source.setIcon(SCConstants.getImg(SCConstants.OUTSIDE_EMPTY));
+						source.setIcon(SCConst.getImg(SCConst.OUTSIDE_EMPTY));
 					}
 				} else {
-					if (SCConstants.TEAM1.equals(currTeam)) {
+					if (SCConst.TEAM1.equals(currTeam)) {
 						if (board.isInMiddle(row, col)) {
-							source.setIcon(SCConstants.getImg(SCConstants.INSIDE_TEAM1));
+							source.setIcon(SCConst.getImg(SCConst.INSIDE_TEAM1));
 						} else {
-							source.setIcon(SCConstants.getImg(SCConstants.OUTSIDE_TEAM1));
+							source.setIcon(SCConst.getImg(SCConst.OUTSIDE_TEAM1));
 						}
 					} else {
 						if (board.isInMiddle(row, col)) {
-							source.setIcon(SCConstants.getImg(SCConstants.INSIDE_TEAM2));
+							source.setIcon(SCConst.getImg(SCConst.INSIDE_TEAM2));
 						} else {
-							source.setIcon(SCConstants.getImg(SCConstants.OUTSIDE_TEAM2));
+							source.setIcon(SCConst.getImg(SCConst.OUTSIDE_TEAM2));
 						}
 					}
 				}
@@ -351,7 +351,7 @@ public class GameBoardFrm extends JFrame {
 	private JPanel getTurnPnl() {
 		if (turnPnl == null) {
 			turnLbl = new JLabel();
-			turnLbl.setIcon(SCConstants.getImg(SCConstants.OUTSIDE_TEAM1));
+			turnLbl.setIcon(SCConst.getImg(SCConst.OUTSIDE_TEAM1));
 			turnPnl = new JPanel();
 			turnPnl.setLayout(new BorderLayout());
 			turnPnl.setBorder(BorderFactory.createTitledBorder("Turn"));
@@ -399,20 +399,20 @@ public class GameBoardFrm extends JFrame {
 			for (int col = 0; col < 8; col++) {
 				Team t = board.get(row, col);
 				if (!board.isInMiddle(row, col)) {
-					if (SCConstants.TEAM1.equals(t)) {
-						buttons[row][col].setIcon(SCConstants.getImg(SCConstants.OUTSIDE_TEAM1));
-					} else if (SCConstants.TEAM2.equals(t)) {
-						buttons[row][col].setIcon(SCConstants.getImg(SCConstants.OUTSIDE_TEAM2));
+					if (SCConst.TEAM1.equals(t)) {
+						buttons[row][col].setIcon(SCConst.getImg(SCConst.OUTSIDE_TEAM1));
+					} else if (SCConst.TEAM2.equals(t)) {
+						buttons[row][col].setIcon(SCConst.getImg(SCConst.OUTSIDE_TEAM2));
 					} else {
-						buttons[row][col].setIcon(SCConstants.getImg(SCConstants.OUTSIDE_EMPTY));
+						buttons[row][col].setIcon(SCConst.getImg(SCConst.OUTSIDE_EMPTY));
 					}
 				} else { // center area
-					if (SCConstants.TEAM1.equals(t)) {
-						buttons[row][col].setIcon(SCConstants.getImg(SCConstants.INSIDE_TEAM1));
-					} else if (SCConstants.TEAM2.equals(t)) {
-						buttons[row][col].setIcon(SCConstants.getImg(SCConstants.INSIDE_TEAM2));
+					if (SCConst.TEAM1.equals(t)) {
+						buttons[row][col].setIcon(SCConst.getImg(SCConst.INSIDE_TEAM1));
+					} else if (SCConst.TEAM2.equals(t)) {
+						buttons[row][col].setIcon(SCConst.getImg(SCConst.INSIDE_TEAM2));
 					} else {
-						buttons[row][col].setIcon(SCConstants.getImg(SCConstants.INSIDE_EMPTY));
+						buttons[row][col].setIcon(SCConst.getImg(SCConst.INSIDE_EMPTY));
 					}
 				}
 			}
@@ -426,10 +426,10 @@ public class GameBoardFrm extends JFrame {
 	 */
 	public void setTurn(Team team) {
 		this.currTeam = team;
-		if (SCConstants.TEAM1.equals(team)) {
-			turnLbl.setIcon(SCConstants.getImg(SCConstants.OUTSIDE_TEAM1));
+		if (SCConst.TEAM1.equals(team)) {
+			turnLbl.setIcon(SCConst.getImg(SCConst.OUTSIDE_TEAM1));
 		} else {
-			turnLbl.setIcon(SCConstants.getImg(SCConstants.OUTSIDE_TEAM2));
+			turnLbl.setIcon(SCConst.getImg(SCConst.OUTSIDE_TEAM2));
 		}
 	}
 

@@ -1,8 +1,6 @@
 package com.supercheckers.datastructures;
 
-import java.util.Arrays;
-
-import com.supercheckers.constants.SCConstants;
+import com.supercheckers.constants.SCConst;
 
 /**
  * Supercheckers Board Data Structure.
@@ -21,7 +19,7 @@ public class Board implements Cloneable {
 	 * Constructor to create a new board
 	 */
 	public Board() {
-		this.board = new Team[SCConstants.B_MAX + 1][SCConstants.B_MAX + 1];
+		this.board = new Team[SCConst.B_MAX + 1][SCConst.B_MAX + 1];
 		reset();
 	}
 
@@ -33,9 +31,10 @@ public class Board implements Cloneable {
 	 * @return true if the spot is in the middle, false otherwise
 	 */
 	public boolean isInMiddle(int row, int col) {
-		return row >= SCConstants.B_MID_MIN && row <= SCConstants.B_MID_MAX && col >= SCConstants.B_MID_MIN && col <= SCConstants.B_MID_MAX;
+		return row >= SCConst.B_MID_MIN && row <= SCConst.B_MID_MAX
+		&& col >= SCConst.B_MID_MIN && col <= SCConst.B_MID_MAX;
 	}
-	
+
 	/**
 	 * Determines if the the move, specified by two (row, col) pairs, is a valid slide for the
 	 * specified team on this board.
@@ -48,7 +47,7 @@ public class Board implements Cloneable {
 	 * @return true if the move is a valid slide, false otherwise
 	 */
 	public boolean isValidSlide(Team team, int rowStart, int colStart, int rowEnd, int colEnd) {
-		if (board == null || team == null) {
+		if (team == null) {
 			// All parameters must not be null.
 			return false;
 		}
@@ -56,8 +55,7 @@ public class Board implements Cloneable {
 			// The board and all spots must be valid.
 			return false;
 		}
-		if (!team.equals(get(rowStart, colStart))
-				|| !SCConstants.EMPTY.equals(get(rowEnd, colEnd))) {
+		if (!team.equals(get(rowStart, colStart)) || !SCConst.EMPTY.equals(get(rowEnd, colEnd))) {
 			// The team must be valid, and the slide must start on a spot on the given team and end
 			// on an empty spot.
 			return false;
@@ -79,9 +77,10 @@ public class Board implements Cloneable {
 	 * @return true if the spot is valid, false otherwise
 	 */
 	public boolean isValidSpot(int row, int col) {
-		return row >= SCConstants.B_MIN && row < SCConstants.B_MAX && col >= SCConstants.B_MIN && col < SCConstants.B_MAX;
+		return row >= SCConst.B_MIN && row < SCConst.B_MAX
+		&& col >= SCConst.B_MIN && col < SCConst.B_MAX;
 	}
-	
+
 	/**
 	 * Determines if the the move, specified by two (row, col) pairs, is a valid jump for the
 	 * specified team on this board.
@@ -94,17 +93,20 @@ public class Board implements Cloneable {
 	 * @return true if the move is a valid jump, false otherwise
 	 */
 	public boolean isValidJump(Team team, int rowStart, int colStart, int rowEnd, int colEnd) {
+		if (team == null) {
+			// All parameters must not be null.
+			return false;
+		}
 		if (!isValidSpot(rowStart, colStart) || !isValidSpot(rowEnd, colEnd)) {
 			// The board and all spots must be valid.
 			return false;
 		}
-		if (team == null || !team.equals(get(rowStart, colStart))
-				|| !SCConstants.EMPTY.equals(get(rowEnd, colEnd))) {
+		if (!team.equals(get(rowStart, colStart)) || !SCConst.EMPTY.equals(get(rowEnd, colEnd))) {
 			// The team must be valid, and the jump must start on a spot on the given team and end
 			// on an empty spot.
 			return false;
 		}
-		if (SCConstants.EMPTY.equals(get((rowStart + rowEnd) / 2, (colStart + colEnd) / 2))) {
+		if (SCConst.EMPTY.equals(get((rowStart + rowEnd) / 2, (colStart + colEnd) / 2))) {
 			// Jumps must not jump over a space.
 			return false;
 		}
@@ -116,7 +118,7 @@ public class Board implements Cloneable {
 		boolean horizontal = colStart - colEnd != 0;
 		return ((north || south) && !horizontal) || ((east || west) && !vertical);
 	}
-	
+
 	/**
 	 * Determines if a given move is valid based on a specific team and this board.
 	 * 
@@ -125,7 +127,7 @@ public class Board implements Cloneable {
 	 * @return true if move is valid, false otherwise
 	 */
 	public boolean isValidMove(Team team, Move move) {
-		System.out.println("validating " + move);
+//		System.out.println("validating " + move);s
 		if (team == null || move == null) {
 			// Parameters must not be null.
 			return false;
@@ -205,9 +207,9 @@ public class Board implements Cloneable {
 				jumpedRow = (move.getRow(i - 1) + move.getRow(i)) / 2;
 				jumpedCol = (move.getCol(i - 1) + move.getCol(i)) / 2;
 				if (isJump && !team.equals(get(jumpedRow, jumpedCol))) {
-					insert(SCConstants.EMPTY, jumpedRow, jumpedCol);
+					insert(SCConst.EMPTY, jumpedRow, jumpedCol);
 				}
-				insert(SCConstants.EMPTY, move.getRow(i - 1), move.getCol(i - 1));
+				insert(SCConst.EMPTY, move.getRow(i - 1), move.getCol(i - 1));
 				insert(team, move.getRow(i), move.getCol(i));
 			}
 		}
@@ -221,24 +223,24 @@ public class Board implements Cloneable {
 			for (int col = 0; col < 8; col++) {
 				if (!isInMiddle(row, col)) { // not center area
 					if ((row + col) % 2 == 0) {
-						insert(SCConstants.TEAM1, row, col);
+						insert(SCConst.TEAM1, row, col);
 					} else { // if ((row + col) % 2 == 1)
-						insert(SCConstants.TEAM2, row, col);
+						insert(SCConst.TEAM2, row, col);
 					}
 				} else { // center area
-					insert(SCConstants.EMPTY, row, col);
+					insert(SCConst.EMPTY, row, col);
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * Clear the board by setting all the spots to EMPTY.
 	 */
 	public void clear() {
-		for (int row = SCConstants.B_MIN; row <= SCConstants.B_MAX; row++) {
-			for (int col = SCConstants.B_MIN; col <= SCConstants.B_MAX; col++) {
-				insert(SCConstants.EMPTY, row, col);
+		for (int row = SCConst.B_MIN; row <= SCConst.B_MAX; row++) {
+			for (int col = SCConst.B_MIN; col <= SCConst.B_MAX; col++) {
+				insert(SCConst.EMPTY, row, col);
 			}
 		}
 	}
@@ -268,6 +270,9 @@ public class Board implements Cloneable {
 			return false;
 		}
 		if (currentMove == null || currentMove.size() == 0) {
+			if (isNewGame()) {
+				return isAdjacentToMiddle(row, col) && team.equals(get(row, col));
+			}
 			// Moves must start on the current Team
 			return team.equals(get(row, col));
 		}
@@ -275,7 +280,30 @@ public class Board implements Cloneable {
 		proposedMove.add(row, col);
 		return isValidMove(team, proposedMove);
 	}
-	
+
+	/**
+	 * Determines if a given spot is adjacent to the middle.
+	 * 
+	 * @param row
+	 * @param col
+	 * @return true if given spo is adjacent, false otherwise
+	 */
+	public boolean isAdjacentToMiddle(int row, int col) {
+		if (row == SCConst.B_MID_MIN - 1 && col >= SCConst.B_MID_MIN && col <= SCConst.B_MID_MAX) {
+			return true;
+		}
+		if (row == SCConst.B_MID_MAX + 1 && col >= SCConst.B_MID_MIN && col <= SCConst.B_MID_MAX) {
+			return true;
+		}
+		if (col == SCConst.B_MID_MIN - 1 && row >= SCConst.B_MID_MIN && row <= SCConst.B_MID_MAX) {
+			return true;
+		}
+		if (col == SCConst.B_MID_MAX + 1 && row >= SCConst.B_MID_MIN && row <= SCConst.B_MID_MAX) {
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * Determines if the board is in a game over state, as determined by one or more players 
 	 * occupying no spots in the center of the board.
@@ -285,11 +313,11 @@ public class Board implements Cloneable {
 	public boolean isGameOver() {
 		int p1 = 0;
 		int p2 = 0;
-		for (int row = SCConstants.B_MID_MIN; row <= SCConstants.B_MID_MAX; row++) {
-			for (int col = SCConstants.B_MID_MIN; col <= SCConstants.B_MID_MAX; col++) {
-				if (SCConstants.TEAM1.equals(get(row, col))) {
+		for (int row = SCConst.B_MID_MIN; row <= SCConst.B_MID_MAX; row++) {
+			for (int col = SCConst.B_MID_MIN; col <= SCConst.B_MID_MAX; col++) {
+				if (SCConst.TEAM1.equals(get(row, col))) {
 					p1++;
-				} else if (SCConstants.TEAM2.equals(get(row, col))) {
+				} else if (SCConst.TEAM2.equals(get(row, col))) {
 					p2++;
 				}
 			}
@@ -318,11 +346,12 @@ public class Board implements Cloneable {
 	public void print() {
 		System.out.println("                    ");
 		System.out.println("   0 1 2 3 4 5 6 7  ");
-		for (int row = SCConstants.B_MIN; row <= SCConstants.B_MAX; row++) {
+		for (int row = SCConst.B_MIN; row <= SCConst.B_MAX; row++) {
 			System.out.print(" " + row + "|");
-			for (int col = SCConstants.B_MIN; col <= SCConstants.B_MAX; col++) {
+			for (int col = SCConst.B_MIN; col <= SCConst.B_MAX; col++) {
 				System.out.print(get(row, col));
-				if (col > SCConstants.B_MIN && col <= SCConstants.B_MID_MAX && row >= SCConstants.B_MID_MIN && row <= SCConstants.B_MID_MAX) {
+				if (row >= SCConst.B_MID_MIN && row <= SCConst.B_MID_MAX 
+						&& col >= SCConst.B_MID_MIN - 1 && col <= SCConst.B_MID_MAX) {
 					System.out.print("#");
 				} else {
 					System.out.print("|");
@@ -336,8 +365,8 @@ public class Board implements Cloneable {
 
 	protected Board clone() {
 		Board b = new Board();
-		for (int row = SCConstants.B_MIN; row <= SCConstants.B_MAX; row++) {
-			for (int col = SCConstants.B_MIN; col <= SCConstants.B_MAX; col++) {
+		for (int row = SCConst.B_MIN; row <= SCConst.B_MAX; row++) {
+			for (int col = SCConst.B_MIN; col <= SCConst.B_MAX; col++) {
 				b.insert(get(row, col), row, col);
 			}
 		}
@@ -352,15 +381,20 @@ public class Board implements Cloneable {
 		if (getClass() != obj.getClass())
 			return false;
 		final Board other = (Board) obj;
-		if (!Arrays.equals(board, other.board))
-			return false;
+		for (int row = SCConst.B_MIN; row <= SCConst.B_MAX; row++) {
+			for (int col = SCConst.B_MIN; col <= SCConst.B_MAX; col++) {
+				if (!get(row, col).equals(other.get(row, col))) {
+					return false;
+				}
+			}
+		}
 		return true;
 	}
 
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
-		for (int row = SCConstants.B_MIN; row <= SCConstants.B_MAX; row++) {
-			for (int col = SCConstants.B_MIN; col <= SCConstants.B_MAX; col++) {
+		for (int row = SCConst.B_MIN; row <= SCConst.B_MAX; row++) {
+			for (int col = SCConst.B_MIN; col <= SCConst.B_MAX; col++) {
 				sb.append(get(row, col).getTeam());
 			}
 		}

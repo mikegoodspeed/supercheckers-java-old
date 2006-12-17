@@ -1,6 +1,6 @@
 package com.supercheckers.datastructures;
 
-import com.supercheckers.constants.SCConstants;
+import com.supercheckers.constants.SCConst;
 
 /**
  * A move performed during a turn.
@@ -57,8 +57,8 @@ public class Team {
 	 * @return true if the team is valid, false otherwise
 	 */
 	public boolean isValid() {
-		return SCConstants.EMPTY.equals(this) || SCConstants.TEAM1.equals(this)
-				|| SCConstants.TEAM2.equals(this);
+		return SCConst.EMPTY.equals(this) || SCConst.TEAM1.equals(this)
+		|| SCConst.TEAM2.equals(this);
 	}
 
 	public String toString() {
