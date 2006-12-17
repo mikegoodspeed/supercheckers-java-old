@@ -77,8 +77,8 @@ public class Board implements Cloneable {
 	 * @return true if the spot is valid, false otherwise
 	 */
 	public boolean isValidSpot(int row, int col) {
-		return row >= SCConst.B_MIN && row < SCConst.B_MAX
-		&& col >= SCConst.B_MIN && col < SCConst.B_MAX;
+		return row >= SCConst.B_MIN && row <= SCConst.B_MAX
+		&& col >= SCConst.B_MIN && col <= SCConst.B_MAX;
 	}
 
 	/**
@@ -127,7 +127,7 @@ public class Board implements Cloneable {
 	 * @return true if move is valid, false otherwise
 	 */
 	public boolean isValidMove(Team team, Move move) {
-//		System.out.println("validating " + move);s
+//		System.out.println("validating " + move);
 		if (team == null || move == null) {
 			// Parameters must not be null.
 			return false;
