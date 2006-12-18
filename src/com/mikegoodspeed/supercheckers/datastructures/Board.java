@@ -373,28 +373,20 @@ public class Board implements Cloneable {
 	 * @return true if the game is on move two, false otherwise.
 	 */
 	public boolean isSecondMove() {
-		int p1Outside = 0;
-		int p2Outside = 0;
-		int p1Inside = 0;
-		int p2Inside = 0;
+		int in = 0;
+		int out = 0;
 		for (int row = SCConst.B_MIN; row <= SCConst.B_MAX; row++) {
 			for (int col = SCConst.B_MIN; col <= SCConst.B_MAX; col++) {
-				if (!isInMiddle(row, col)) {
-					if (SCConst.TEAM1.equals(get(row, col))) {
-						p1Outside++;
-					} else if (SCConst.TEAM2.equals(get(row, col))) {
-						p2Outside++;
-					}
-				} else {
-					if (SCConst.TEAM1.equals(get(row, col))) {
-						p1Inside++;
-					} else if (SCConst.TEAM2.equals(get(row, col))) {
-						p2Inside++;
+				if (!SCConst.EMPTY.equals(get(row, col))) {
+					if (isInMiddle(row, col)) {
+						in++;
+					} else {
+						out++;
 					}
 				}
 			}
 		}
-		return p1Outside == 23 && p2Outside == 24 && p1Inside == 1 && p2Inside == 0; 
+		return in == 1 && out == 47;
 	}
 
 	/**
