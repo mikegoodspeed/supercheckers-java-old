@@ -419,7 +419,6 @@ public class Board implements Cloneable {
 	 * </pre>
 	 */
 	public void print() {
-		System.out.println("                    ");
 		System.out.println("   0 1 2 3 4 5 6 7  ");
 		for (int row = SCConst.B_MIN; row <= SCConst.B_MAX; row++) {
 			System.out.print(" " + row + "|");
@@ -435,7 +434,6 @@ public class Board implements Cloneable {
 			System.out.println(row + " ");
 		}
 		System.out.println("   0 1 2 3 4 5 6 7  ");
-		System.out.println("                    ");
 	}
 
 	/**
@@ -444,14 +442,14 @@ public class Board implements Cloneable {
 	public void reset() {
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
-				if (!isInMiddle(row, col)) { // not center area
+				if (isInMiddle(row, col)) {
+					insert(SCConst.EMPTY, row, col);
+				} else {
 					if ((row + col) % 2 == 0) {
 						insert(SCConst.TEAM1, row, col);
 					} else { // if ((row + col) % 2 == 1)
 						insert(SCConst.TEAM2, row, col);
 					}
-				} else { // center area
-					insert(SCConst.EMPTY, row, col);
 				}
 			}
 		}
