@@ -1,6 +1,7 @@
 package com.supercheckers.unittest;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.After;
 import org.junit.Before;
@@ -17,7 +18,7 @@ import com.supercheckers.datastructures.Move;
  * @author Mike Goodspeed
  * @version $Id$
  */
-public class MoveTest extends TestCase {
+public class MoveTest {
 
 	private Move move = null;
 

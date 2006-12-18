@@ -55,7 +55,8 @@ public class Board implements Cloneable {
 			// The board and all spots must be valid.
 			return false;
 		}
-		if (!team.equals(get(rowStart, colStart)) || !SCConst.EMPTY.equals(get(rowEnd, colEnd))) {
+		if (SCConst.EMPTY.equals(team) || !team.equals(get(rowStart, colStart)) 
+				|| !SCConst.EMPTY.equals(get(rowEnd, colEnd))) {
 			// The team must be valid, and the slide must start on a spot on the given team and end
 			// on an empty spot.
 			return false;
