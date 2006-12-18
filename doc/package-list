@@ -1,6 +1,7 @@
-com.supercheckers.constants
-com.supercheckers.datastructures
-com.supercheckers.main
-com.supercheckers.players
-com.supercheckers.ui
-com.supercheckers.utils
+com.mikegoodspeed.supercheckers.constants
+com.mikegoodspeed.supercheckers.datastructures
+com.mikegoodspeed.supercheckers.main
+com.mikegoodspeed.supercheckers.players
+com.mikegoodspeed.supercheckers.ui
+com.mikegoodspeed.supercheckers.unittest
+com.mikegoodspeed.supercheckers.utils
