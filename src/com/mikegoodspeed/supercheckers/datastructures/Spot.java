@@ -23,24 +23,7 @@ public class Spot {
 		this.col = col;
 	}
 
-	/**
-	 * @return the col
-	 */
-	public int getCol() {
-		return col;
-	}
-
-	/**
-	 * @return the row
-	 */
-	public int getRow() {
-		return row;
-	}
-
-	public String toString() {
-		return "(" + row + "," + col + ")";
-	}
-
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
@@ -56,5 +39,24 @@ public class Spot {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * @return the col
+	 */
+	public int getCol() {
+		return col;
+	}
+
+	/**
+	 * @return the row
+	 */
+	public int getRow() {
+		return row;
+	}
+
+	@Override
+	public String toString() {
+		return "(" + row + "," + col + ")";
 	}
 }

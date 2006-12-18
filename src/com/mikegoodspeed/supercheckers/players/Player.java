@@ -15,6 +15,7 @@ import com.mikegoodspeed.supercheckers.ui.GameBoardFrm;
  * @version $Id$
  */
 public abstract class Player {
+
 	private GameBoardFrm window = null;
 	private Board board = null;
 	private Team team = null;
@@ -31,18 +32,18 @@ public abstract class Player {
 	}
 
 	/**
-	 * @return the window
-	 */
-	public GameBoardFrm getWindow() {
-		return window;
-	}
-
-	/**
 	 * @return the board
 	 */
 	public Board getBoard() {
 		return board;
 	}
+
+	/**
+	 * Abstract method to be created by the subclass.
+	 *
+	 * @return the selected Move
+	 */
+	public abstract Move getMove();
 
 	/**
 	 * @return the team
@@ -52,9 +53,9 @@ public abstract class Player {
 	}
 
 	/**
-	 * Abstract method to be created by the subclass.
-	 *
-	 * @return the selected Move
+	 * @return the window
 	 */
-	public abstract Move getMove();
+	public GameBoardFrm getWindow() {
+		return window;
+	}
 }

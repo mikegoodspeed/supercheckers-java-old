@@ -24,18 +24,6 @@ public class Team {
 		this.team = team;
 	}
 
-	/**
-	 * @return the team
-	 */
-	public char getTeam() {
-		return team;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -51,6 +39,13 @@ public class Team {
 	}
 
 	/**
+	 * @return the team
+	 */
+	public char getTeam() {
+		return team;
+	}
+
+	/**
 	 * Determines if the team is valid, where validity is determined by being equal to one of the
 	 * predefined Teams.
 	 * 
@@ -61,6 +56,7 @@ public class Team {
 		|| SCConst.TEAM2.equals(this);
 	}
 
+	@Override
 	public String toString() {
 		return new String(new char[] { team });
 	}

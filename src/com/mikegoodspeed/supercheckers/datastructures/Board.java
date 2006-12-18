@@ -271,8 +271,40 @@ public class Board implements Cloneable {
 			return false;
 		}
 		if (currentMove == null || currentMove.size() == 0) {
-			if (isNewGame()) {
+			if (isFirstMove()) {
 				return isAdjacentToMiddle(row, col) && team.equals(get(row, col));
+			} else if (isSecondMove()) {
+				boolean p1North = SCConst.EMPTY.equals(get(1, 2)) 
+				|| SCConst.EMPTY.equals(get(1, 3)) || SCConst.EMPTY.equals(get(1, 4))
+				|| SCConst.EMPTY.equals(get(1, 5));
+				boolean p1South = SCConst.EMPTY.equals(get(6, 2)) 
+				|| SCConst.EMPTY.equals(get(6, 3)) || SCConst.EMPTY.equals(get(6, 4))
+				|| SCConst.EMPTY.equals(get(6, 5));
+				boolean p1East = SCConst.EMPTY.equals(get(2, 6)) 
+				|| SCConst.EMPTY.equals(get(3, 6)) || SCConst.EMPTY.equals(get(4, 6))
+				|| SCConst.EMPTY.equals(get(5, 6));
+				boolean p1West = SCConst.EMPTY.equals(get(2, 1)) 
+				|| SCConst.EMPTY.equals(get(3, 1)) || SCConst.EMPTY.equals(get(4, 1))
+				|| SCConst.EMPTY.equals(get(5, 1));
+				if (p1North) {
+					// Move from South
+					return row == 6 && col >= SCConst.B_MID_MIN && col <= SCConst.B_MID_MAX 
+					&& team.equals(get(row, col));
+				} else if (p1South) {
+					// Move from North
+					return row == 1 && col >= SCConst.B_MID_MIN && col <= SCConst.B_MID_MAX 
+					&& team.equals(get(row, col));
+				} else if (p1East) {
+					// Move from West
+					return row >= SCConst.B_MID_MIN && row <= SCConst.B_MID_MAX && col == 1 
+					&& team.equals(get(row, col));
+				} else if (p1West) {
+					// Move from East
+					return row >= SCConst.B_MID_MIN && row <= SCConst.B_MID_MAX && col == 6 
+					&& team.equals(get(row, col));
+				}
+				// Should not happen.
+				return false;
 			}
 			// Moves must start on the current Team
 			return team.equals(get(row, col));
@@ -325,6 +357,45 @@ public class Board implements Cloneable {
 		}
 		return p1 == 0 || p2 == 0;
 	}
+	
+	/**
+	 * Determines if the board is in the position for a first move.
+	 * 
+	 * @return true if the game is on move one, false otherwise.
+	 */
+	public boolean isFirstMove() {
+		return equals(new Board());
+	}
+	
+	/**
+	 * Determines if the board is in the position for a second move.
+	 * 
+	 * @return true if the game is on move two, false otherwise.
+	 */
+	public boolean isSecondMove() {
+		int p1Outside = 0;
+		int p2Outside = 0;
+		int p1Inside = 0;
+		int p2Inside = 0;
+		for (int row = SCConst.B_MIN; row <= SCConst.B_MAX; row++) {
+			for (int col = SCConst.B_MIN; col <= SCConst.B_MAX; col++) {
+				if (!isInMiddle(row, col)) {
+					if (SCConst.TEAM1.equals(get(row, col))) {
+						p1Outside++;
+					} else if (SCConst.TEAM2.equals(get(row, col))) {
+						p2Outside++;
+					}
+				} else {
+					if (SCConst.TEAM1.equals(get(row, col))) {
+						p1Inside++;
+					} else if (SCConst.TEAM2.equals(get(row, col))) {
+						p2Inside++;
+					}
+				}
+			}
+		}
+		return p1Outside == 23 && p2Outside == 24 && p1Inside == 1 && p2Inside == 0; 
+	}
 
 	/**
 	 * Prints the current state of the board to standard output.
@@ -364,7 +435,8 @@ public class Board implements Cloneable {
 		System.out.println("                    ");
 	}
 
-	protected Board clone() {
+	@Override
+	public Board clone() {
 		Board b = new Board();
 		for (int row = SCConst.B_MIN; row <= SCConst.B_MAX; row++) {
 			for (int col = SCConst.B_MIN; col <= SCConst.B_MAX; col++) {
@@ -374,6 +446,7 @@ public class Board implements Cloneable {
 		return b;
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -392,6 +465,7 @@ public class Board implements Cloneable {
 		return true;
 	}
 
+	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		for (int row = SCConst.B_MIN; row <= SCConst.B_MAX; row++) {

@@ -94,7 +94,8 @@ public class GameBoardFrm extends JFrame {
 			String[] loc = name.split(",");
 			int row = new Integer(loc[0]).intValue();
 			int col = new Integer(loc[1]).intValue();
-			if (listenForInput && board.isAvailableSpot(currTeam, inputListener.getMove(), row, col)) {
+			if (listenForInput 
+					&& board.isAvailableSpot(currTeam, inputListener.getMove(), row, col)) {
 				if (inputListener.getMove().size() == 0) {
 					if (board.isInMiddle(row, col)) {
 						source.setIcon(SCConst.getImg(SCConst.INSIDE_EMPTY));
@@ -113,6 +114,29 @@ public class GameBoardFrm extends JFrame {
 							source.setIcon(SCConst.getImg(SCConst.INSIDE_TEAM2));
 						} else {
 							source.setIcon(SCConst.getImg(SCConst.OUTSIDE_TEAM2));
+						}
+					}
+					Move m = getMove();
+					int r1 = m.getRow(m.size() - 1);
+					int c1 = m.getCol(m.size() - 1);
+					Board clone = board.clone();
+					clone.doMove(currTeam, m);
+					if (clone.isValidJump(currTeam, r1, c1, row, col)) {
+						JLabel oldSpot = getButtonByName(r1, c1);
+						if (clone.isInMiddle(r1, c1)) {
+							oldSpot.setIcon(SCConst.getImg(SCConst.INSIDE_EMPTY));
+						} else {
+							oldSpot.setIcon(SCConst.getImg(SCConst.OUTSIDE_EMPTY));
+						}
+						int jumpedRow = (r1 + row) / 2;
+						int jumpedCol = (c1 + col) / 2;
+						JLabel jumpedSpot = getButtonByName(jumpedRow, jumpedCol);
+						if (!currTeam.equals(clone.get(jumpedRow, jumpedCol))) {
+							if (clone.isInMiddle(jumpedRow, jumpedCol)) {
+								jumpedSpot.setIcon(SCConst.getImg(SCConst.INSIDE_EMPTY));
+							} else {
+								jumpedSpot.setIcon(SCConst.getImg(SCConst.OUTSIDE_EMPTY));
+							}
 						}
 					}
 				}
@@ -377,8 +401,8 @@ public class GameBoardFrm extends JFrame {
 
 	private void populateBoardPnl() {
 		buttons = new JLabel[8][8];
-		for (int row = 0; row <= 8 - 1; row++) {
-			for (int col = 0; col <= 8 - 1; col++) {
+		for (int row = 0; row < 8; row++) {
+			for (int col = 0; col < 8; col++) {
 				buttons[row][col] = new JLabel();
 				buttons[row][col].setName(row + "," + col);
 				buttons[row][col].addMouseListener(buttonMouseListener);
@@ -386,6 +410,18 @@ public class GameBoardFrm extends JFrame {
 			}
 		}
 		updateBoard(board);
+	}
+	
+	private JLabel getButtonByName(int rowName, int colName) {
+		String name = String.valueOf(rowName) + "," + String.valueOf(colName); 
+		for (int row = 0; row < 8; row++) {
+			for (int col = 0; col < 8; col++) {
+				if (name.equals(buttons[row][col].getName())) {
+					return buttons[row][col];
+				}
+			}
+		}
+		return null;
 	}
 
 	/**
