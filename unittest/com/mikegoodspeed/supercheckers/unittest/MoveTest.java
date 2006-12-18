@@ -10,7 +10,7 @@ import org.junit.Test;
 import com.mikegoodspeed.supercheckers.datastructures.Move;
 
 /**
- * Test the Move object.
+ * Test the Move class.
  * <p>
  * project Supercheckers <br />
  * url http://www.mikegoodspeed.com/blog/projects/supercheckers/
@@ -23,7 +23,7 @@ public class MoveTest {
 	private Move move = null;
 
 	/**
-	 * @throws java.lang.Exception
+	 * @throws Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
@@ -31,7 +31,7 @@ public class MoveTest {
 	}
 
 	/**
-	 * @throws java.lang.Exception
+	 * @throws Exception
 	 */
 	@After
 	public void tearDown() throws Exception {

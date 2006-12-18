@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Move implements Cloneable {
 
-	ArrayList<Spot> points = null;
+	private ArrayList<Spot> points = null;
 
 	/**
 	 * Constructor to create a new move.

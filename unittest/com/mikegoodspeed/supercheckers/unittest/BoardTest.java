@@ -11,9 +11,12 @@ import com.mikegoodspeed.supercheckers.datastructures.Board;
 import com.mikegoodspeed.supercheckers.datastructures.Team;
 
 /**
+ * Test the Board class.
+ * <p>
+ * project Supercheckers <br />
+ * url http://www.mikegoodspeed.com/blog/projects/supercheckers/
  * 
- * 
- * @author Mike
+ * @author Mike Goodspeed
  * @version $Id$
  */
 public class BoardTest {
@@ -21,7 +24,7 @@ public class BoardTest {
 	private Board board = null;
 
 	/**
-	 * @throws java.lang.Exception
+	 * @throws Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
@@ -29,7 +32,7 @@ public class BoardTest {
 	}
 
 	/**
-	 * @throws java.lang.Exception
+	 * @throws Exception
 	 */
 	@After
 	public void tearDown() throws Exception {
@@ -241,7 +244,19 @@ public class BoardTest {
         board.insert(SCConst.TEAM1, row, col - 1);
         board.insert(SCConst.TEAM1, row, col + 1);
         board.insert(SCConst.TEAM1, row + 1, col);
-        // To spot is current team
+        // End spot is TEAM1
+        assertEquals(false, board.isValidSlide(SCConst.TEAM1, row, col, row - 1, col));
+        assertEquals(false, board.isValidSlide(SCConst.TEAM1, row, col, row, col - 1));
+        assertEquals(false, board.isValidSlide(SCConst.TEAM1, row, col, row, col + 1));
+        assertEquals(false, board.isValidSlide(SCConst.TEAM1, row, col, row + 1, col));
+        assertEquals(false, board.isValidSlide(SCConst.TEAM2, row, col, row - 1, col));
+        assertEquals(false, board.isValidSlide(SCConst.TEAM2, row, col, row, col - 1));
+        assertEquals(false, board.isValidSlide(SCConst.TEAM2, row, col, row, col + 1));
+        assertEquals(false, board.isValidSlide(SCConst.TEAM2, row, col, row + 1, col));
+        assertEquals(false, board.isValidSlide(SCConst.EMPTY, row, col, row - 1, col));
+        assertEquals(false, board.isValidSlide(SCConst.EMPTY, row, col, row, col - 1));
+        assertEquals(false, board.isValidSlide(SCConst.EMPTY, row, col, row, col + 1));
+        assertEquals(false, board.isValidSlide(SCConst.EMPTY, row, col, row + 1, col));
         assertEquals(false, board.isValidSlide(null, row, col, row - 1, col));
         assertEquals(false, board.isValidSlide(null, row, col, row, col - 1));
         assertEquals(false, board.isValidSlide(null, row, col, row, col + 1));
@@ -250,7 +265,19 @@ public class BoardTest {
         board.insert(SCConst.TEAM2, row, col - 1);
         board.insert(SCConst.TEAM2, row, col + 1);
         board.insert(SCConst.TEAM2, row + 1, col);
-        // To spot is not current team
+        // End spot is TEAM2
+        assertEquals(false, board.isValidSlide(SCConst.TEAM1, row, col, row - 1, col));
+        assertEquals(false, board.isValidSlide(SCConst.TEAM1, row, col, row, col - 1));
+        assertEquals(false, board.isValidSlide(SCConst.TEAM1, row, col, row, col + 1));
+        assertEquals(false, board.isValidSlide(SCConst.TEAM1, row, col, row + 1, col));
+        assertEquals(false, board.isValidSlide(SCConst.TEAM2, row, col, row - 1, col));
+        assertEquals(false, board.isValidSlide(SCConst.TEAM2, row, col, row, col - 1));
+        assertEquals(false, board.isValidSlide(SCConst.TEAM2, row, col, row, col + 1));
+        assertEquals(false, board.isValidSlide(SCConst.TEAM2, row, col, row + 1, col));
+        assertEquals(false, board.isValidSlide(SCConst.EMPTY, row, col, row - 1, col));
+        assertEquals(false, board.isValidSlide(SCConst.EMPTY, row, col, row, col - 1));
+        assertEquals(false, board.isValidSlide(SCConst.EMPTY, row, col, row, col + 1));
+        assertEquals(false, board.isValidSlide(SCConst.EMPTY, row, col, row + 1, col));
         assertEquals(false, board.isValidSlide(null, row, col, row - 1, col));
         assertEquals(false, board.isValidSlide(null, row, col, row, col - 1));
         assertEquals(false, board.isValidSlide(null, row, col, row, col + 1));
