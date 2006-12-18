@@ -32,7 +32,7 @@ import com.mikegoodspeed.supercheckers.utils.GUIInput;
  * <p>
  * project Supercheckers <br />
  * url http://www.mikegoodspeed.com/blog/projects/supercheckers/
- * 
+ *
  * @author Mike Goodspeed
  * @version $Id$
  */
@@ -94,7 +94,7 @@ public class GameBoardFrm extends JFrame {
 			String[] loc = name.split(",");
 			int row = new Integer(loc[0]).intValue();
 			int col = new Integer(loc[1]).intValue();
-			if (listenForInput 
+			if (listenForInput
 					&& board.isAvailableSpot(currTeam, inputListener.getMove(), row, col)) {
 				if (inputListener.getMove().size() == 0) {
 					if (board.isInMiddle(row, col)) {
@@ -168,8 +168,8 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes
-	 * 
-	 * @param board 
+	 *
+	 * @param board
 	 * @param manager
 	 */
 	public GameBoardFrm(Board board) {
@@ -184,7 +184,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes this
-	 * 
+	 *
 	 */
 	private void initialize() {
 		this.setSize(new Dimension(400, 400));
@@ -198,7 +198,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes content
-	 * 
+	 *
 	 * @return JPanel
 	 */
 	private JPanel getContent() {
@@ -213,7 +213,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes menu
-	 * 
+	 *
 	 * @return JMenuBar
 	 */
 	private JMenuBar getMenu() {
@@ -227,7 +227,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes fileMnu
-	 * 
+	 *
 	 * @return JMenu
 	 */
 	private JMenu getGameMnu() {
@@ -244,7 +244,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes helpMnu
-	 * 
+	 *
 	 * @return JMenu
 	 */
 	private JMenu getHelpMnu() {
@@ -259,7 +259,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes exitMnuItem
-	 * 
+	 *
 	 * @return JMenuItem
 	 */
 	private JMenuItem getExitMnuItem() {
@@ -274,7 +274,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes newMnuItem
-	 * 
+	 *
 	 * @return JMenuItem
 	 */
 	private JMenuItem getNewMnuItem() {
@@ -290,7 +290,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes aboutMnuItem
-	 * 
+	 *
 	 * @return JMenuItem
 	 */
 	private JMenuItem getAboutMnuItem() {
@@ -304,7 +304,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes boardPnl
-	 * 
+	 *
 	 * @return JPanel
 	 */
 	private JPanel getBoardPnl() {
@@ -321,7 +321,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes submitBtn
-	 * 
+	 *
 	 * @return JButton
 	 */
 	private JButton getSubmitBtn() {
@@ -337,7 +337,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes resetBtn
-	 * 
+	 *
 	 * @return JButton
 	 */
 	private JButton getResetBtn() {
@@ -353,7 +353,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes MovePnl
-	 * 
+	 *
 	 * @return JPanel
 	 */
 	private JPanel getMovePnl() {
@@ -369,7 +369,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes turnPnl
-	 * 
+	 *
 	 * @return JPanel
 	 */
 	private JPanel getTurnPnl() {
@@ -386,7 +386,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * This method initializes uiPanel
-	 * 
+	 *
 	 * @return JPanel
 	 */
 	private JPanel getUiPanel() {
@@ -411,9 +411,9 @@ public class GameBoardFrm extends JFrame {
 		}
 		updateBoard(board);
 	}
-	
+
 	private JLabel getButtonByName(int rowName, int colName) {
-		String name = String.valueOf(rowName) + "," + String.valueOf(colName); 
+		String name = String.valueOf(rowName) + "," + String.valueOf(colName);
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
 				if (name.equals(buttons[row][col].getName())) {
@@ -426,8 +426,8 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * Update the GUI board to reflect the actual board.
-	 * 
-	 * @param board 
+	 *
+	 * @param board
 	 */
 	public void updateBoard(Board board) {
 		this.board = board;
@@ -457,7 +457,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * Set the turn so the game board reflects who'se turn it is.
-	 * 
+	 *
 	 * @param team
 	 */
 	public void setTurn(Team team) {
@@ -487,7 +487,7 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * Returns user-chosen move after the submit button has been pressed.
-	 * 
+	 *
 	 * @return the move as chosen by the user
 	 */
 	public Move getMove() {

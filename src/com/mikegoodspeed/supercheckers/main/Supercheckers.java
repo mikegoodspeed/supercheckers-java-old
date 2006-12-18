@@ -12,7 +12,7 @@ import com.mikegoodspeed.supercheckers.ui.GameBoardFrm;
  * <p>
  * project Supercheckers <br />
  * url http://www.mikegoodspeed.com/blog/projects/supercheckers/
- * 
+ *
  * @author Mike Goodspeed
  * @version $Id$
  */
