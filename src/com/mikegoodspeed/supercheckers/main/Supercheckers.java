@@ -1,6 +1,8 @@
 package com.mikegoodspeed.supercheckers.main;
 
-import com.mikegoodspeed.supercheckers.constants.SCConst;
+import static com.mikegoodspeed.supercheckers.constants.SCConst.TEAM1;
+import static com.mikegoodspeed.supercheckers.constants.SCConst.TEAM2;
+
 import com.mikegoodspeed.supercheckers.datastructures.Board;
 import com.mikegoodspeed.supercheckers.datastructures.Move;
 import com.mikegoodspeed.supercheckers.players.HumanPlayer;
@@ -29,8 +31,8 @@ public class Supercheckers {
 		window = new GameBoardFrm(board);
 		window.setVisible(true);
 		Move move;
-		Player p1 = new HumanPlayer(window, board, SCConst.TEAM1);
-		Player p2 = new HumanPlayer(window, board, SCConst.TEAM2);
+		Player p1 = new HumanPlayer(window, board, TEAM1);
+		Player p2 = new HumanPlayer(window, board, TEAM2);
 		while (true) {
 			window.setTurn(p1.getTeam());
 			do {

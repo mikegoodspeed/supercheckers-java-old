@@ -1,6 +1,12 @@
 package com.mikegoodspeed.supercheckers.datastructures;
 
-import com.mikegoodspeed.supercheckers.constants.SCConst;
+import static com.mikegoodspeed.supercheckers.constants.SCConst.B_MAX;
+import static com.mikegoodspeed.supercheckers.constants.SCConst.B_MID_MAX;
+import static com.mikegoodspeed.supercheckers.constants.SCConst.B_MID_MIN;
+import static com.mikegoodspeed.supercheckers.constants.SCConst.B_MIN;
+import static com.mikegoodspeed.supercheckers.constants.SCConst.EMPTY;
+import static com.mikegoodspeed.supercheckers.constants.SCConst.TEAM1;
+import static com.mikegoodspeed.supercheckers.constants.SCConst.TEAM2;
 
 /**
  * Supercheckers Board Data Structure.
@@ -19,7 +25,7 @@ public class Board implements Cloneable {
 	 * Constructor to create a new board
 	 */
 	public Board() {
-		this.board = new Team[SCConst.B_MAX + 1][SCConst.B_MAX + 1];
+		this.board = new Team[B_MAX + 1][B_MAX + 1];
 		reset();
 	}
 
@@ -27,9 +33,9 @@ public class Board implements Cloneable {
 	 * Clear the board by setting all the spots to EMPTY.
 	 */
 	public void clear() {
-		for (int row = SCConst.B_MIN; row <= SCConst.B_MAX; row++) {
-			for (int col = SCConst.B_MIN; col <= SCConst.B_MAX; col++) {
-				insert(SCConst.EMPTY, row, col);
+		for (int row = B_MIN; row <= B_MAX; row++) {
+			for (int col = B_MIN; col <= B_MAX; col++) {
+				insert(EMPTY, row, col);
 			}
 		}
 	}
@@ -37,8 +43,8 @@ public class Board implements Cloneable {
 	@Override
 	public Board clone() {
 		Board b = new Board();
-		for (int row = SCConst.B_MIN; row <= SCConst.B_MAX; row++) {
-			for (int col = SCConst.B_MIN; col <= SCConst.B_MAX; col++) {
+		for (int row = B_MIN; row <= B_MAX; row++) {
+			for (int col = B_MIN; col <= B_MAX; col++) {
 				b.insert(get(row, col), row, col);
 			}
 		}
@@ -54,17 +60,17 @@ public class Board implements Cloneable {
 	 */
 	public void doMove(Team team, Move move) {
 		if (team != null && team.isValid() && move != null && move.size() > 1) {
-			boolean isJump = isValidJump(team, move.getRow(0), move.getCol(0), move.getRow(1),
-					move.getCol(1));
+			boolean isJump = 
+				isValidJump(team, move.getRow(0), move.getCol(0), move.getRow(1), move.getCol(1));
 			int jumpedRow;
 			int jumpedCol;
 			for (int i = 1; i < move.size(); i++) {
 				jumpedRow = (move.getRow(i - 1) + move.getRow(i)) / 2;
 				jumpedCol = (move.getCol(i - 1) + move.getCol(i)) / 2;
 				if (isJump && !team.equals(get(jumpedRow, jumpedCol))) {
-					insert(SCConst.EMPTY, jumpedRow, jumpedCol);
+					insert(EMPTY, jumpedRow, jumpedCol);
 				}
-				insert(SCConst.EMPTY, move.getRow(i - 1), move.getCol(i - 1));
+				insert(EMPTY, move.getRow(i - 1), move.getCol(i - 1));
 				insert(team, move.getRow(i), move.getCol(i));
 			}
 		}
@@ -79,8 +85,8 @@ public class Board implements Cloneable {
 		if (getClass() != obj.getClass())
 			return false;
 		final Board other = (Board) obj;
-		for (int row = SCConst.B_MIN; row <= SCConst.B_MAX; row++) {
-			for (int col = SCConst.B_MIN; col <= SCConst.B_MAX; col++) {
+		for (int row = B_MIN; row <= B_MAX; row++) {
+			for (int col = B_MIN; col <= B_MAX; col++) {
 				if (!get(row, col).equals(other.get(row, col))) {
 					return false;
 				}
@@ -119,19 +125,10 @@ public class Board implements Cloneable {
 	 * @return true if given spo is adjacent, false otherwise
 	 */
 	public boolean isAdjacentToMiddle(int row, int col) {
-		if (row == SCConst.B_MID_MIN - 1 && col >= SCConst.B_MID_MIN && col <= SCConst.B_MID_MAX) {
-			return true;
-		}
-		if (row == SCConst.B_MID_MAX + 1 && col >= SCConst.B_MID_MIN && col <= SCConst.B_MID_MAX) {
-			return true;
-		}
-		if (col == SCConst.B_MID_MIN - 1 && row >= SCConst.B_MID_MIN && row <= SCConst.B_MID_MAX) {
-			return true;
-		}
-		if (col == SCConst.B_MID_MAX + 1 && row >= SCConst.B_MID_MIN && row <= SCConst.B_MID_MAX) {
-			return true;
-		}
-		return false;
+		return (row == B_MID_MIN - 1 && col >= B_MID_MIN && col <= B_MID_MAX)
+		|| (row == B_MID_MAX + 1 && col >= B_MID_MIN && col <= B_MID_MAX)
+		|| (col == B_MID_MIN - 1 && row >= B_MID_MIN && row <= B_MID_MAX)
+		|| (col == B_MID_MAX + 1 && row >= B_MID_MIN && row <= B_MID_MAX);
 	}
 
 	/**
@@ -153,33 +150,29 @@ public class Board implements Cloneable {
 			if (isFirstMove()) {
 				return isAdjacentToMiddle(row, col) && team.equals(get(row, col));
 			} else if (isSecondMove()) {
-				boolean p1North = SCConst.EMPTY.equals(get(1, 2))
-				|| SCConst.EMPTY.equals(get(1, 3)) || SCConst.EMPTY.equals(get(1, 4))
-				|| SCConst.EMPTY.equals(get(1, 5));
-				boolean p1South = SCConst.EMPTY.equals(get(6, 2))
-				|| SCConst.EMPTY.equals(get(6, 3)) || SCConst.EMPTY.equals(get(6, 4))
-				|| SCConst.EMPTY.equals(get(6, 5));
-				boolean p1East = SCConst.EMPTY.equals(get(2, 6))
-				|| SCConst.EMPTY.equals(get(3, 6)) || SCConst.EMPTY.equals(get(4, 6))
-				|| SCConst.EMPTY.equals(get(5, 6));
-				boolean p1West = SCConst.EMPTY.equals(get(2, 1))
-				|| SCConst.EMPTY.equals(get(3, 1)) || SCConst.EMPTY.equals(get(4, 1))
-				|| SCConst.EMPTY.equals(get(5, 1));
+				boolean p1North = EMPTY.equals(get(1, 2)) || EMPTY.equals(get(1, 3))
+				|| EMPTY.equals(get(1, 4)) || EMPTY.equals(get(1, 5));
+				boolean p1South = EMPTY.equals(get(6, 2)) || EMPTY.equals(get(6, 3))
+				|| EMPTY.equals(get(6, 4)) || EMPTY.equals(get(6, 5));
+				boolean p1East = EMPTY.equals(get(2, 6)) || EMPTY.equals(get(3, 6))
+				|| EMPTY.equals(get(4, 6)) || EMPTY.equals(get(5, 6));
+				boolean p1West = EMPTY.equals(get(2, 1)) || EMPTY.equals(get(3, 1))
+				|| EMPTY.equals(get(4, 1)) || EMPTY.equals(get(5, 1));
 				if (p1North) {
 					// Move from South
-					return row == 6 && col >= SCConst.B_MID_MIN && col <= SCConst.B_MID_MAX
+					return row == 6 && col >= B_MID_MIN && col <= B_MID_MAX 
 					&& team.equals(get(row, col));
 				} else if (p1South) {
 					// Move from North
-					return row == 1 && col >= SCConst.B_MID_MIN && col <= SCConst.B_MID_MAX
+					return row == 1 && col >= B_MID_MIN && col <= B_MID_MAX
 					&& team.equals(get(row, col));
 				} else if (p1East) {
 					// Move from West
-					return row >= SCConst.B_MID_MIN && row <= SCConst.B_MID_MAX && col == 1
+					return row >= B_MID_MIN && row <= B_MID_MAX && col == 1
 					&& team.equals(get(row, col));
 				} else if (p1West) {
 					// Move from East
-					return row >= SCConst.B_MID_MIN && row <= SCConst.B_MID_MAX && col == 6
+					return row >= B_MID_MIN && row <= B_MID_MAX && col == 6
 					&& team.equals(get(row, col));
 				}
 				// Should not happen.
@@ -211,11 +204,11 @@ public class Board implements Cloneable {
 	public boolean isGameOver() {
 		int p1 = 0;
 		int p2 = 0;
-		for (int row = SCConst.B_MID_MIN; row <= SCConst.B_MID_MAX; row++) {
-			for (int col = SCConst.B_MID_MIN; col <= SCConst.B_MID_MAX; col++) {
-				if (SCConst.TEAM1.equals(get(row, col))) {
+		for (int row = B_MID_MIN; row <= B_MID_MAX; row++) {
+			for (int col = B_MID_MIN; col <= B_MID_MAX; col++) {
+				if (TEAM1.equals(get(row, col))) {
 					p1++;
-				} else if (SCConst.TEAM2.equals(get(row, col))) {
+				} else if (TEAM2.equals(get(row, col))) {
 					p2++;
 				}
 			}
@@ -231,8 +224,7 @@ public class Board implements Cloneable {
 	 * @return true if the spot is in the middle, false otherwise
 	 */
 	public boolean isInMiddle(int row, int col) {
-		return row >= SCConst.B_MID_MIN && row <= SCConst.B_MID_MAX
-		&& col >= SCConst.B_MID_MIN && col <= SCConst.B_MID_MAX;
+		return row >= B_MID_MIN && row <= B_MID_MAX && col >= B_MID_MIN && col <= B_MID_MAX;
 	}
 
 	/**
@@ -252,9 +244,9 @@ public class Board implements Cloneable {
 	public boolean isSecondMove() {
 		int in = 0;
 		int out = 0;
-		for (int row = SCConst.B_MIN; row <= SCConst.B_MAX; row++) {
-			for (int col = SCConst.B_MIN; col <= SCConst.B_MAX; col++) {
-				if (!SCConst.EMPTY.equals(get(row, col))) {
+		for (int row = B_MIN; row <= B_MAX; row++) {
+			for (int col = B_MIN; col <= B_MAX; col++) {
+				if (!EMPTY.equals(get(row, col))) {
 					if (isInMiddle(row, col)) {
 						in++;
 					} else {
@@ -286,12 +278,12 @@ public class Board implements Cloneable {
 			// The board and all spots must be valid.
 			return false;
 		}
-		if (!team.equals(get(rowStart, colStart)) || !SCConst.EMPTY.equals(get(rowEnd, colEnd))) {
+		if (!team.equals(get(rowStart, colStart)) || !EMPTY.equals(get(rowEnd, colEnd))) {
 			// The team must be valid, and the jump must start on a spot on the given team and end
 			// on an empty spot.
 			return false;
 		}
-		if (SCConst.EMPTY.equals(get((rowStart + rowEnd) / 2, (colStart + colEnd) / 2))) {
+		if (EMPTY.equals(get((rowStart + rowEnd) / 2, (colStart + colEnd) / 2))) {
 			// Jumps must not jump over a space.
 			return false;
 		}
@@ -373,8 +365,8 @@ public class Board implements Cloneable {
 			// The board and all spots must be valid.
 			return false;
 		}
-		if (SCConst.EMPTY.equals(team) || !team.equals(get(rowStart, colStart))
-				|| !SCConst.EMPTY.equals(get(rowEnd, colEnd))) {
+		if (EMPTY.equals(team) || !team.equals(get(rowStart, colStart))
+				|| !EMPTY.equals(get(rowEnd, colEnd))) {
 			// The team must be valid, and the slide must start on a spot on the given team and end
 			// on an empty spot.
 			return false;
@@ -396,8 +388,7 @@ public class Board implements Cloneable {
 	 * @return true if the spot is valid, false otherwise
 	 */
 	public boolean isValidSpot(int row, int col) {
-		return row >= SCConst.B_MIN && row <= SCConst.B_MAX
-		&& col >= SCConst.B_MIN && col <= SCConst.B_MAX;
+		return row >= B_MIN && row <= B_MAX && col >= B_MIN && col <= B_MAX;
 	}
 
 	/**
@@ -420,12 +411,12 @@ public class Board implements Cloneable {
 	 */
 	public void print() {
 		System.out.println("   0 1 2 3 4 5 6 7  ");
-		for (int row = SCConst.B_MIN; row <= SCConst.B_MAX; row++) {
+		for (int row = B_MIN; row <= B_MAX; row++) {
 			System.out.print(" " + row + "|");
-			for (int col = SCConst.B_MIN; col <= SCConst.B_MAX; col++) {
+			for (int col = B_MIN; col <= B_MAX; col++) {
 				System.out.print(get(row, col));
-				if (row >= SCConst.B_MID_MIN && row <= SCConst.B_MID_MAX
-						&& col >= SCConst.B_MID_MIN - 1 && col <= SCConst.B_MID_MAX) {
+				if (row >= B_MID_MIN && row <= B_MID_MAX & col >= B_MID_MIN - 1
+						&& col <= B_MID_MAX) {
 					System.out.print("#");
 				} else {
 					System.out.print("|");
@@ -443,12 +434,12 @@ public class Board implements Cloneable {
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
 				if (isInMiddle(row, col)) {
-					insert(SCConst.EMPTY, row, col);
+					insert(EMPTY, row, col);
 				} else {
 					if ((row + col) % 2 == 0) {
-						insert(SCConst.TEAM1, row, col);
+						insert(TEAM1, row, col);
 					} else { // if ((row + col) % 2 == 1)
-						insert(SCConst.TEAM2, row, col);
+						insert(TEAM2, row, col);
 					}
 				}
 			}
@@ -458,8 +449,8 @@ public class Board implements Cloneable {
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
-		for (int row = SCConst.B_MIN; row <= SCConst.B_MAX; row++) {
-			for (int col = SCConst.B_MIN; col <= SCConst.B_MAX; col++) {
+		for (int row = B_MIN; row <= B_MAX; row++) {
+			for (int col = B_MIN; col <= B_MAX; col++) {
 				sb.append(get(row, col).getTeam());
 			}
 		}
