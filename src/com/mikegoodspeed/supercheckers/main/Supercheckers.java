@@ -2,7 +2,7 @@ package com.mikegoodspeed.supercheckers.main;
 
 import com.mikegoodspeed.supercheckers.datastructures.Board;
 import com.mikegoodspeed.supercheckers.datastructures.Move;
-import com.mikegoodspeed.supercheckers.datastructures.Teams;
+import com.mikegoodspeed.supercheckers.datastructures.Team;
 import com.mikegoodspeed.supercheckers.players.EasyComputerPlayer;
 import com.mikegoodspeed.supercheckers.players.HumanPlayer;
 import com.mikegoodspeed.supercheckers.players.Player;
@@ -30,8 +30,8 @@ public class Supercheckers {
 		window = new GameBoardFrm(board);
 		window.setVisible(true);
 		Move move;
-		Player p1 = new HumanPlayer(window, board, Teams.X);
-		Player p2 = new EasyComputerPlayer(window, board, Teams.O);
+		Player p1 = new HumanPlayer(window, board, Team.X);
+		Player p2 = new EasyComputerPlayer(window, board, Team.O);
 		boolean joshing = true;
 		while (true) {
 			window.setTurn(p1.getTeam());
@@ -41,6 +41,7 @@ public class Supercheckers {
 				System.out.println("player1 move: " + move);
 			} while (!board.isValidMove(p1.getTeam(), move));
 			board.doMove(p1.getTeam(), move);
+			board.print();
 			window.updateBoard(board);
 			if (board.isGameOver() && !joshing) {
 				System.out.println("game over, p1 wins");

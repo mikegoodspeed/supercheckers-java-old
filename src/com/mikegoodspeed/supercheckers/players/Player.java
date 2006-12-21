@@ -2,7 +2,7 @@ package com.mikegoodspeed.supercheckers.players;
 
 import com.mikegoodspeed.supercheckers.datastructures.Board;
 import com.mikegoodspeed.supercheckers.datastructures.Move;
-import com.mikegoodspeed.supercheckers.datastructures.Teams;
+import com.mikegoodspeed.supercheckers.datastructures.Team;
 import com.mikegoodspeed.supercheckers.ui.GameBoardFrm;
 
 /**
@@ -18,14 +18,14 @@ public abstract class Player {
 
 	private GameBoardFrm window = null;
 	private Board board = null;
-	private Teams team = null;
+	private Team team = null;
 
 	/**
 	 * @param window
 	 * @param board
 	 * @param team
 	 */
-	public Player(GameBoardFrm window, Board board, Teams team) {
+	public Player(GameBoardFrm window, Board board, Team team) {
 		this.window = window;
 		this.board = board;
 		this.team = team;
@@ -48,7 +48,7 @@ public abstract class Player {
 	/**
 	 * @return the team
 	 */
-	public Teams getTeam() {
+	public Team getTeam() {
 		return team;
 	}
 

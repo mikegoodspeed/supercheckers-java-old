@@ -23,7 +23,7 @@ import javax.swing.UIManager;
 
 import com.mikegoodspeed.supercheckers.datastructures.Board;
 import com.mikegoodspeed.supercheckers.datastructures.Move;
-import com.mikegoodspeed.supercheckers.datastructures.Teams;
+import com.mikegoodspeed.supercheckers.datastructures.Team;
 import com.mikegoodspeed.supercheckers.utils.GUIInput;
 
 /**
@@ -55,7 +55,7 @@ public class GameBoardFrm extends JFrame {
 	private JPanel MovePnl = null;
 	private JPanel turnPnl = null;
 	private JLabel turnLbl = null;
-	private Teams currTeam = Teams.X;
+	private Team currTeam = Team.X;
 	private GUIInput input = new GUIInput();
 	private boolean listenForInput = false;
 
@@ -96,9 +96,9 @@ public class GameBoardFrm extends JFrame {
 			if (listenForInput
 					&& board.isAvailableSpot(currTeam, input.getMove(), row, col)) {
 				if (input.getMove().size() == 0) {
-					source.setIcon(Teams.EMPTY.getImage(board.isInMiddle(row, col)));
+					source.setIcon(Team.EMPTY.getIcon(board.isInMiddle(row, col)));
 				} else {
-					source.setIcon(currTeam.getImage(board.isInMiddle(row, col)));
+					source.setIcon(currTeam.getIcon(board.isInMiddle(row, col)));
 					Move m = getMove();
 					int r1 = m.getRow(m.size() - 1);
 					int c1 = m.getCol(m.size() - 1);
@@ -106,12 +106,12 @@ public class GameBoardFrm extends JFrame {
 					clone.doMove(currTeam, m);
 					if (clone.isValidJump(currTeam, r1, c1, row, col)) {
 						JLabel oldSpot = getButtonByName(r1, c1);
-						oldSpot.setIcon(Teams.EMPTY.getImage(clone.isInMiddle(r1, c1)));
+						oldSpot.setIcon(Team.EMPTY.getIcon(clone.isInMiddle(r1, c1)));
 						int jumpedRow = (r1 + row) / 2;
 						int jumpedCol = (c1 + col) / 2;
 						JLabel jumpedSpot = getButtonByName(jumpedRow, jumpedCol);
 						if (!currTeam.equals(clone.get(jumpedRow, jumpedCol))) {
-							jumpedSpot.setIcon(Teams.EMPTY.getImage(
+							jumpedSpot.setIcon(Team.EMPTY.getIcon(
 									clone.isInMiddle(jumpedRow, jumpedCol)));
 						}
 					}
@@ -351,7 +351,7 @@ public class GameBoardFrm extends JFrame {
 	private JPanel getTurnPnl() {
 		if (turnPnl == null) {
 			turnLbl = new JLabel();
-			turnLbl.setIcon(Teams.X.getImage(false));
+			turnLbl.setIcon(Team.X.getIcon(false));
 			turnPnl = new JPanel();
 			turnPnl.setLayout(new BorderLayout());
 			turnPnl.setBorder(BorderFactory.createTitledBorder("Turn"));
@@ -409,7 +409,7 @@ public class GameBoardFrm extends JFrame {
 		this.board = board;
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
-				buttons[row][col].setIcon(board.get(row, col).getImage(board.isInMiddle(row, col)));
+				buttons[row][col].setIcon(board.get(row, col).getIcon(board.isInMiddle(row, col)));
 			}
 		}
 	}
@@ -419,9 +419,9 @@ public class GameBoardFrm extends JFrame {
 	 *
 	 * @param team
 	 */
-	public void setTurn(Teams team) {
+	public void setTurn(Team team) {
 		this.currTeam = team;
-		turnLbl.setIcon(team.getImage(false));
+		turnLbl.setIcon(team.getIcon(false));
 	}
 
 	/**
