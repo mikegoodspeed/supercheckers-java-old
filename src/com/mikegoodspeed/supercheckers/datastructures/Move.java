@@ -85,6 +85,15 @@ public class Move implements Cloneable {
 	public int getRow(int index) throws IndexOutOfBoundsException {
 		return points.get(index).getRow();
 	}
+	
+	/**
+	 * @param index
+	 * @return the spot at the selected index
+	 * @throws IndexOutOfBoundsException - if index is out of range (index < 0 || index >= size())
+	 */
+	public Spot getSpot(int index) throws IndexOutOfBoundsException {
+		return points.get(index);
+	}
 
 	/**
 	 * Find the size of the current move.

@@ -1,8 +1,5 @@
 package com.mikegoodspeed.supercheckers.datastructures;
 
-import static com.mikegoodspeed.supercheckers.constants.SCConst.EMPTY;
-import static com.mikegoodspeed.supercheckers.constants.SCConst.TEAM1;
-import static com.mikegoodspeed.supercheckers.constants.SCConst.TEAM2;
 
 /**
  * A move performed during a turn.
@@ -47,15 +44,15 @@ public class Team {
 		return team;
 	}
 
-	/**
-	 * Determines if the team is valid, where validity is determined by being equal to one of the
-	 * predefined Teams.
-	 * 
-	 * @return true if the team is valid, false otherwise
-	 */
-	public boolean isValid() {
-		return TEAM1.equals(this) || TEAM2.equals(this) || EMPTY.equals(this);
-	}
+//	/**
+//	 * Determines if the team is valid, where validity is determined by being equal to one of the
+//	 * predefined Teams.
+//	 * 
+//	 * @return true if the team is valid, false otherwise
+//	 */
+//	public boolean isValid() {
+//		return TEAM1.equals(this) || TEAM2.equals(this) || EMPTY.equals(this);
+//	}
 
 	@Override
 	public String toString() {

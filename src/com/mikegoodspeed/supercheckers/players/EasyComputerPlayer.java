@@ -1,14 +1,10 @@
 package com.mikegoodspeed.supercheckers.players;
 
-import static com.mikegoodspeed.supercheckers.constants.SCConst.EMPTY;
-import static com.mikegoodspeed.supercheckers.constants.SCConst.TEAM1;
-import static com.mikegoodspeed.supercheckers.constants.SCConst.TEAM2;
-
 import java.util.Random;
 
 import com.mikegoodspeed.supercheckers.datastructures.Board;
 import com.mikegoodspeed.supercheckers.datastructures.Move;
-import com.mikegoodspeed.supercheckers.datastructures.Team;
+import com.mikegoodspeed.supercheckers.datastructures.Teams;
 import com.mikegoodspeed.supercheckers.ui.GameBoardFrm;
 
 /**
@@ -19,18 +15,18 @@ import com.mikegoodspeed.supercheckers.ui.GameBoardFrm;
  */
 public class EasyComputerPlayer extends Player {
 
-	Team myTeam = null;
-	Team opponentTeam = null;
+	Teams myTeam = null;
+	Teams opponentTeam = null;
 
 	/**
 	 * @param window
 	 * @param board
 	 * @param team
 	 */
-	public EasyComputerPlayer(GameBoardFrm window, Board board, Team team) {
+	public EasyComputerPlayer(GameBoardFrm window, Board board, Teams team) {
 		super(window, board, team);
 		myTeam = team;
-		opponentTeam = TEAM1.equals(team) ? TEAM2 : TEAM1;
+		opponentTeam = Teams.X.equals(team) ? Teams.O : Teams.X;
 	}
 
 	public Move getMove() {
@@ -42,7 +38,7 @@ public class EasyComputerPlayer extends Player {
 		if (getBoard().isFirstMove()) {
 			// If we are first to go in the first round then randomly slide into the middle.
 			Random randomNumber = new Random();
-			if (TEAM1.equals(myTeam)) {
+			if (Teams.X.equals(myTeam)) {
 				switch (randomNumber.nextInt(8)) {
 					case 0:
 						move = new Move();
@@ -140,7 +136,7 @@ public class EasyComputerPlayer extends Player {
 			for (int row = 1; row <= 6; row++) {
 				for (int col = 1; col <= 6; col++) {
 					if (row == 1 || row == 6 || col == 1 || col == 6) {// adjacent to middle
-						if (getBoard().get(row, col).equals(EMPTY)) {
+						if (getBoard().get(row, col).equals(Teams.EMPTY)) {
 							emptyCellRow = row;
 							emptyCellCol = col;
 						}
@@ -148,7 +144,7 @@ public class EasyComputerPlayer extends Player {
 				}
 			}
 			if (emptyCellCol == 6) { // empty on right side
-				if (TEAM1.equals(myTeam)) {
+				if (Teams.X.equals(myTeam)) {
 					switch (randomNumber.nextInt(2)) {
 						case 0:
 							move = new Move();
@@ -176,7 +172,7 @@ public class EasyComputerPlayer extends Player {
 					}
 				}
 			} else if (emptyCellRow == 1) { // empty on top side
-				if (TEAM1.equals(myTeam)) {
+				if (Teams.X.equals(myTeam)) {
 					switch (randomNumber.nextInt(2)) {
 						case 0:
 							move = new Move();
@@ -204,7 +200,7 @@ public class EasyComputerPlayer extends Player {
 					}
 				}
 			} else if (emptyCellCol == 1) { // empty on left side
-				if (TEAM1.equals(myTeam)) {
+				if (Teams.X.equals(myTeam)) {
 					switch (randomNumber.nextInt(2)) {
 						case 0:
 							move = new Move();
@@ -232,7 +228,7 @@ public class EasyComputerPlayer extends Player {
 					}
 				}
 			} else { // if (emptyCellRow == 6) { // empty on bottom side
-				if (TEAM1.equals(myTeam)) {
+				if (Teams.X.equals(myTeam)) {
 					switch (randomNumber.nextInt(2)) {
 						case 0:
 							move = new Move();
@@ -271,7 +267,7 @@ public class EasyComputerPlayer extends Player {
 					if (row < 4) { // able to jump up
 						if (getBoard().get(row, col).equals(myTeam) &&
 								getBoard().get(row + 1, col).equals(opponentTeam) &&
-								getBoard().get(row + 2, col).equals(EMPTY)) {
+								getBoard().get(row + 2, col).equals(Teams.EMPTY)) {
 							move = new Move();
 							move.add(row, col);
 							move.add(row + 2, col);
@@ -280,7 +276,7 @@ public class EasyComputerPlayer extends Player {
 					if (col < 4) { // able to jump right
 						if (getBoard().get(row, col).equals(myTeam) &&
 								getBoard().get(row, col + 1).equals(opponentTeam) &&
-								getBoard().get(row, col + 2).equals(EMPTY)) {
+								getBoard().get(row, col + 2).equals(Teams.EMPTY)) {
 							move = new Move();
 							move.add(row, col);
 							move.add(row, col + 2);
@@ -289,7 +285,7 @@ public class EasyComputerPlayer extends Player {
 					if (row > 3) { // able to jump down
 						if (getBoard().get(row, col).equals(myTeam) &&
 								getBoard().get(row - 1, col).equals(opponentTeam) &&
-								getBoard().get(row - 2, col).equals(EMPTY)) {
+								getBoard().get(row - 2, col).equals(Teams.EMPTY)) {
 							move = new Move();
 							move.add(row, col);
 							move.add(row - 2, col);
@@ -298,7 +294,7 @@ public class EasyComputerPlayer extends Player {
 					if (col > 3) { // able ot jump left
 						if (getBoard().get(row, col).equals(myTeam) &&
 								getBoard().get(row, col - 1).equals(opponentTeam) &&
-								getBoard().get(row, col - 2).equals(EMPTY)) {
+								getBoard().get(row, col - 2).equals(Teams.EMPTY)) {
 							move = new Move();
 							move.add(row, col);
 							move.add(row, col - 2);
@@ -315,7 +311,7 @@ public class EasyComputerPlayer extends Player {
 			for (int row = 6; row <= 7; row++)
 				for (int col = 2; col <= 5; col++)
 					if (getBoard().get(row, col).equals(myTeam) &&
-							getBoard().get(row - 2, col).equals(EMPTY)) {
+							getBoard().get(row - 2, col).equals(Teams.EMPTY)) {
 						if (getBoard().get(row - 1, col).equals(opponentTeam)) {
 							move = new Move();
 							move.add(row, col);
@@ -329,7 +325,7 @@ public class EasyComputerPlayer extends Player {
 			for (int row = 2; row <= 5; row++)
 				for (int col = 6; col <= 7; col++)
 					if (getBoard().get(row, col).equals(myTeam) &&
-							getBoard().get(row, col - 2).equals(EMPTY)) {
+							getBoard().get(row, col - 2).equals(Teams.EMPTY)) {
 						if (getBoard().get(row, col - 1).equals(opponentTeam)) {
 							move = new Move();
 							move.add(row, col);
@@ -343,7 +339,7 @@ public class EasyComputerPlayer extends Player {
 			for (int row = 0; row <= 1; row++)
 				for (int col = 2; col <= 5; col++)
 					if (getBoard().get(row, col).equals(myTeam) &&
-							getBoard().get(row + 2, col).equals(EMPTY)) {
+							getBoard().get(row + 2, col).equals(Teams.EMPTY)) {
 						if (getBoard().get(row + 1, col).equals(opponentTeam)) {
 							move = new Move();
 							move.add(row, col);
@@ -357,7 +353,7 @@ public class EasyComputerPlayer extends Player {
 			for (int row = 2; row <= 5; row++) {
 				for (int col = 0; col <= 1; col++) {
 					if (getBoard().get(row, col).equals(myTeam) &&
-							getBoard().get(row, col + 2).equals(EMPTY)) {
+							getBoard().get(row, col + 2).equals(Teams.EMPTY)) {
 						if (getBoard().get(row, col + 1).equals(opponentTeam)) {
 							move = new Move();
 							move.add(row, col);
@@ -378,28 +374,28 @@ public class EasyComputerPlayer extends Player {
 			// try to slide inside
 			for (int col = 2; col <= 5; col++)
 				if (getBoard().get(6, col).equals(myTeam) &&
-						getBoard().get(5, col).equals(EMPTY)) {
+						getBoard().get(5, col).equals(Teams.EMPTY)) {
 					move = new Move();
 					move.add(6, col);
 					move.add(5, col);
 				}
 			for (int row = 2; row <= 5; row++)
 				if (getBoard().get(row, 6).equals(myTeam) &&
-						getBoard().get(row, 5).equals(EMPTY)) {
+						getBoard().get(row, 5).equals(Teams.EMPTY)) {
 					move = new Move();
 					move.add(row, 6);
 					move.add(row, 5);
 				}
 			for (int col = 2; col <= 5; col++)
 				if (getBoard().get(1, col).equals(myTeam) &&
-						getBoard().get(2, col).equals(EMPTY)) {
+						getBoard().get(2, col).equals(Teams.EMPTY)) {
 					move = new Move();
 					move.add(1, col);
 					move.add(2, col);
 				}
 			for (int row = 2; row <= 5; row++)
 				if (getBoard().get(row, 1).equals(myTeam) &&
-						getBoard().get(row, 2).equals(EMPTY)) {
+						getBoard().get(row, 2).equals(Teams.EMPTY)) {
 					move = new Move();
 					move.add(row, 1);
 					move.add(row, 2);
@@ -410,28 +406,28 @@ public class EasyComputerPlayer extends Player {
 			// try to slide in from the edges
 			for (int col = 1; col <= 6; col++)
 				if (getBoard().get(7, col).equals(myTeam) &&
-						getBoard().get(6, col).equals(EMPTY)) {
+						getBoard().get(6, col).equals(Teams.EMPTY)) {
 					move = new Move();
 					move.add(7, col);
 					move.add(6, col);
 				}
 			for (int row = 1; row <= 6; row++)
 				if (getBoard().get(row, 7).equals(myTeam) &&
-						getBoard().get(row, 6).equals(EMPTY)) {
+						getBoard().get(row, 6).equals(Teams.EMPTY)) {
 					move = new Move();
 					move.add(row, 7);
 					move.add(row, 6);
 				}
 			for (int col = 1; col <= 6; col++)
 				if (getBoard().get(0, col).equals(myTeam) &&
-						getBoard().get(1, col).equals(EMPTY)) {
+						getBoard().get(1, col).equals(Teams.EMPTY)) {
 					move = new Move();
 					move.add(0, col);
 					move.add(1, col);
 				}
 			for (int row = 1; row <= 6; row++)
 				if (getBoard().get(row, 0).equals(myTeam) &&
-						getBoard().get(row, 1).equals(EMPTY)) {
+						getBoard().get(row, 1).equals(Teams.EMPTY)) {
 					move = new Move();
 					move.add(row, 0);
 					move.add(row, 1);
@@ -452,7 +448,7 @@ public class EasyComputerPlayer extends Player {
 					//d System.out.println("Randomly looking for a jump at (" + row + "," + col + ")");
 					if (row <= 5) // able to jump down
 						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row + 2, col).equals(EMPTY)) {
+								getBoard().get(row + 2, col).equals(Teams.EMPTY)) {
 							if (getBoard().get(row + 1, col).equals(opponentTeam)) {
 								move = new Move();
 								move.add(row, col);
@@ -461,7 +457,7 @@ public class EasyComputerPlayer extends Player {
 						}
 					if (col <= 5) // able to jump right
 						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row, col + 2).equals(EMPTY)) {
+								getBoard().get(row, col + 2).equals(Teams.EMPTY)) {
 							if (getBoard().get(row, col + 1).equals(opponentTeam)) {
 								move = new Move();
 								move.add(row, col);
@@ -470,7 +466,7 @@ public class EasyComputerPlayer extends Player {
 						}
 					if (row >= 2) // able to jump up
 						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row - 2, col).equals(EMPTY)) {
+								getBoard().get(row - 2, col).equals(Teams.EMPTY)) {
 							if (getBoard().get(row - 1, col).equals(opponentTeam)) {
 								move = new Move();
 								move.add(row, col);
@@ -479,7 +475,7 @@ public class EasyComputerPlayer extends Player {
 						}
 					if (col >= 2) // able ot jump left
 						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row, col - 2).equals(EMPTY)) {
+								getBoard().get(row, col - 2).equals(Teams.EMPTY)) {
 							if (getBoard().get(row, col - 1).equals(opponentTeam)) {
 								move = new Move();
 								move.add(row, col);
@@ -491,7 +487,7 @@ public class EasyComputerPlayer extends Player {
 					//d System.out.println("Randomly looking for a jump at (" + row + "," + col + ")");
 					if (row <= 5) // able to jump down
 						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row + 2, col).equals(EMPTY)) {
+								getBoard().get(row + 2, col).equals(Teams.EMPTY)) {
 							if (getBoard().get(row + 1, col).equals(opponentTeam)) {
 								move = new Move();
 								move.add(row, col);
@@ -500,7 +496,7 @@ public class EasyComputerPlayer extends Player {
 						}
 					if (col <= 5) // able to jump right
 						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row, col + 2).equals(EMPTY)) {
+								getBoard().get(row, col + 2).equals(Teams.EMPTY)) {
 							if (getBoard().get(row, col + 1).equals(opponentTeam)) {
 								move = new Move();
 								move.add(row, col);
@@ -509,7 +505,7 @@ public class EasyComputerPlayer extends Player {
 						}
 					if (row >= 2) // able to jump up
 						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row - 2, col).equals(EMPTY)) {
+								getBoard().get(row - 2, col).equals(Teams.EMPTY)) {
 							if (getBoard().get(row - 1, col).equals(opponentTeam)) {
 								move = new Move();
 								move.add(row, col);
@@ -518,7 +514,7 @@ public class EasyComputerPlayer extends Player {
 						}
 					if (col >= 2) // able ot jump left
 						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row, col - 2).equals(EMPTY)) {
+								getBoard().get(row, col - 2).equals(Teams.EMPTY)) {
 							if (getBoard().get(row, col - 1).equals(opponentTeam)) {
 								move = new Move();
 								move.add(row, col);
@@ -533,7 +529,7 @@ public class EasyComputerPlayer extends Player {
 						//d System.out.println("Randomly looking for a jump at (" + row + "," + col + ")");
 						if (row <= 5) // able to jump down
 							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row + 2, col).equals(EMPTY)) {
+									getBoard().get(row + 2, col).equals(Teams.EMPTY)) {
 								if (getBoard().get(row + 1, col).equals(opponentTeam)) {
 									move = new Move();
 									move.add(row, col);
@@ -542,7 +538,7 @@ public class EasyComputerPlayer extends Player {
 							}
 						if (col <= 5) // able to jump right
 							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row, col + 2).equals(EMPTY)) {
+									getBoard().get(row, col + 2).equals(Teams.EMPTY)) {
 								if (getBoard().get(row, col + 1).equals(opponentTeam)) {
 									move = new Move();
 									move.add(row, col);
@@ -551,7 +547,7 @@ public class EasyComputerPlayer extends Player {
 							}
 						if (row >= 2) // able to jump up
 							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row - 2, col).equals(EMPTY)) {
+									getBoard().get(row - 2, col).equals(Teams.EMPTY)) {
 								if (getBoard().get(row - 1, col).equals(opponentTeam)) {
 									move = new Move();
 									move.add(row, col);
@@ -560,7 +556,7 @@ public class EasyComputerPlayer extends Player {
 							}
 						if (col >= 2) // able ot jump left
 							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row, col - 2).equals(EMPTY)) {
+									getBoard().get(row, col - 2).equals(Teams.EMPTY)) {
 								if (getBoard().get(row, col - 1).equals(opponentTeam)) {
 									move = new Move();
 									move.add(row, col);
@@ -573,7 +569,7 @@ public class EasyComputerPlayer extends Player {
 					//d System.out.println("Randomly looking for a jump at (" + row + "," + col + ")");
 					if (row <= 5) // able to jump down
 						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row + 2, col).equals(EMPTY)) {
+								getBoard().get(row + 2, col).equals(Teams.EMPTY)) {
 							if (getBoard().get(row + 1, col).equals(opponentTeam)) {
 								move = new Move();
 								move.add(row, col);
@@ -582,7 +578,7 @@ public class EasyComputerPlayer extends Player {
 						}
 					if (col <= 5) // able to jump right
 						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row, col + 2).equals(EMPTY)) {
+								getBoard().get(row, col + 2).equals(Teams.EMPTY)) {
 							if (getBoard().get(row, col + 1).equals(opponentTeam)) {
 								move = new Move();
 								move.add(row, col);
@@ -591,7 +587,7 @@ public class EasyComputerPlayer extends Player {
 						}
 					if (row >= 2) // able to jump up
 						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row - 2, col).equals(EMPTY)) {
+								getBoard().get(row - 2, col).equals(Teams.EMPTY)) {
 							if (getBoard().get(row - 1, col).equals(opponentTeam)) {
 								move = new Move();
 								move.add(row, col);
@@ -600,7 +596,7 @@ public class EasyComputerPlayer extends Player {
 						}
 					if (col >= 2) // able ot jump left
 						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row, col - 2).equals(EMPTY)) {
+								getBoard().get(row, col - 2).equals(Teams.EMPTY)) {
 							if (getBoard().get(row, col - 1).equals(opponentTeam)) {
 								move = new Move();
 								move.add(row, col);
@@ -625,28 +621,28 @@ public class EasyComputerPlayer extends Player {
 					for (int i = 0; i <= 3; i++) { // times through with a direction
 						if (randomDirection == 0 && row <= 6) // able to slide down
 							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row + 1, col).equals(EMPTY)) {
+									getBoard().get(row + 1, col).equals(Teams.EMPTY)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row + 1, col);
 							}
 						if (randomDirection == 1 && col <= 6) // able to slide right
 							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row, col + 1).equals(EMPTY)) {
+									getBoard().get(row, col + 1).equals(Teams.EMPTY)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row, col + 1);
 							}
 						if (randomDirection == 2 && row >= 1) // able to slide up
 							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row - 1, col).equals(EMPTY)) {
+									getBoard().get(row - 1, col).equals(Teams.EMPTY)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row - 1, col);
 							}
 						if (randomDirection == 3 && col >= 1) // able to slide left
 							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row, col - 1).equals(EMPTY)) {
+									getBoard().get(row, col - 1).equals(Teams.EMPTY)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row, col - 1);
@@ -661,28 +657,28 @@ public class EasyComputerPlayer extends Player {
 					for (int i = 0; i <= 3; i++) { // times through with a direction
 						if (randomDirection == 0 && row <= 6) // able to slide down
 							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row + 1, col).equals(EMPTY)) {
+									getBoard().get(row + 1, col).equals(Teams.EMPTY)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row + 1, col);
 							}
 						if (randomDirection == 1 && col <= 6) // able to slide right
 							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row, col + 1).equals(EMPTY)) {
+									getBoard().get(row, col + 1).equals(Teams.EMPTY)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row, col + 1);
 							}
 						if (randomDirection == 2 && row >= 1) // able to slide up
 							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row - 1, col).equals(EMPTY)) {
+									getBoard().get(row - 1, col).equals(Teams.EMPTY)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row - 1, col);
 							}
 						if (randomDirection == 3 && col >= 1) // able to slide left
 							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row, col - 1).equals(EMPTY)) {
+									getBoard().get(row, col - 1).equals(Teams.EMPTY)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row, col - 1);
@@ -699,28 +695,28 @@ public class EasyComputerPlayer extends Player {
 					for (int i = 0; i <= 3; i++) { // times through with a direction
 						if (randomDirection == 0 && row <= 6) // able to slide down
 							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row + 1, col).equals(EMPTY)) {
+									getBoard().get(row + 1, col).equals(Teams.EMPTY)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row + 1, col);
 							}
 						if (randomDirection == 1 && col <= 6) // able to slide right
 							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row, col + 1).equals(EMPTY)) {
+									getBoard().get(row, col + 1).equals(Teams.EMPTY)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row, col + 1);
 							}
 						if (randomDirection == 2 && row >= 1) // able to slide up
 							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row - 1, col).equals(EMPTY)) {
+									getBoard().get(row - 1, col).equals(Teams.EMPTY)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row - 1, col);
 							}
 						if (randomDirection == 3 && col >= 1) // able to slide left
 							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row, col - 1).equals(EMPTY)) {
+									getBoard().get(row, col - 1).equals(Teams.EMPTY)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row, col - 1);
@@ -735,28 +731,28 @@ public class EasyComputerPlayer extends Player {
 					for (int i = 0; i <= 3; i++) { // times through with a direction
 						if (randomDirection == 0 && row <= 6) // able to slide down
 							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row + 1, col).equals(EMPTY)) {
+									getBoard().get(row + 1, col).equals(Teams.EMPTY)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row + 1, col);
 							}
 						if (randomDirection == 1 && col <= 6) // able to slide right
 							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row, col + 1).equals(EMPTY)) {
+									getBoard().get(row, col + 1).equals(Teams.EMPTY)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row, col + 1);
 							}
 						if (randomDirection == 2 && row >= 1) // able to slide up
 							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row - 1, col).equals(EMPTY)) {
+									getBoard().get(row - 1, col).equals(Teams.EMPTY)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row - 1, col);
 							}
 						if (randomDirection == 3 && col >= 1) // able to slide left
 							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row, col - 1).equals(EMPTY)) {
+									getBoard().get(row, col - 1).equals(Teams.EMPTY)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row, col - 1);

@@ -21,10 +21,9 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
-import com.mikegoodspeed.supercheckers.constants.SCConst;
 import com.mikegoodspeed.supercheckers.datastructures.Board;
 import com.mikegoodspeed.supercheckers.datastructures.Move;
-import com.mikegoodspeed.supercheckers.datastructures.Team;
+import com.mikegoodspeed.supercheckers.datastructures.Teams;
 import com.mikegoodspeed.supercheckers.utils.GUIInput;
 
 /**
@@ -56,8 +55,8 @@ public class GameBoardFrm extends JFrame {
 	private JPanel MovePnl = null;
 	private JPanel turnPnl = null;
 	private JLabel turnLbl = null;
-	private Team currTeam = SCConst.TEAM1;
-	private GUIInput inputListener = new GUIInput();
+	private Teams currTeam = Teams.X;
+	private GUIInput input = new GUIInput();
 	private boolean listenForInput = false;
 
 	private ActionListener newMnuItemActionListener = new ActionListener() {
@@ -75,7 +74,7 @@ public class GameBoardFrm extends JFrame {
 			String[] loc = ((JLabel) e.getSource()).getName().split(",");
 			int row = new Integer(loc[0]).intValue();
 			int col = new Integer(loc[1]).intValue();
-			if (board.isAvailableSpot(currTeam, inputListener.getMove(), row, col)) {
+			if (board.isAvailableSpot(currTeam, input.getMove(), row, col)) {
 				setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
 		}
@@ -95,27 +94,11 @@ public class GameBoardFrm extends JFrame {
 			int row = new Integer(loc[0]).intValue();
 			int col = new Integer(loc[1]).intValue();
 			if (listenForInput
-					&& board.isAvailableSpot(currTeam, inputListener.getMove(), row, col)) {
-				if (inputListener.getMove().size() == 0) {
-					if (board.isInMiddle(row, col)) {
-						source.setIcon(SCConst.getImg(SCConst.INSIDE_EMPTY));
-					} else {
-						source.setIcon(SCConst.getImg(SCConst.OUTSIDE_EMPTY));
-					}
+					&& board.isAvailableSpot(currTeam, input.getMove(), row, col)) {
+				if (input.getMove().size() == 0) {
+					source.setIcon(Teams.EMPTY.getImage(board.isInMiddle(row, col)));
 				} else {
-					if (SCConst.TEAM1.equals(currTeam)) {
-						if (board.isInMiddle(row, col)) {
-							source.setIcon(SCConst.getImg(SCConst.INSIDE_TEAM1));
-						} else {
-							source.setIcon(SCConst.getImg(SCConst.OUTSIDE_TEAM1));
-						}
-					} else {
-						if (board.isInMiddle(row, col)) {
-							source.setIcon(SCConst.getImg(SCConst.INSIDE_TEAM2));
-						} else {
-							source.setIcon(SCConst.getImg(SCConst.OUTSIDE_TEAM2));
-						}
-					}
+					source.setIcon(currTeam.getImage(board.isInMiddle(row, col)));
 					Move m = getMove();
 					int r1 = m.getRow(m.size() - 1);
 					int c1 = m.getCol(m.size() - 1);
@@ -123,26 +106,19 @@ public class GameBoardFrm extends JFrame {
 					clone.doMove(currTeam, m);
 					if (clone.isValidJump(currTeam, r1, c1, row, col)) {
 						JLabel oldSpot = getButtonByName(r1, c1);
-						if (clone.isInMiddle(r1, c1)) {
-							oldSpot.setIcon(SCConst.getImg(SCConst.INSIDE_EMPTY));
-						} else {
-							oldSpot.setIcon(SCConst.getImg(SCConst.OUTSIDE_EMPTY));
-						}
+						oldSpot.setIcon(Teams.EMPTY.getImage(clone.isInMiddle(r1, c1)));
 						int jumpedRow = (r1 + row) / 2;
 						int jumpedCol = (c1 + col) / 2;
 						JLabel jumpedSpot = getButtonByName(jumpedRow, jumpedCol);
 						if (!currTeam.equals(clone.get(jumpedRow, jumpedCol))) {
-							if (clone.isInMiddle(jumpedRow, jumpedCol)) {
-								jumpedSpot.setIcon(SCConst.getImg(SCConst.INSIDE_EMPTY));
-							} else {
-								jumpedSpot.setIcon(SCConst.getImg(SCConst.OUTSIDE_EMPTY));
-							}
+							jumpedSpot.setIcon(Teams.EMPTY.getImage(
+									clone.isInMiddle(jumpedRow, jumpedCol)));
 						}
 					}
 				}
 				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-				inputListener.addSpot(row, col);
-				if (inputListener.getMove().size() >= 2) {
+				input.addSpot(row, col);
+				if (input.getMove().size() >= 2) {
 					getSubmitBtn().setEnabled(true);
 				}
 				getResetBtn().setEnabled(true);
@@ -151,14 +127,14 @@ public class GameBoardFrm extends JFrame {
 	};
 	private ActionListener submitBtnActionListener = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-			inputListener.setReady();
+			input.setReady();
 			getSubmitBtn().setEnabled(false);
 			getResetBtn().setEnabled(false);
 		}
 	};
 	private ActionListener resetBtnActionListener = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-			inputListener.clearMove();
+			input.clearMove();
 			updateBoard(board);
 			getSubmitBtn().setEnabled(false);
 			getResetBtn().setEnabled(false);
@@ -375,7 +351,7 @@ public class GameBoardFrm extends JFrame {
 	private JPanel getTurnPnl() {
 		if (turnPnl == null) {
 			turnLbl = new JLabel();
-			turnLbl.setIcon(SCConst.getImg(SCConst.OUTSIDE_TEAM1));
+			turnLbl.setIcon(Teams.X.getImage(false));
 			turnPnl = new JPanel();
 			turnPnl.setLayout(new BorderLayout());
 			turnPnl.setBorder(BorderFactory.createTitledBorder("Turn"));
@@ -433,24 +409,7 @@ public class GameBoardFrm extends JFrame {
 		this.board = board;
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
-				Team t = board.get(row, col);
-				if (!board.isInMiddle(row, col)) {
-					if (SCConst.TEAM1.equals(t)) {
-						buttons[row][col].setIcon(SCConst.getImg(SCConst.OUTSIDE_TEAM1));
-					} else if (SCConst.TEAM2.equals(t)) {
-						buttons[row][col].setIcon(SCConst.getImg(SCConst.OUTSIDE_TEAM2));
-					} else {
-						buttons[row][col].setIcon(SCConst.getImg(SCConst.OUTSIDE_EMPTY));
-					}
-				} else { // center area
-					if (SCConst.TEAM1.equals(t)) {
-						buttons[row][col].setIcon(SCConst.getImg(SCConst.INSIDE_TEAM1));
-					} else if (SCConst.TEAM2.equals(t)) {
-						buttons[row][col].setIcon(SCConst.getImg(SCConst.INSIDE_TEAM2));
-					} else {
-						buttons[row][col].setIcon(SCConst.getImg(SCConst.INSIDE_EMPTY));
-					}
-				}
+				buttons[row][col].setIcon(board.get(row, col).getImage(board.isInMiddle(row, col)));
 			}
 		}
 	}
@@ -460,13 +419,9 @@ public class GameBoardFrm extends JFrame {
 	 *
 	 * @param team
 	 */
-	public void setTurn(Team team) {
+	public void setTurn(Teams team) {
 		this.currTeam = team;
-		if (SCConst.TEAM1.equals(team)) {
-			turnLbl.setIcon(SCConst.getImg(SCConst.OUTSIDE_TEAM1));
-		} else {
-			turnLbl.setIcon(SCConst.getImg(SCConst.OUTSIDE_TEAM2));
-		}
+		turnLbl.setIcon(team.getImage(false));
 	}
 
 	/**
@@ -474,10 +429,10 @@ public class GameBoardFrm extends JFrame {
 	 */
 	public void waitForInput() {
 		listenForInput = true;
-		inputListener = new GUIInput();
-		inputListener.start();
+		input = new GUIInput();
+		input.start();
 		try {
-			inputListener.join();
+			input.join();
 		} catch (Exception e) {}
 		listenForInput = false;
 		getSubmitBtn().setEnabled(false);
@@ -491,6 +446,6 @@ public class GameBoardFrm extends JFrame {
 	 * @return the move as chosen by the user
 	 */
 	public Move getMove() {
-		return inputListener.getMove();
+		return input.getMove();
 	}
 }

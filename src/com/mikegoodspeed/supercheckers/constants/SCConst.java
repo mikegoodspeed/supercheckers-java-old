@@ -1,11 +1,8 @@
 package com.mikegoodspeed.supercheckers.constants;
 
-import javax.swing.ImageIcon;
-
-import com.mikegoodspeed.supercheckers.datastructures.Team;
 
 /**
- * A move performed during a turn.
+ * Supercheckers game constants.
  * <p>
  * project Supercheckers <br />
  * url http://www.mikegoodspeed.com/blog/projects/supercheckers/
@@ -15,13 +12,13 @@ import com.mikegoodspeed.supercheckers.datastructures.Team;
  */
 public class SCConst {
 
-	// Teams
-	/** Player 1's team: X */
-	public static Team TEAM1 = new Team('X');
-	/** Player 2's team: O */
-	public static Team TEAM2 = new Team('0');
-	/** An empty team: (space) */
-	public static Team EMPTY = new Team(' ');
+//	// Teams
+//	/** Player 1's team: X */
+//	public static Team TEAM1 = new Team('X');
+//	/** Player 2's team: O */
+//	public static Team TEAM2 = new Team('0');
+//	/** An empty team: (space) */
+//	public static Team EMPTY = new Team(' ');
 	
 	// Board constants
 	/**
@@ -47,31 +44,31 @@ public class SCConst {
 	 */
 	public static int B_MID_MAX = 5;
 
-	// Board Icons
-	/** Icon for player 1's spot inside the center */
-	public static final String INSIDE_TEAM1 = "images/inside_green.jpg";
-	/** Icon for player 2's spot inside the center */
-	public static final String INSIDE_TEAM2 = "images/inside_orange.jpg";
-	/** Icon for an empty spot inside the center */
-	public static final String INSIDE_EMPTY = "images/inside_empty.jpg";
-	/** Icon for player 1's spot outside the center */
-	public static final String OUTSIDE_TEAM1 = "images/outside_green.jpg";
-	/** Icon for player 2's spot outside the center */
-	public static final String OUTSIDE_TEAM2 = "images/outside_orange.jpg";
-	/** Icon for an empty spot outside the center */
-	public static final String OUTSIDE_EMPTY = "images/outside_empty.jpg";
+//	// Board Icons
+//	/** Icon for player 1's spot inside the center */
+//	public static final String INSIDE_TEAM1 = "images/inside_green.jpg";
+//	/** Icon for player 2's spot inside the center */
+//	public static final String INSIDE_TEAM2 = "images/inside_orange.jpg";
+//	/** Icon for an empty spot inside the center */
+//	public static final String INSIDE_EMPTY = "images/inside_empty.jpg";
+//	/** Icon for player 1's spot outside the center */
+//	public static final String OUTSIDE_TEAM1 = "images/outside_green.jpg";
+//	/** Icon for player 2's spot outside the center */
+//	public static final String OUTSIDE_TEAM2 = "images/outside_orange.jpg";
+//	/** Icon for an empty spot outside the center */
+//	public static final String OUTSIDE_EMPTY = "images/outside_empty.jpg";
 	
-	/**
-	 * Returns an ImageIcon as specified by the given path.
-	 * 
-	 * @param path
-	 * @return Associated icon for the given path
-	 */
-	public static final ImageIcon getImg(String path) {
-		if (SCConst.class.getResource("/" + path) == null) {
-			return new ImageIcon(path);
-		} else {
-			return new ImageIcon(SCConst.class.getResource("/" + path));
-		}
-	}
+//	/**
+//	 * Returns an ImageIcon as specified by the given path.
+//	 * 
+//	 * @param path
+//	 * @return Associated icon for the given path
+//	 */
+//	public static final ImageIcon getImg(String path) {
+//		if (SCConst.class.getResource("/" + path) == null) {
+//			return new ImageIcon(path);
+//		} else {
+//			return new ImageIcon(SCConst.class.getResource("/" + path));
+//		}
+//	}
 }

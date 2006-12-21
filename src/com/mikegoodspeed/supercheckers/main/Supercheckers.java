@@ -1,11 +1,10 @@
 package com.mikegoodspeed.supercheckers.main;
 
-import static com.mikegoodspeed.supercheckers.constants.SCConst.TEAM1;
-import static com.mikegoodspeed.supercheckers.constants.SCConst.TEAM2;
-
 import com.mikegoodspeed.supercheckers.datastructures.Board;
 import com.mikegoodspeed.supercheckers.datastructures.Move;
+import com.mikegoodspeed.supercheckers.datastructures.Teams;
 import com.mikegoodspeed.supercheckers.players.EasyComputerPlayer;
+import com.mikegoodspeed.supercheckers.players.HumanPlayer;
 import com.mikegoodspeed.supercheckers.players.Player;
 import com.mikegoodspeed.supercheckers.ui.GameBoardFrm;
 
@@ -31,8 +30,8 @@ public class Supercheckers {
 		window = new GameBoardFrm(board);
 		window.setVisible(true);
 		Move move;
-		Player p1 = new EasyComputerPlayer(window, board, TEAM1);
-		Player p2 = new EasyComputerPlayer(window, board, TEAM2);
+		Player p1 = new HumanPlayer(window, board, Teams.X);
+		Player p2 = new EasyComputerPlayer(window, board, Teams.O);
 		boolean joshing = true;
 		while (true) {
 			window.setTurn(p1.getTeam());

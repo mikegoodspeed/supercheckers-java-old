@@ -2,7 +2,7 @@ package com.mikegoodspeed.supercheckers.players;
 
 import com.mikegoodspeed.supercheckers.datastructures.Board;
 import com.mikegoodspeed.supercheckers.datastructures.Move;
-import com.mikegoodspeed.supercheckers.datastructures.Team;
+import com.mikegoodspeed.supercheckers.datastructures.Teams;
 import com.mikegoodspeed.supercheckers.ui.GameBoardFrm;
 
 /**
@@ -21,7 +21,7 @@ public class HumanPlayer extends Player {
 	 * @param board
 	 * @param team
 	 */
-	public HumanPlayer(GameBoardFrm window, Board board, Team team) {
+	public HumanPlayer(GameBoardFrm window, Board board, Teams team) {
 		super(window, board, team);
 	}
 
