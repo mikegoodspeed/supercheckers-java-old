@@ -22,6 +22,13 @@ public class Supercheckers {
 	private GameBoardFrm window = null;
 
 	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		new Supercheckers();
+	}
+
+	/**
 	 * Constructor to create a new game of Supercheckers.
 	 */
 	public Supercheckers() {
@@ -59,26 +66,5 @@ public class Supercheckers {
 			board = new Board();
 			window.updateBoard(board);
 		}
-	}
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		new Supercheckers();
-	}
-
-	/**
-	 * @return the board
-	 */
-	public Board getBoard() {
-		return board;
-	}
-
-	/**
-	 * @return the window
-	 */
-	public GameBoardFrm getWindow() {
-		return window;
 	}
 }
