@@ -4,7 +4,6 @@ import com.mikegoodspeed.supercheckers.datastructures.Board;
 import com.mikegoodspeed.supercheckers.datastructures.Move;
 import com.mikegoodspeed.supercheckers.datastructures.Team;
 import com.mikegoodspeed.supercheckers.players.EasyComputerPlayer;
-import com.mikegoodspeed.supercheckers.players.HumanPlayer;
 import com.mikegoodspeed.supercheckers.players.Player;
 import com.mikegoodspeed.supercheckers.ui.GameBoardFrm;
 
@@ -30,36 +29,43 @@ public class Supercheckers {
 		window = new GameBoardFrm(board);
 		window.setVisible(true);
 		Move move;
-		Player p1 = new HumanPlayer(window, board, Team.X);
-		Player p2 = new EasyComputerPlayer(window, board, Team.O);
-		boolean joshing = true;
 		while (true) {
-			window.setTurn(p1.getTeam());
-			do {
+			Player p1 = new EasyComputerPlayer(window, board, Team.X);
+			Player p2 = new EasyComputerPlayer(window, board, Team.O);
+			while (true) {
+				window.setTurn(p1.getTeam());
+				do {
+					window.updateBoard(board);
+					move = p1.getMove();
+					if (!board.isValidMove(p1.getTeam(), move)) {
+						System.out.println("INVALID!!! X move: " + move);
+						board.print();
+					}
+				} while (!board.isValidMove(p1.getTeam(), move));
+				board.doMove(p1.getTeam(), move);
 				window.updateBoard(board);
-				move = p1.getMove();
-				System.out.println("player1 move: " + move);
-			} while (!board.isValidMove(p1.getTeam(), move));
-			board.doMove(p1.getTeam(), move);
-			board.print();
-			window.updateBoard(board);
-			if (board.isGameOver() && !joshing) {
-				System.out.println("game over, p1 wins");
-				break;
-			}
-			joshing = false;
-			window.setTurn(p2.getTeam());
-			do {
+				if (board.isGameOver() && !board.isSecondMove()) {
+					System.out.println(board.getWinner() + " wins!");
+					break;
+				}
+				window.setTurn(p2.getTeam());
+				do {
+					window.updateBoard(board);
+					move = p2.getMove();
+					if (!board.isValidMove(p2.getTeam(), move)) {
+						System.out.println("INVALID!!! O move: " + move);
+						board.print();
+					}
+				} while (!board.isValidMove(p2.getTeam(), move));
+				board.doMove(p2.getTeam(), move);
 				window.updateBoard(board);
-				move = p2.getMove();
-				System.out.println("p2 move: " + move);
-			} while (!board.isValidMove(p2.getTeam(), move));
-			board.doMove(p2.getTeam(), move);
-			window.updateBoard(board);
-			if (board.isGameOver()) {
-				System.out.println("game over, p2 wins");
-				break;
+				if (board.isGameOver() && !board.isSecondMove()) {
+					System.out.println(board.getWinner() + " wins!");
+					break;
+				}
 			}
+			board = new Board();
+			window.updateBoard(board);
 		}
 	}
 

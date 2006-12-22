@@ -42,17 +42,42 @@ public class Board implements Cloneable {
 		this.board = new Team[MAX + 1][MAX + 1];
 		reset();
 	}
-//
-//	/**
-//	 * Clear the board by setting all the spots to EMPTY.
-//	 */
-//	public void clear() {
-//		for (int row = B_MIN; row <= B_MAX; row++) {
-//			for (int col = B_MIN; col <= B_MAX; col++) {
-//				insert(Teams.EMPTY, row, col);
-//			}
-//		}
-//	}
+
+	/**
+	 * Returns the winner of the game, or null if the game is not over.
+	 * 
+	 * @return the Team of the winner, Team.EMPTY if a draw, or null if the game is not over.
+	 */
+	public Team getWinner() {
+		int x = 0;
+		int o = 0;
+		int empty = 0;
+		for (int row = MID_MIN; row <= MID_MAX; row++) {
+			for (int col = MID_MIN; col <= MID_MAX; col++) {
+				switch (get(row, col)) {
+					case X:
+						x++;
+						break;
+					case O:
+						o++;
+						break;
+					case EMPTY:
+						empty++;
+						break;
+				}
+			}
+		}
+		if (o == 0) {
+			return Team.X; // X wins
+		}
+		if (x == 0) {
+			return Team.O; // O wins
+		}
+		if (empty == 16) {
+			return Team.EMPTY; // Tie
+		}
+		return null; // Game is not over.
+	}
 
 	@Override
 	public Board clone() {

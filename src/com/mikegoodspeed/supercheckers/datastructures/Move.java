@@ -106,6 +106,9 @@ public class Move implements Cloneable {
 
 	@Override
 	public String toString() {
+		if (points.size() == 0) {
+			return "empty";
+		}
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < size(); i++) {
 			sb.append(" " + points.get(i));

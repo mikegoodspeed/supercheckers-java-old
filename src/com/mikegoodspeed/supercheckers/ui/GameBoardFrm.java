@@ -23,6 +23,7 @@ import javax.swing.UIManager;
 
 import com.mikegoodspeed.supercheckers.datastructures.Board;
 import com.mikegoodspeed.supercheckers.datastructures.Move;
+import com.mikegoodspeed.supercheckers.datastructures.Spot;
 import com.mikegoodspeed.supercheckers.datastructures.Team;
 import com.mikegoodspeed.supercheckers.utils.GUIInput;
 
@@ -58,6 +59,7 @@ public class GameBoardFrm extends JFrame {
 	private Team currTeam = Team.X;
 	private GUIInput input = new GUIInput();
 	private boolean listenForInput = false;
+	private Spot hoverSpot = null;
 
 	private ActionListener newMnuItemActionListener = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
@@ -77,38 +79,37 @@ public class GameBoardFrm extends JFrame {
 			if (board.isAvailableSpot(currTeam, input.getMove(), row, col)) {
 				setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
+			hoverSpot = new Spot(row, col);
 		}
 
 		public void mouseExited(MouseEvent e) {
 			setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			hoverSpot = null;
 		}
 
 		public void mousePressed(MouseEvent e) {}
 
-		public void mouseReleased(MouseEvent e) {}
-
-		public void mouseClicked(MouseEvent e) {
+		public void mouseReleased(MouseEvent e) {
+			Move move = getMove();
 			JLabel source = ((JLabel) e.getSource());
-			String name = source.getName();
-			String[] loc = name.split(",");
+			String[] loc = source.getName().split(",");
 			int row = new Integer(loc[0]).intValue();
 			int col = new Integer(loc[1]).intValue();
-			if (listenForInput
-					&& board.isAvailableSpot(currTeam, input.getMove(), row, col)) {
-				if (input.getMove().size() == 0) {
+			if (listenForInput && new Spot(row, col).equals(hoverSpot) 
+					&& board.isAvailableSpot(currTeam, move, row, col)) {
+				if (move.size() == 0) {
 					source.setIcon(Team.EMPTY.getIcon(board.isInMiddle(row, col)));
 				} else {
 					source.setIcon(currTeam.getIcon(board.isInMiddle(row, col)));
-					Move m = getMove();
-					int r1 = m.getRow(m.size() - 1);
-					int c1 = m.getCol(m.size() - 1);
+					int oldRow = move.getRow(move.size() - 1);
+					int oldCol = move.getCol(move.size() - 1);
 					Board clone = board.clone();
-					clone.doMove(currTeam, m);
-					if (clone.isValidJump(currTeam, r1, c1, row, col)) {
-						JLabel oldSpot = getButtonByName(r1, c1);
-						oldSpot.setIcon(Team.EMPTY.getIcon(clone.isInMiddle(r1, c1)));
-						int jumpedRow = (r1 + row) / 2;
-						int jumpedCol = (c1 + col) / 2;
+					clone.doMove(currTeam, move);
+					if (clone.isValidJump(currTeam, oldRow, oldCol, row, col)) {
+						JLabel oldSpot = getButtonByName(oldRow, oldCol);
+						oldSpot.setIcon(Team.EMPTY.getIcon(clone.isInMiddle(oldRow, oldCol)));
+						int jumpedRow = (oldRow + row) / 2;
+						int jumpedCol = (oldCol + col) / 2;
 						JLabel jumpedSpot = getButtonByName(jumpedRow, jumpedCol);
 						if (!currTeam.equals(clone.get(jumpedRow, jumpedCol))) {
 							jumpedSpot.setIcon(Team.EMPTY.getIcon(
@@ -118,12 +119,14 @@ public class GameBoardFrm extends JFrame {
 				}
 				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 				input.addSpot(row, col);
-				if (input.getMove().size() >= 2) {
+				if (getMove().size() >= 2) {
 					getSubmitBtn().setEnabled(true);
 				}
 				getResetBtn().setEnabled(true);
 			}
 		}
+
+		public void mouseClicked(MouseEvent e) {}
 	};
 	private ActionListener submitBtnActionListener = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {

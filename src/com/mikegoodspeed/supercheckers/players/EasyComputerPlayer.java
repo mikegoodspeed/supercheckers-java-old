@@ -30,9 +30,9 @@ public class EasyComputerPlayer extends Player {
 	}
 
 	public Move getMove() {
-		try {
-			Thread.sleep(50); // wait 50 milliseconds to play
-		} catch (Exception e) {}
+//		try {
+//			Thread.sleep(50); // wait 50 milliseconds to play
+//		} catch (Exception e) {}
 
 		Move move = new Move();
 		if (getBoard().isFirstMove()) {
