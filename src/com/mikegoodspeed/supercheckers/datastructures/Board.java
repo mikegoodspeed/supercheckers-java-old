@@ -11,27 +11,27 @@ package com.mikegoodspeed.supercheckers.datastructures;
  */
 public class Board implements Cloneable {
 	/**
-	 * The board's minimum index.  The row with this index is on the north side of the board.  The 
-	 * column with this index is on the far east of the board. 
+	 * The board's minimum index.  The row with this index is on the north side of the board.  The
+	 * column with this index is on the far east of the board.
 	 */
-	private static int MIN = 0;
+	public static int MIN = 0;
 	/**
-	 * The board's maximum index.  The row with this index is on the south side of the board.  The 
-	 * column with this index is on the west side of the board. 
+	 * The board's maximum index.  The row with this index is on the south side of the board.  The
+	 * column with this index is on the west side of the board.
 	 */
-	private static int MAX = 7;
+	public static int MAX = 7;
 	/**
 	 * The board's middle area's minimum index.  The row with this index is on the north side of the
 	 * middle of the board.  The column with this index is on the east side of the middle of the
-	 * board. 
+	 * board.
 	 */
-	private static int MID_MIN = 2;
+	public static int MID_MIN = 2;
 	/**
 	 * The board's middle area's maximum index.  The row with this index is on the south side of the
-	 * center of the board.  The column with this index is on the west side of the middle of the 
-	 * board. 
+	 * center of the board.  The column with this index is on the west side of the middle of the
+	 * board.
 	 */
-	private static int MID_MAX = 5;
+	public static int MID_MAX = 5;
 
 	private Team board[][] = null;
 
@@ -43,41 +43,16 @@ public class Board implements Cloneable {
 		reset();
 	}
 
-	/**
-	 * Returns the winner of the game, or null if the game is not over.
-	 * 
-	 * @return the Team of the winner, Team.EMPTY if a draw, or null if the game is not over.
-	 */
-	public Team getWinner() {
-		int x = 0;
-		int o = 0;
-		int empty = 0;
-		for (int row = MID_MIN; row <= MID_MAX; row++) {
-			for (int col = MID_MIN; col <= MID_MAX; col++) {
-				switch (get(row, col)) {
-					case X:
-						x++;
-						break;
-					case O:
-						o++;
-						break;
-					case EMPTY:
-						empty++;
-						break;
-				}
-			}
-		}
-		if (o == 0) {
-			return Team.X; // X wins
-		}
-		if (x == 0) {
-			return Team.O; // O wins
-		}
-		if (empty == 16) {
-			return Team.EMPTY; // Tie
-		}
-		return null; // Game is not over.
-	}
+//	/**
+//	 * Clear the board (testing use only).
+//	 */
+//	public void clear() {
+//		for (int row = MIN; row <= MAX; row++) {
+//			for (int col = MIN; col <= MAX; col++) {
+//				insert(Team.EMPTY, row, col);
+//			}
+//		}
+//	}
 
 	@Override
 	public Board clone() {
@@ -143,6 +118,42 @@ public class Board implements Cloneable {
 	 */
 	public Team get(int row, int col) {
 		return board[row][col];
+	}
+
+	/**
+	 * Returns the winner of the game, or null if the game is not over.
+	 *
+	 * @return the Team of the winner, Team.EMPTY if a draw, or null if the game is not over.
+	 */
+	public Team getWinner() {
+		int x = 0;
+		int o = 0;
+		int empty = 0;
+		for (int row = MID_MIN; row <= MID_MAX; row++) {
+			for (int col = MID_MIN; col <= MID_MAX; col++) {
+				switch (get(row, col)) {
+					case X:
+						x++;
+						break;
+					case O:
+						o++;
+						break;
+					case EMPTY:
+						empty++;
+						break;
+				}
+			}
+		}
+		if (o == 0) {
+			return Team.X; // X wins
+		}
+		if (x == 0) {
+			return Team.O; // O wins
+		}
+		if (empty == 16) {
+			return Team.EMPTY; // Tie
+		}
+		return null; // Game is not over.
 	}
 
 	/**
@@ -245,10 +256,13 @@ public class Board implements Cloneable {
 		int p2 = 0;
 		for (int row = MID_MIN; row <= MID_MAX; row++) {
 			for (int col = MID_MIN; col <= MID_MAX; col++) {
-				if (Team.X.equals(get(row, col))) {
-					p1++;
-				} else if (Team.O.equals(get(row, col))) {
-					p2++;
+				switch (get(row, col)) {
+					case X:
+						p1++;
+						break;
+					case O:
+						p2++;
+						break;
 				}
 			}
 		}

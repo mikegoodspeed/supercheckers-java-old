@@ -3,7 +3,7 @@ package com.mikegoodspeed.supercheckers.main;
 import com.mikegoodspeed.supercheckers.datastructures.Board;
 import com.mikegoodspeed.supercheckers.datastructures.Move;
 import com.mikegoodspeed.supercheckers.datastructures.Team;
-import com.mikegoodspeed.supercheckers.players.EasyComputerPlayer;
+import com.mikegoodspeed.supercheckers.players.HumanPlayer;
 import com.mikegoodspeed.supercheckers.players.Player;
 import com.mikegoodspeed.supercheckers.ui.GameBoardFrm;
 
@@ -30,17 +30,13 @@ public class Supercheckers {
 		window.setVisible(true);
 		Move move;
 		while (true) {
-			Player p1 = new EasyComputerPlayer(window, board, Team.X);
-			Player p2 = new EasyComputerPlayer(window, board, Team.O);
+			Player p1 = new HumanPlayer(window, board, Team.X);
+			Player p2 = new HumanPlayer(window, board, Team.O);
 			while (true) {
 				window.setTurn(p1.getTeam());
 				do {
 					window.updateBoard(board);
 					move = p1.getMove();
-					if (!board.isValidMove(p1.getTeam(), move)) {
-						System.out.println("INVALID!!! X move: " + move);
-						board.print();
-					}
 				} while (!board.isValidMove(p1.getTeam(), move));
 				board.doMove(p1.getTeam(), move);
 				window.updateBoard(board);
@@ -52,10 +48,6 @@ public class Supercheckers {
 				do {
 					window.updateBoard(board);
 					move = p2.getMove();
-					if (!board.isValidMove(p2.getTeam(), move)) {
-						System.out.println("INVALID!!! O move: " + move);
-						board.print();
-					}
 				} while (!board.isValidMove(p2.getTeam(), move));
 				board.doMove(p2.getTeam(), move);
 				window.updateBoard(board);

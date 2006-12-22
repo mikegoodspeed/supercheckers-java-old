@@ -93,7 +93,7 @@ public class MoveTest {
 	 */
 	@Test
 	public void testToString() {
-		assertEquals("", move.toString());
+		assertEquals("empty", move.toString());
 		move.add(1, 2);
 		assertEquals("(1,2)", move.toString());
 		move.add(3, 4);

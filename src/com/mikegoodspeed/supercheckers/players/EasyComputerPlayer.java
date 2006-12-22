@@ -8,7 +8,7 @@ import com.mikegoodspeed.supercheckers.datastructures.Team;
 import com.mikegoodspeed.supercheckers.ui.GameBoardFrm;
 
 /**
- *
+ * Easy Computer Player
  *
  * @author Mike
  * @version $Id$
@@ -19,6 +19,8 @@ public class EasyComputerPlayer extends Player {
 	Team opponentTeam = null;
 
 	/**
+	 * Constructor for an easy computer player
+	 * 
 	 * @param window
 	 * @param board
 	 * @param team
@@ -31,7 +33,7 @@ public class EasyComputerPlayer extends Player {
 
 	public Move getMove() {
 //		try {
-//			Thread.sleep(50); // wait 50 milliseconds to play
+//		Thread.sleep(50); // wait 50 milliseconds to play
 //		} catch (Exception e) {}
 
 		Move move = new Move();
@@ -81,7 +83,7 @@ public class EasyComputerPlayer extends Player {
 						move.add(5, 4);
 						break;
 				}
-			} else { // if (TEAM2.equals(myTeam))
+			} else { // if (Team.O.equals(myTeam))
 				switch (randomNumber.nextInt(8)) {
 					case 0:
 						move = new Move();
@@ -265,53 +267,54 @@ public class EasyComputerPlayer extends Player {
 			for (int row = 2; row <= 5; row++) {
 				for (int col = 2; col <= 5; col++) {
 					if (row < 4) { // able to jump up
-						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row + 1, col).equals(opponentTeam) &&
-								getBoard().get(row + 2, col).equals(Team.EMPTY)) {
-							move = new Move();
-							move.add(row, col);
-							move.add(row + 2, col);
+						if (getBoard().isValidJump(myTeam, row, col, row + 2, col)) {
+							if (getBoard().get(row + 1, col).equals(opponentTeam)) {
+								move = new Move();
+								move.add(row, col);
+								move.add(row + 2, col);
+							}
 						}
 					}
 					if (col < 4) { // able to jump right
-						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row, col + 1).equals(opponentTeam) &&
-								getBoard().get(row, col + 2).equals(Team.EMPTY)) {
-							move = new Move();
-							move.add(row, col);
-							move.add(row, col + 2);
+						if (getBoard().isValidJump(myTeam, row, col, row, col + 2)) {
+							if (getBoard().get(row, col + 1).equals(opponentTeam)) {
+								move = new Move();
+								move.add(row, col);
+								move.add(row, col + 2);
+							}
 						}
 					}
 					if (row > 3) { // able to jump down
-						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row - 1, col).equals(opponentTeam) &&
-								getBoard().get(row - 2, col).equals(Team.EMPTY)) {
-							move = new Move();
-							move.add(row, col);
-							move.add(row - 2, col);
+						if (getBoard().isValidJump(myTeam, row, col, row - 2, col)) {
+							if (getBoard().get(row - 1, col).equals(opponentTeam)) {
+								move = new Move();
+								move.add(row, col);
+								move.add(row - 2, col);
+							}
 						}
 					}
-					if (col > 3) { // able ot jump left
-						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row, col - 1).equals(opponentTeam) &&
-								getBoard().get(row, col - 2).equals(Team.EMPTY)) {
-							move = new Move();
-							move.add(row, col);
-							move.add(row, col - 2);
+					if (col > 3) { // able to jump left
+						if (getBoard().isValidJump(myTeam, row, col, row, col - 2)) {
+							if (getBoard().get(row, col - 1).equals(opponentTeam)) {
+								move = new Move();
+								move.add(row, col);
+								move.add(row, col - 2);
+							}
 						}
 					}
 				}
 			}
-			if (move.size() != 0)
+			if (move.size() != 0) {
 				return move; // if a better move was found, do it
-			if (secondChoice.size() != 0)
+			}
+			if (secondChoice.size() != 0) {
 				return secondChoice; // second choice move
+			}
 
 			// try to jump an opponent or a teammate to get inside
-			for (int row = 6; row <= 7; row++)
-				for (int col = 2; col <= 5; col++)
-					if (getBoard().get(row, col).equals(myTeam) &&
-							getBoard().get(row - 2, col).equals(Team.EMPTY)) {
+			for (int row = 6; row <= 7; row++) {
+				for (int col = 2; col <= 5; col++) {
+					if (getBoard().isValidSlide(myTeam, row, col, row - 2, col)) {
 						if (getBoard().get(row - 1, col).equals(opponentTeam)) {
 							move = new Move();
 							move.add(row, col);
@@ -322,10 +325,11 @@ public class EasyComputerPlayer extends Player {
 							secondChoice.add(row - 2, col);
 						}
 					}
-			for (int row = 2; row <= 5; row++)
-				for (int col = 6; col <= 7; col++)
-					if (getBoard().get(row, col).equals(myTeam) &&
-							getBoard().get(row, col - 2).equals(Team.EMPTY)) {
+				}
+			}
+			for (int row = 2; row <= 5; row++) {
+				for (int col = 6; col <= 7; col++) {
+					if (getBoard().isValidSlide(myTeam, row, col, row, col - 2)) {
 						if (getBoard().get(row, col - 1).equals(opponentTeam)) {
 							move = new Move();
 							move.add(row, col);
@@ -336,10 +340,11 @@ public class EasyComputerPlayer extends Player {
 							secondChoice.add(row, col - 2);
 						}
 					}
-			for (int row = 0; row <= 1; row++)
-				for (int col = 2; col <= 5; col++)
-					if (getBoard().get(row, col).equals(myTeam) &&
-							getBoard().get(row + 2, col).equals(Team.EMPTY)) {
+				}
+			}
+			for (int row = 0; row <= 1; row++) {
+				for (int col = 2; col <= 5; col++) {
+					if (getBoard().isValidSlide(myTeam, row, col, row + 2, col)) {
 						if (getBoard().get(row + 1, col).equals(opponentTeam)) {
 							move = new Move();
 							move.add(row, col);
@@ -350,10 +355,11 @@ public class EasyComputerPlayer extends Player {
 							secondChoice.add(row + 2, col);
 						}
 					}
+				}
+			}
 			for (int row = 2; row <= 5; row++) {
 				for (int col = 0; col <= 1; col++) {
-					if (getBoard().get(row, col).equals(myTeam) &&
-							getBoard().get(row, col + 2).equals(Team.EMPTY)) {
+					if (getBoard().isValidSlide(myTeam, row, col, row, col + 2)) {
 						if (getBoard().get(row, col + 1).equals(opponentTeam)) {
 							move = new Move();
 							move.add(row, col);
@@ -366,210 +372,208 @@ public class EasyComputerPlayer extends Player {
 					}
 				}
 			}
-			if (move.size() != 0)
+			if (move.size() != 0) {
 				return move; // if a better move was found, do it
-			if (secondChoice.size() != 0)
+			}
+			if (secondChoice.size() != 0) {
 				return secondChoice; // second choice move
+			}
 
 			// try to slide inside
-			for (int col = 2; col <= 5; col++)
-				if (getBoard().get(6, col).equals(myTeam) &&
-						getBoard().get(5, col).equals(Team.EMPTY)) {
+			for (int col = 2; col <= 5; col++) {
+				if (getBoard().isValidSlide(myTeam, 6, col, 5, col)) {
 					move = new Move();
 					move.add(6, col);
 					move.add(5, col);
 				}
-			for (int row = 2; row <= 5; row++)
-				if (getBoard().get(row, 6).equals(myTeam) &&
-						getBoard().get(row, 5).equals(Team.EMPTY)) {
+			}
+			for (int row = 2; row <= 5; row++) {
+				if (getBoard().isValidSlide(myTeam, row, 6, row, 5)) {
 					move = new Move();
 					move.add(row, 6);
 					move.add(row, 5);
 				}
-			for (int col = 2; col <= 5; col++)
-				if (getBoard().get(1, col).equals(myTeam) &&
-						getBoard().get(2, col).equals(Team.EMPTY)) {
+			}
+			for (int col = 2; col <= 5; col++) {
+				if (getBoard().isValidSlide(myTeam, 1, col, 2, col)) {
 					move = new Move();
 					move.add(1, col);
 					move.add(2, col);
 				}
-			for (int row = 2; row <= 5; row++)
-				if (getBoard().get(row, 1).equals(myTeam) &&
-						getBoard().get(row, 2).equals(Team.EMPTY)) {
+			}
+			for (int row = 2; row <= 5; row++) {
+				if (getBoard().isValidSlide(myTeam, row, 1, row, 2)) {
 					move = new Move();
 					move.add(row, 1);
 					move.add(row, 2);
 				}
-			if (move.size() != 0)
+			}
+			if (move.size() != 0) {
 				return move; // if a move was found, do it
+			}
 
 			// try to slide in from the edges
-			for (int col = 1; col <= 6; col++)
-				if (getBoard().get(7, col).equals(myTeam) &&
-						getBoard().get(6, col).equals(Team.EMPTY)) {
+			for (int col = 1; col <= 6; col++) {
+				if (getBoard().isValidSlide(myTeam, 7, col, 6, col)) {
 					move = new Move();
 					move.add(7, col);
 					move.add(6, col);
 				}
-			for (int row = 1; row <= 6; row++)
-				if (getBoard().get(row, 7).equals(myTeam) &&
-						getBoard().get(row, 6).equals(Team.EMPTY)) {
+			}
+			for (int row = 1; row <= 6; row++) {
+				if (getBoard().isValidSlide(myTeam, row, 7, row, 6)) {
 					move = new Move();
 					move.add(row, 7);
 					move.add(row, 6);
 				}
-			for (int col = 1; col <= 6; col++)
-				if (getBoard().get(0, col).equals(myTeam) &&
-						getBoard().get(1, col).equals(Team.EMPTY)) {
+			}
+			for (int col = 1; col <= 6; col++) {
+				if (getBoard().isValidSlide(myTeam, 0, col, 1, col)) {
 					move = new Move();
 					move.add(0, col);
 					move.add(1, col);
 				}
-			for (int row = 1; row <= 6; row++)
-				if (getBoard().get(row, 0).equals(myTeam) &&
-						getBoard().get(row, 1).equals(Team.EMPTY)) {
+			}
+			for (int row = 1; row <= 6; row++) {
+				if (getBoard().isValidSlide(myTeam, row, 0, row, 1)) {
 					move = new Move();
 					move.add(row, 0);
 					move.add(row, 1);
 				}
-			if (move.size() != 0)
+			}
+			if (move.size() != 0) {
 				return move; // if a move was found, do it
+			}
 
 			// create random numbers for random jumping
 			Random randomNumber = new Random();
 			int randomRow = randomNumber.nextInt(8);
 			int randomCol = randomNumber.nextInt(8);
 			int randomDirection = randomNumber.nextInt(4);
-			//d System.out.println("Random Jump Start: (" + randomRow + "," + randomCol + ") Direction:" + randomDirection);
 
 			// try to randomly jump an opponent
 			for (int row = randomRow; row <= 7; row++) {
 				for (int col = randomCol; col <= 7; col++) {
-					//d System.out.println("Randomly looking for a jump at (" + row + "," + col + ")");
-					if (row <= 5) // able to jump down
-						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row + 2, col).equals(Team.EMPTY)) {
+					if (row <= 5) { // able to jump down
+						if (getBoard().isValidJump(myTeam, row, col, row + 2, col)) {
 							if (getBoard().get(row + 1, col).equals(opponentTeam)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row + 2, col);
 							}
 						}
-					if (col <= 5) // able to jump right
-						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row, col + 2).equals(Team.EMPTY)) {
+					}
+					if (col <= 5) { // able to jump right
+						if (getBoard().isValidJump(myTeam, row, col, row, col + 2)) {
 							if (getBoard().get(row, col + 1).equals(opponentTeam)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row, col + 2);
 							}
 						}
-					if (row >= 2) // able to jump up
-						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row - 2, col).equals(Team.EMPTY)) {
+					}
+					if (row >= 2) { // able to jump up
+						if (getBoard().isValidJump(myTeam, row, col, row - 2, col)) {
 							if (getBoard().get(row - 1, col).equals(opponentTeam)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row - 2, col);
 							}
 						}
-					if (col >= 2) // able ot jump left
-						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row, col - 2).equals(Team.EMPTY)) {
+					}
+					if (col >= 2) { // able to jump left
+						if (getBoard().isValidJump(myTeam, row, col, row, col - 2)) {
 							if (getBoard().get(row, col - 1).equals(opponentTeam)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row, col - 2);
 							}
 						}
+					}
 				}
 				for (int col = 0; col <= randomCol - 1; col++) {
-					//d System.out.println("Randomly looking for a jump at (" + row + "," + col + ")");
-					if (row <= 5) // able to jump down
-						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row + 2, col).equals(Team.EMPTY)) {
+					if (row <= 5) { // able to jump down
+						if (getBoard().isValidJump(myTeam, row, col, row + 2, col)) {
 							if (getBoard().get(row + 1, col).equals(opponentTeam)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row + 2, col);
 							}
 						}
-					if (col <= 5) // able to jump right
-						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row, col + 2).equals(Team.EMPTY)) {
+					}
+					if (col <= 5) { // able to jump right
+						if (getBoard().isValidJump(myTeam, row, col, row, col + 2)) {
 							if (getBoard().get(row, col + 1).equals(opponentTeam)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row, col + 2);
 							}
 						}
-					if (row >= 2) // able to jump up
-						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row - 2, col).equals(Team.EMPTY)) {
+					}
+					if (row >= 2) { // able to jump up
+						if (getBoard().isValidJump(myTeam, row, col, row - 2, col)) {
 							if (getBoard().get(row - 1, col).equals(opponentTeam)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row - 2, col);
 							}
 						}
-					if (col >= 2) // able ot jump left
-						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row, col - 2).equals(Team.EMPTY)) {
+					}
+					if (col >= 2) { // able to jump left
+						if (getBoard().isValidJump(myTeam, row, col, row, col - 2)) {
 							if (getBoard().get(row, col - 1).equals(opponentTeam)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row, col - 2);
 							}
 						}
+					}
 				}
 			}
 			for (int row = 0; row <= randomRow - 1; row++) {
 				if (randomCol < 7) {
 					for (int col = randomCol; col <= 7; col++) {
-						//d System.out.println("Randomly looking for a jump at (" + row + "," + col + ")");
-						if (row <= 5) // able to jump down
-							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row + 2, col).equals(Team.EMPTY)) {
+						if (row <= 5) { // able to jump down
+							if (getBoard().isValidJump(myTeam, row, col, row + 2, col)) {
 								if (getBoard().get(row + 1, col).equals(opponentTeam)) {
 									move = new Move();
 									move.add(row, col);
 									move.add(row + 2, col);
 								}
 							}
-						if (col <= 5) // able to jump right
-							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row, col + 2).equals(Team.EMPTY)) {
+						}
+						if (col <= 5) { // able to jump right
+							if (getBoard().isValidJump(myTeam, row, col, row, col + 2)) {
 								if (getBoard().get(row, col + 1).equals(opponentTeam)) {
 									move = new Move();
 									move.add(row, col);
 									move.add(row, col + 2);
 								}
 							}
-						if (row >= 2) // able to jump up
-							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row - 2, col).equals(Team.EMPTY)) {
+						}
+						if (row >= 2) { // able to jump up
+							if (getBoard().isValidJump(myTeam, row, col, row - 2, col)) {
 								if (getBoard().get(row - 1, col).equals(opponentTeam)) {
 									move = new Move();
 									move.add(row, col);
 									move.add(row - 2, col);
 								}
 							}
-						if (col >= 2) // able ot jump left
-							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row, col - 2).equals(Team.EMPTY)) {
+						}
+						if (col >= 2) { // able to jump left
+							if (getBoard().isValidJump(myTeam, row, col, row, col - 2)) {
 								if (getBoard().get(row, col - 1).equals(opponentTeam)) {
 									move = new Move();
 									move.add(row, col);
 									move.add(row, col - 2);
 								}
 							}
+						}
 					}
 				}
 				for (int col = 0; col <= randomCol - 1; col++) {
-					//d System.out.println("Randomly looking for a jump at (" + row + "," + col + ")");
 					if (row <= 5) // able to jump down
-						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row + 2, col).equals(Team.EMPTY)) {
+						if (getBoard().isValidJump(myTeam, row, col, row + 2, col)) {
 							if (getBoard().get(row + 1, col).equals(opponentTeam)) {
 								move = new Move();
 								move.add(row, col);
@@ -577,8 +581,7 @@ public class EasyComputerPlayer extends Player {
 							}
 						}
 					if (col <= 5) // able to jump right
-						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row, col + 2).equals(Team.EMPTY)) {
+						if (getBoard().isValidJump(myTeam, row, col, row, col + 2)) {
 							if (getBoard().get(row, col + 1).equals(opponentTeam)) {
 								move = new Move();
 								move.add(row, col);
@@ -586,17 +589,15 @@ public class EasyComputerPlayer extends Player {
 							}
 						}
 					if (row >= 2) // able to jump up
-						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row - 2, col).equals(Team.EMPTY)) {
+						if (getBoard().isValidJump(myTeam, row, col, row - 2, col)) {
 							if (getBoard().get(row - 1, col).equals(opponentTeam)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row - 2, col);
 							}
 						}
-					if (col >= 2) // able ot jump left
-						if (getBoard().get(row, col).equals(myTeam) &&
-								getBoard().get(row, col - 2).equals(Team.EMPTY)) {
+					if (col >= 2) // able to jump left
+						if (getBoard().isValidJump(myTeam, row, col, row, col - 2)) {
 							if (getBoard().get(row, col - 1).equals(opponentTeam)) {
 								move = new Move();
 								move.add(row, col);
@@ -605,162 +606,165 @@ public class EasyComputerPlayer extends Player {
 						}
 				}
 			}
-			//d System.out.println("");
-			if (move.size() != 0)
+			if (move.size() != 0) {
 				return move; // return a jump if we have one
+			}
 
 			// create new random numbers for random sliding
 			randomRow = randomNumber.nextInt(8);
 			randomCol = randomNumber.nextInt(8);
 			randomDirection = randomNumber.nextInt(4);
-			//d System.out.println("Random Slide Start: (" + randomRow + "," + randomCol + ") Direction:" + randomDirection);
 
 			// try to randomly slide anywhere (base case)
-			for (int row = randomRow; row <= 7; row++) {
-				for (int col = randomRow; col <= 7; col++) {
+			for (int row = randomRow; row < 8; row++) {
+				for (int col = randomCol; col < 8; col++) {
 					for (int i = 0; i <= 3; i++) { // times through with a direction
-						if (randomDirection == 0 && row <= 6) // able to slide down
-							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row + 1, col).equals(Team.EMPTY)) {
+						if (randomDirection == 0 && row <= 6) { // able to slide down
+							if (getBoard().isValidSlide(myTeam, row, col, row + 1, col)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row + 1, col);
 							}
-						if (randomDirection == 1 && col <= 6) // able to slide right
-							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row, col + 1).equals(Team.EMPTY)) {
+						}
+						if (randomDirection == 1 && col <= 6) { // able to slide right
+							if (getBoard().isValidSlide(myTeam, row, col, row, col + 1)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row, col + 1);
 							}
-						if (randomDirection == 2 && row >= 1) // able to slide up
-							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row - 1, col).equals(Team.EMPTY)) {
+						}
+						if (randomDirection == 2 && row >= 1) { // able to slide up
+							if (getBoard().isValidSlide(myTeam, row, col, row - 1, col)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row - 1, col);
 							}
-						if (randomDirection == 3 && col >= 1) // able to slide left
-							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row, col - 1).equals(Team.EMPTY)) {
+						}
+						if (randomDirection == 3 && col >= 1) { // able to slide left
+							if (getBoard().isValidSlide(myTeam, row, col, row, col - 1)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row, col - 1);
 							}
-						if (randomDirection != 3)
+						}
+						if (randomDirection != 3) {
 							randomDirection++; // increment random direction
-						else
+						} else {
 							randomDirection = 0; // loop it back to the top
+						}
 					}
 				}
 				for (int col = 0; col <= randomCol - 1; col++) {
 					for (int i = 0; i <= 3; i++) { // times through with a direction
-						if (randomDirection == 0 && row <= 6) // able to slide down
-							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row + 1, col).equals(Team.EMPTY)) {
+						if (randomDirection == 0 && row <= 6) { // able to slide down
+							if (getBoard().isValidSlide(myTeam, row, col, row + 1, col)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row + 1, col);
 							}
-						if (randomDirection == 1 && col <= 6) // able to slide right
-							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row, col + 1).equals(Team.EMPTY)) {
+						}
+						if (randomDirection == 1 && col <= 6) { // able to slide right
+							if (getBoard().isValidSlide(myTeam, row, col, row, col + 1)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row, col + 1);
 							}
-						if (randomDirection == 2 && row >= 1) // able to slide up
-							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row - 1, col).equals(Team.EMPTY)) {
+						}
+						if (randomDirection == 2 && row >= 1) { // able to slide up
+							if (getBoard().isValidSlide(myTeam, row, col, row - 1, col)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row - 1, col);
 							}
-						if (randomDirection == 3 && col >= 1) // able to slide left
-							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row, col - 1).equals(Team.EMPTY)) {
+						}
+						if (randomDirection == 3 && col >= 1) { // able to slide left
+							if (getBoard().isValidSlide(myTeam, row, col, row, col - 1)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row, col - 1);
 							}
-						if (randomDirection != 3)
+						}
+						if (randomDirection != 3) {
 							randomDirection++; // increment random direction
-						else
+						} else {
 							randomDirection = 0; // loop it back to the top
+						}
 					}
 				}
 			}
 			for (int row = 0; row <= randomRow - 1; row++) {
 				for (int col = randomCol; col <= 7; col++) {
 					for (int i = 0; i <= 3; i++) { // times through with a direction
-						if (randomDirection == 0 && row <= 6) // able to slide down
-							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row + 1, col).equals(Team.EMPTY)) {
+						if (randomDirection == 0 && row <= 6) { // able to slide down
+							if (getBoard().isValidSlide(myTeam, row, col, row + 1, col)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row + 1, col);
 							}
-						if (randomDirection == 1 && col <= 6) // able to slide right
-							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row, col + 1).equals(Team.EMPTY)) {
+						}
+						if (randomDirection == 1 && col <= 6) { // able to slide right
+							if (getBoard().isValidSlide(myTeam, row, col, row, col + 1)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row, col + 1);
 							}
-						if (randomDirection == 2 && row >= 1) // able to slide up
-							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row - 1, col).equals(Team.EMPTY)) {
+						}
+						if (randomDirection == 2 && row >= 1) { // able to slide up
+							if (getBoard().isValidSlide(myTeam, row, col, row - 1, col)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row - 1, col);
 							}
-						if (randomDirection == 3 && col >= 1) // able to slide left
-							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row, col - 1).equals(Team.EMPTY)) {
+						}
+						if (randomDirection == 3 && col >= 1) { // able to slide left
+							if (getBoard().isValidSlide(myTeam, row, col, row, col - 1)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row, col - 1);
 							}
-						if (randomDirection != 3)
+						}
+						if (randomDirection != 3) {
 							randomDirection++; // increment random direction
-						else
+						} else {
 							randomDirection = 0; // loop it back to the top
+						}
 					}
 				}
 				for (int col = 0; col <= randomCol - 1; col++) {
 					for (int i = 0; i <= 3; i++) { // times through with a direction
-						if (randomDirection == 0 && row <= 6) // able to slide down
-							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row + 1, col).equals(Team.EMPTY)) {
+						if (randomDirection == 0 && row <= 6) { // able to slide down
+							if (getBoard().isValidSlide(myTeam, row, col, row + 1, col)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row + 1, col);
 							}
-						if (randomDirection == 1 && col <= 6) // able to slide right
-							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row, col + 1).equals(Team.EMPTY)) {
+						}
+						if (randomDirection == 1 && col <= 6) {// able to slide right
+							if (getBoard().isValidSlide(myTeam, row, col, row, col + 1)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row, col + 1);
 							}
-						if (randomDirection == 2 && row >= 1) // able to slide up
-							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row - 1, col).equals(Team.EMPTY)) {
+						}
+						if (randomDirection == 2 && row >= 1) { // able to slide up
+							if (getBoard().isValidSlide(myTeam, row, col, row - 1, col)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row - 1, col);
 							}
-						if (randomDirection == 3 && col >= 1) // able to slide left
-							if (getBoard().get(row, col).equals(myTeam) &&
-									getBoard().get(row, col - 1).equals(Team.EMPTY)) {
+						}
+						if (randomDirection == 3 && col >= 1) { // able to slide left
+							if (getBoard().isValidSlide(myTeam, row, col, row, col - 1)) {
 								move = new Move();
 								move.add(row, col);
 								move.add(row, col - 1);
 							}
-						if (randomDirection != 3)
+						}
+						if (randomDirection != 3) {
 							randomDirection++; // increment random direction
-						else
+						} else {
 							randomDirection = 0; // loop it back to the top
+						}
 					}
 				}
 			}
