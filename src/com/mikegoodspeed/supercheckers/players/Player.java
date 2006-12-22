@@ -34,7 +34,7 @@ public abstract class Player {
 	/**
 	 * @return the board
 	 */
-	public Board getBoard() {
+	protected Board getBoard() {
 		return board;
 	}
 
@@ -55,7 +55,7 @@ public abstract class Player {
 	/**
 	 * @return the window
 	 */
-	public GameBoardFrm getWindow() {
+	protected GameBoardFrm getWindow() {
 		return window;
 	}
 }

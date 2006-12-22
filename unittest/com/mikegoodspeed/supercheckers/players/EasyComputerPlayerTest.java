@@ -1,4 +1,4 @@
-package com.mikegoodspeed.supercheckers.unittest;
+package com.mikegoodspeed.supercheckers.players;
 
 import static org.junit.Assert.assertTrue;
 

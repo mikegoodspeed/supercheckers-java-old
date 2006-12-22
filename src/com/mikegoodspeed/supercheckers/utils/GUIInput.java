@@ -24,27 +24,6 @@ public class GUIInput extends Thread {
 		reset();
 	}
 
-	private void reset() {
-		ready = false;
-		clearMove();
-	}
-
-	public void run() {
-		reset();
-		while (!ready) {
-			try {
-				sleep(100);
-			} catch (Exception e) {}
-		}
-	}
-
-	/**
-	 * Tell the input thread that it is ready to be processed.
-	 */
-	public void setReady() {
-		ready = true;
-	}
-
 	/**
 	 * Adds a spot, specified by a row and a column, to the current move.
 	 * 
@@ -69,5 +48,26 @@ public class GUIInput extends Thread {
 	 */
 	public Move getMove() {
 		return move;
+	}
+
+	private void reset() {
+		ready = false;
+		clearMove();
+	}
+
+	public void run() {
+		reset();
+		while (!ready) {
+			try {
+				sleep(100);
+			} catch (Exception e) {}
+		}
+	}
+
+	/**
+	 * Tell the input thread that it is ready to be processed.
+	 */
+	public void setReady() {
+		ready = true;
 	}
 }

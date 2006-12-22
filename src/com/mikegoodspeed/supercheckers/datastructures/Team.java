@@ -39,8 +39,17 @@ public enum Team {
 	}
 
 	/**
+	 * Returns the representation of a team.
+	 *
+	 * @return the representation as a String
+	 */
+	public String get() {
+		return new String(new char[] { representation });
+	}
+
+	/**
 	 * Returns the ImageIcon of the team, depending on if it is in the middle of the board or not.
-	 * 
+	 *
 	 * @param isInMiddle true if spot is in the middle of the board
 	 * @return image representation of the team
 	 */
@@ -51,14 +60,5 @@ public enum Team {
 		} else {
 			return new ImageIcon(Team.class.getResource("/" + path));
 		}
-	}
-
-	/**
-	 * Returns the representation of a team.
-	 * 
-	 * @return the representation as a String
-	 */
-	public String get() {
-		return new String(new char[] { representation });
 	}
 }

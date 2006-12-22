@@ -20,15 +20,15 @@ import com.mikegoodspeed.supercheckers.ui.GameBoardFrm;
  */
 public class Supercheckers extends Thread{
 
-	private Board board = null;
-	private GameBoardFrm window = null;
-
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		new Supercheckers();
 	}
+
+	private Board board = null;
+	private GameBoardFrm window = null;
 
 	/**
 	 * Constructor to create a new game of Supercheckers.

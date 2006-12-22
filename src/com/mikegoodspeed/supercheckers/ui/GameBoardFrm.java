@@ -72,6 +72,8 @@ public class GameBoardFrm extends JFrame {
 		}
 	};
 	private MouseListener buttonMouseListener = new MouseListener() {
+		public void mouseClicked(MouseEvent e) {}
+
 		public void mouseEntered(MouseEvent e) {
 			String[] loc = ((JLabel) e.getSource()).getName().split(",");
 			int row = new Integer(loc[0]).intValue();
@@ -125,8 +127,6 @@ public class GameBoardFrm extends JFrame {
 				getResetBtn().setEnabled(true);
 			}
 		}
-
-		public void mouseClicked(MouseEvent e) {}
 	};
 	private ActionListener submitBtnActionListener = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
@@ -162,17 +162,46 @@ public class GameBoardFrm extends JFrame {
 	}
 
 	/**
-	 * This method initializes this
+	 * This method initializes aboutMnuItem
 	 *
+	 * @return JMenuItem
 	 */
-	private void initialize() {
-		this.setSize(new Dimension(400, 400));
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setResizable(false);
-		this.setJMenuBar(getMenu());
-		this.setContentPane(getContent());
-		this.setTitle("Supercheckers");
-		this.setLocationRelativeTo(null);
+	private JMenuItem getAboutMnuItem() {
+		if (aboutMnuItem == null) {
+			aboutMnuItem = new JMenuItem();
+			aboutMnuItem.setText("About Supercheckers");
+			aboutMnuItem.setMnemonic(KeyEvent.VK_A);
+		}
+		return aboutMnuItem;
+	}
+
+	/**
+	 * This method initializes boardPnl
+	 *
+	 * @return JPanel
+	 */
+	private JPanel getBoardPnl() {
+		if (boardPnl == null) {
+			GridLayout gridLayout = new GridLayout();
+			gridLayout.setRows(8);
+			gridLayout.setColumns(8);
+			boardPnl = new JPanel();
+			boardPnl.setLayout(gridLayout);
+			populateBoardPnl();
+		}
+		return boardPnl;
+	}
+
+	private JLabel getButtonByName(int rowName, int colName) {
+		String name = String.valueOf(rowName) + "," + String.valueOf(colName);
+		for (int row = 0; row < 8; row++) {
+			for (int col = 0; col < 8; col++) {
+				if (name.equals(buttons[row][col].getName())) {
+					return buttons[row][col];
+				}
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -191,17 +220,18 @@ public class GameBoardFrm extends JFrame {
 	}
 
 	/**
-	 * This method initializes menu
+	 * This method initializes exitMnuItem
 	 *
-	 * @return JMenuBar
+	 * @return JMenuItem
 	 */
-	private JMenuBar getMenu() {
-		if (menu == null) {
-			menu = new JMenuBar();
-			menu.add(getGameMnu());
-			menu.add(getHelpMnu());
+	private JMenuItem getExitMnuItem() {
+		if (exitMnuItem == null) {
+			exitMnuItem = new JMenuItem();
+			exitMnuItem.setText("Exit");
+			exitMnuItem.setMnemonic(KeyEvent.VK_X);
+			exitMnuItem.addActionListener(exitMnuItemActionListener);
 		}
-		return menu;
+		return exitMnuItem;
 	}
 
 	/**
@@ -237,18 +267,42 @@ public class GameBoardFrm extends JFrame {
 	}
 
 	/**
-	 * This method initializes exitMnuItem
+	 * This method initializes menu
 	 *
-	 * @return JMenuItem
+	 * @return JMenuBar
 	 */
-	private JMenuItem getExitMnuItem() {
-		if (exitMnuItem == null) {
-			exitMnuItem = new JMenuItem();
-			exitMnuItem.setText("Exit");
-			exitMnuItem.setMnemonic(KeyEvent.VK_X);
-			exitMnuItem.addActionListener(exitMnuItemActionListener);
+	private JMenuBar getMenu() {
+		if (menu == null) {
+			menu = new JMenuBar();
+			menu.add(getGameMnu());
+			menu.add(getHelpMnu());
 		}
-		return exitMnuItem;
+		return menu;
+	}
+
+	/**
+	 * Returns user-chosen move after the submit button has been pressed.
+	 *
+	 * @return the move as chosen by the user
+	 */
+	public Move getMove() {
+		return input.getMove();
+	}
+
+	/**
+	 * This method initializes MovePnl
+	 *
+	 * @return JPanel
+	 */
+	private JPanel getMovePnl() {
+		if (MovePnl == null) {
+			MovePnl = new JPanel();
+			MovePnl.setLayout(new BorderLayout());
+			MovePnl.setBorder(BorderFactory.createTitledBorder("Move"));
+			MovePnl.add(getSubmitBtn(), BorderLayout.CENTER);
+			MovePnl.add(getResetBtn(), BorderLayout.WEST);
+		}
+		return MovePnl;
 	}
 
 	/**
@@ -268,53 +322,6 @@ public class GameBoardFrm extends JFrame {
 	}
 
 	/**
-	 * This method initializes aboutMnuItem
-	 *
-	 * @return JMenuItem
-	 */
-	private JMenuItem getAboutMnuItem() {
-		if (aboutMnuItem == null) {
-			aboutMnuItem = new JMenuItem();
-			aboutMnuItem.setText("About Supercheckers");
-			aboutMnuItem.setMnemonic(KeyEvent.VK_A);
-		}
-		return aboutMnuItem;
-	}
-
-	/**
-	 * This method initializes boardPnl
-	 *
-	 * @return JPanel
-	 */
-	private JPanel getBoardPnl() {
-		if (boardPnl == null) {
-			GridLayout gridLayout = new GridLayout();
-			gridLayout.setRows(8);
-			gridLayout.setColumns(8);
-			boardPnl = new JPanel();
-			boardPnl.setLayout(gridLayout);
-			populateBoardPnl();
-		}
-		return boardPnl;
-	}
-
-	/**
-	 * This method initializes submitBtn
-	 *
-	 * @return JButton
-	 */
-	private JButton getSubmitBtn() {
-		if (submitBtn == null) {
-			submitBtn = new JButton();
-			submitBtn.setMnemonic(KeyEvent.VK_S);
-			submitBtn.setText("Submit");
-			submitBtn.setEnabled(false);
-			submitBtn.addActionListener(submitBtnActionListener);
-		}
-		return submitBtn;
-	}
-
-	/**
 	 * This method initializes resetBtn
 	 *
 	 * @return JButton
@@ -331,19 +338,19 @@ public class GameBoardFrm extends JFrame {
 	}
 
 	/**
-	 * This method initializes MovePnl
+	 * This method initializes submitBtn
 	 *
-	 * @return JPanel
+	 * @return JButton
 	 */
-	private JPanel getMovePnl() {
-		if (MovePnl == null) {
-			MovePnl = new JPanel();
-			MovePnl.setLayout(new BorderLayout());
-			MovePnl.setBorder(BorderFactory.createTitledBorder("Move"));
-			MovePnl.add(getSubmitBtn(), BorderLayout.CENTER);
-			MovePnl.add(getResetBtn(), BorderLayout.WEST);
+	private JButton getSubmitBtn() {
+		if (submitBtn == null) {
+			submitBtn = new JButton();
+			submitBtn.setMnemonic(KeyEvent.VK_S);
+			submitBtn.setText("Submit");
+			submitBtn.setEnabled(false);
+			submitBtn.addActionListener(submitBtnActionListener);
 		}
-		return MovePnl;
+		return submitBtn;
 	}
 
 	/**
@@ -378,6 +385,20 @@ public class GameBoardFrm extends JFrame {
 		return uiPanel;
 	}
 
+	/**
+	 * This method initializes this
+	 *
+	 */
+	private void initialize() {
+		this.setSize(new Dimension(400, 400));
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setResizable(false);
+		this.setJMenuBar(getMenu());
+		this.setContentPane(getContent());
+		this.setTitle("Supercheckers");
+		this.setLocationRelativeTo(null);
+	}
+
 	private void populateBoardPnl() {
 		buttons = new JLabel[8][8];
 		for (int row = 0; row < 8; row++) {
@@ -391,16 +412,14 @@ public class GameBoardFrm extends JFrame {
 		updateBoard(board);
 	}
 
-	private JLabel getButtonByName(int rowName, int colName) {
-		String name = String.valueOf(rowName) + "," + String.valueOf(colName);
-		for (int row = 0; row < 8; row++) {
-			for (int col = 0; col < 8; col++) {
-				if (name.equals(buttons[row][col].getName())) {
-					return buttons[row][col];
-				}
-			}
-		}
-		return null;
+	/**
+	 * Set the turn so the game board reflects who'se turn it is.
+	 *
+	 * @param team
+	 */
+	public void setTurn(Team team) {
+		this.currTeam = team;
+		turnLbl.setIcon(team.getIcon(false));
 	}
 
 	/**
@@ -418,16 +437,6 @@ public class GameBoardFrm extends JFrame {
 	}
 
 	/**
-	 * Set the turn so the game board reflects who'se turn it is.
-	 *
-	 * @param team
-	 */
-	public void setTurn(Team team) {
-		this.currTeam = team;
-		turnLbl.setIcon(team.getIcon(false));
-	}
-
-	/**
 	 * This method blocks until the submit button is pressed.
 	 */
 	public void waitForInput() {
@@ -441,14 +450,5 @@ public class GameBoardFrm extends JFrame {
 		getSubmitBtn().setEnabled(false);
 		getResetBtn().setEnabled(false);
 		getBoardPnl().requestFocus();
-	}
-
-	/**
-	 * Returns user-chosen move after the submit button has been pressed.
-	 *
-	 * @return the move as chosen by the user
-	 */
-	public Move getMove() {
-		return input.getMove();
 	}
 }

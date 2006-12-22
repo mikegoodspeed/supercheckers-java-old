@@ -43,16 +43,16 @@ public class Board implements Cloneable {
 		reset();
 	}
 
-//	/**
-//	 * Clear the board (testing use only).
-//	 */
-//	public void clear() {
-//		for (int row = MIN; row <= MAX; row++) {
-//			for (int col = MIN; col <= MAX; col++) {
-//				insert(Team.EMPTY, row, col);
-//			}
-//		}
-//	}
+	/**
+	 * Clear the board (testing use only).
+	 */
+	void clear() {
+		for (int row = MIN; row <= MAX; row++) {
+			for (int col = MIN; col <= MAX; col++) {
+				insert(Team.NOBODY, row, col);
+			}
+		}
+	}
 
 	@Override
 	public Board clone() {
@@ -163,7 +163,7 @@ public class Board implements Cloneable {
 	 * @param row
 	 * @param col
 	 */
-	private void insert(Team team, int row, int col) {
+	void insert(Team team, int row, int col) {
 		board[row][col] = team;
 	}
 

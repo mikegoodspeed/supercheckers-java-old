@@ -1,4 +1,4 @@
-package com.mikegoodspeed.supercheckers.unittest;
+package com.mikegoodspeed.supercheckers.datastructures;
 
 import static org.junit.Assert.assertEquals;
 

@@ -22,6 +22,11 @@ public class Spot {
 		this.row = row;
 		this.col = col;
 	}
+	
+	@Override
+	protected Spot clone() {
+		return new Spot(getRow(), getCol());
+	}
 
 	@Override
 	public boolean equals(Object obj) {
