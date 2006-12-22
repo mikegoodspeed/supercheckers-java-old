@@ -2,8 +2,6 @@ package com.mikegoodspeed.supercheckers.datastructures;
 
 import javax.swing.ImageIcon;
 
-import com.mikegoodspeed.supercheckers.constants.SCConst;
-
 /**
  * Teams as an enumeration.
  * <p>
@@ -46,10 +44,10 @@ public enum Team {
 	 */
 	public ImageIcon getIcon(boolean isInMiddle) {
 		String path = isInMiddle ? insideImagePath : outsideImagePath;
-		if (SCConst.class.getResource("/" + path) == null) {
+		if (Team.class.getResource("/" + path) == null) {
 			return new ImageIcon(path);
 		} else {
-			return new ImageIcon(SCConst.class.getResource("/" + path));
+			return new ImageIcon(Team.class.getResource("/" + path));
 		}
 	}
 
