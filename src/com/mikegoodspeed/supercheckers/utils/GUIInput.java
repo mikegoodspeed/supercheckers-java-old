@@ -21,6 +21,7 @@ public class GUIInput extends Thread {
 	 */
 	public GUIInput() {
 		super();
+		setName("Supercheckers GUI Waiter");
 		reset();
 	}
 

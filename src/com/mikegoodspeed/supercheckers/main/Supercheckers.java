@@ -2,7 +2,9 @@ package com.mikegoodspeed.supercheckers.main;
 
 import com.mikegoodspeed.supercheckers.datastructures.Board;
 import com.mikegoodspeed.supercheckers.datastructures.Move;
+import com.mikegoodspeed.supercheckers.datastructures.Players;
 import com.mikegoodspeed.supercheckers.datastructures.Team;
+import com.mikegoodspeed.supercheckers.players.EasyComputerPlayer;
 import com.mikegoodspeed.supercheckers.players.HumanPlayer;
 import com.mikegoodspeed.supercheckers.players.Player;
 import com.mikegoodspeed.supercheckers.ui.GameBoardFrm;
@@ -16,7 +18,7 @@ import com.mikegoodspeed.supercheckers.ui.GameBoardFrm;
  * @author Mike Goodspeed
  * @version $Id$
  */
-public class Supercheckers {
+public class Supercheckers extends Thread{
 
 	private Board board = null;
 	private GameBoardFrm window = null;
@@ -35,36 +37,62 @@ public class Supercheckers {
 		board = new Board();
 		window = new GameBoardFrm(board);
 		window.setVisible(true);
-		Move move;
-		while (true) {
-			Player p1 = new HumanPlayer(window, board, Team.X);
-			Player p2 = new HumanPlayer(window, board, Team.O);
-			while (true) {
-				window.setTurn(p1.getTeam());
-				do {
-					window.updateBoard(board);
-					move = p1.getMove();
-				} while (!board.isValidMove(p1.getTeam(), move));
-				board.doMove(p1.getTeam(), move);
-				window.updateBoard(board);
-				if (board.isGameOver() && !board.isSecondMove()) {
-					System.out.println(board.getWinner() + " wins!");
-					break;
-				}
-				window.setTurn(p2.getTeam());
-				do {
-					window.updateBoard(board);
-					move = p2.getMove();
-				} while (!board.isValidMove(p2.getTeam(), move));
-				board.doMove(p2.getTeam(), move);
-				window.updateBoard(board);
-				if (board.isGameOver() && !board.isSecondMove()) {
-					System.out.println(board.getWinner() + " wins!");
-					break;
-				}
-			}
-			board = new Board();
-			window.updateBoard(board);
+		setName("Supercheckers Main");
+		this.start(); // calls run() in a new thread
+	}
+
+	/**
+	 * Play a single game of Supercheckers.
+	 */
+	private void playGame() {
+		board.reset();
+		window.updateBoard(board);
+		Players.PLAYER1.set(new HumanPlayer(window, board, Team.X));
+		Players.PLAYER2.set(new EasyComputerPlayer(window, board, Team.O));
+		boolean gameOver = false;
+		while (!gameOver) {
+			gameOver = playRound();
 		}
+		System.out.println(board.getWinner() + " wins.");
+	}
+
+	/**
+	 * Play a single round of supercheckers, where each player gets to make one valid move.
+	 *
+	 * @param p1 player 1
+	 * @param p2 player 2
+	 * @return true if game is over, false otherwise
+	 */
+	private boolean playRound() {
+		boolean gameOver = false;
+		for (Players currentPlayer : Players.values()) {
+			gameOver = playTurn(currentPlayer.get());
+			if (gameOver) {
+				return true; // Game over
+			}
+		}
+		return false; // Round over (game continues)
+	}
+
+	/**
+	 * Play a turn for a given player.
+	 *
+	 * @param player the player expected to make a move
+	 * @return true if game is over, false otherwise
+	 */
+	private boolean playTurn(Player player) {
+		Move move;
+		window.setTurn(player.getTeam());
+		do {
+			window.updateBoard(board);
+			move = player.getMove();
+		} while (!board.isValidMove(player.getTeam(), move));
+		board.doMove(player.getTeam(), move);
+		window.updateBoard(board);
+		return board.isGameOver(); // return game over status
+	}
+
+	public void run() {
+		playGame();
 	}
 }

@@ -98,7 +98,7 @@ public class GameBoardFrm extends JFrame {
 			if (listenForInput && new Spot(row, col).equals(hoverSpot) 
 					&& board.isAvailableSpot(currTeam, move, row, col)) {
 				if (move.size() == 0) {
-					source.setIcon(Team.EMPTY.getIcon(board.isInMiddle(row, col)));
+					source.setIcon(Team.NOBODY.getIcon(board.isInMiddle(row, col)));
 				} else {
 					source.setIcon(currTeam.getIcon(board.isInMiddle(row, col)));
 					int oldRow = move.getRow(move.size() - 1);
@@ -107,12 +107,12 @@ public class GameBoardFrm extends JFrame {
 					clone.doMove(currTeam, move);
 					if (clone.isValidJump(currTeam, oldRow, oldCol, row, col)) {
 						JLabel oldSpot = getButtonByName(oldRow, oldCol);
-						oldSpot.setIcon(Team.EMPTY.getIcon(clone.isInMiddle(oldRow, oldCol)));
+						oldSpot.setIcon(Team.NOBODY.getIcon(clone.isInMiddle(oldRow, oldCol)));
 						int jumpedRow = (oldRow + row) / 2;
 						int jumpedCol = (oldCol + col) / 2;
 						JLabel jumpedSpot = getButtonByName(jumpedRow, jumpedCol);
 						if (!currTeam.equals(clone.get(jumpedRow, jumpedCol))) {
-							jumpedSpot.setIcon(Team.EMPTY.getIcon(
+							jumpedSpot.setIcon(Team.NOBODY.getIcon(
 									clone.isInMiddle(jumpedRow, jumpedCol)));
 						}
 					}

@@ -26,7 +26,7 @@ public enum Team {
 	/**
 	 * Empty team: (space)
 	 */
-	EMPTY(' ', "images/outside_empty.jpg", "images/inside_empty.jpg");
+	NOBODY(' ', "images/outside_empty.jpg", "images/inside_empty.jpg");
 
 	private char representation;
 	private String outsideImagePath;
@@ -39,7 +39,9 @@ public enum Team {
 	}
 
 	/**
-	 * @param isInMiddle
+	 * Returns the ImageIcon of the team, depending on if it is in the middle of the board or not.
+	 * 
+	 * @param isInMiddle true if spot is in the middle of the board
 	 * @return image representation of the team
 	 */
 	public ImageIcon getIcon(boolean isInMiddle) {
@@ -51,8 +53,12 @@ public enum Team {
 		}
 	}
 
-	@Override
-	public String toString() {
+	/**
+	 * Returns the representation of a team.
+	 * 
+	 * @return the representation as a String
+	 */
+	public String get() {
 		return new String(new char[] { representation });
 	}
 }

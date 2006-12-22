@@ -138,7 +138,7 @@ public class EasyComputerPlayer extends Player {
 			for (int row = 1; row <= 6; row++) {
 				for (int col = 1; col <= 6; col++) {
 					if (row == 1 || row == 6 || col == 1 || col == 6) {// adjacent to middle
-						if (getBoard().get(row, col).equals(Team.EMPTY)) {
+						if (getBoard().get(row, col).equals(Team.NOBODY)) {
 							emptyCellRow = row;
 							emptyCellCol = col;
 						}

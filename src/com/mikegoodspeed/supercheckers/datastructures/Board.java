@@ -82,9 +82,9 @@ public class Board implements Cloneable {
 				jumpedRow = (move.getRow(i - 1) + move.getRow(i)) / 2;
 				jumpedCol = (move.getCol(i - 1) + move.getCol(i)) / 2;
 				if (isJump && !team.equals(get(jumpedRow, jumpedCol))) {
-					insert(Team.EMPTY, jumpedRow, jumpedCol);
+					insert(Team.NOBODY, jumpedRow, jumpedCol);
 				}
-				insert(Team.EMPTY, move.getRow(i - 1), move.getCol(i - 1));
+				insert(Team.NOBODY, move.getRow(i - 1), move.getCol(i - 1));
 				insert(team, move.getRow(i), move.getCol(i));
 			}
 		}
@@ -138,20 +138,20 @@ public class Board implements Cloneable {
 					case O:
 						o++;
 						break;
-					case EMPTY:
+					case NOBODY:
 						empty++;
 						break;
 				}
 			}
+		}
+		if (empty == 16) {
+			return Team.NOBODY; // Tie
 		}
 		if (o == 0) {
 			return Team.X; // X wins
 		}
 		if (x == 0) {
 			return Team.O; // O wins
-		}
-		if (empty == 16) {
-			return Team.EMPTY; // Tie
 		}
 		return null; // Game is not over.
 	}
@@ -200,14 +200,14 @@ public class Board implements Cloneable {
 			if (isFirstMove()) {
 				return isAdjacentToMiddle(row, col) && team.equals(get(row, col));
 			} else if (isSecondMove()) {
-				boolean p1North = Team.EMPTY.equals(get(1, 2)) || Team.EMPTY.equals(get(1, 3))
-				|| Team.EMPTY.equals(get(1, 4)) || Team.EMPTY.equals(get(1, 5));
-				boolean p1South = Team.EMPTY.equals(get(6, 2)) || Team.EMPTY.equals(get(6, 3))
-				|| Team.EMPTY.equals(get(6, 4)) || Team.EMPTY.equals(get(6, 5));
-				boolean p1East = Team.EMPTY.equals(get(2, 6)) || Team.EMPTY.equals(get(3, 6))
-				|| Team.EMPTY.equals(get(4, 6)) || Team.EMPTY.equals(get(5, 6));
-				boolean p1West = Team.EMPTY.equals(get(2, 1)) || Team.EMPTY.equals(get(3, 1))
-				|| Team.EMPTY.equals(get(4, 1)) || Team.EMPTY.equals(get(5, 1));
+				boolean p1North = Team.NOBODY.equals(get(1, 2)) || Team.NOBODY.equals(get(1, 3))
+				|| Team.NOBODY.equals(get(1, 4)) || Team.NOBODY.equals(get(1, 5));
+				boolean p1South = Team.NOBODY.equals(get(6, 2)) || Team.NOBODY.equals(get(6, 3))
+				|| Team.NOBODY.equals(get(6, 4)) || Team.NOBODY.equals(get(6, 5));
+				boolean p1East = Team.NOBODY.equals(get(2, 6)) || Team.NOBODY.equals(get(3, 6))
+				|| Team.NOBODY.equals(get(4, 6)) || Team.NOBODY.equals(get(5, 6));
+				boolean p1West = Team.NOBODY.equals(get(2, 1)) || Team.NOBODY.equals(get(3, 1))
+				|| Team.NOBODY.equals(get(4, 1)) || Team.NOBODY.equals(get(5, 1));
 				if (p1North) {
 					// Move from South
 					return row == 6 && col >= MID_MIN && col <= MID_MAX
@@ -266,7 +266,7 @@ public class Board implements Cloneable {
 				}
 			}
 		}
-		return p1 == 0 || p2 == 0;
+		return !isSecondMove() && (p1 == 0 || p2 == 0);
 	}
 
 	/**
@@ -299,7 +299,7 @@ public class Board implements Cloneable {
 		int out = 0;
 		for (int row = MIN; row <= MAX; row++) {
 			for (int col = MIN; col <= MAX; col++) {
-				if (!Team.EMPTY.equals(get(row, col))) {
+				if (!Team.NOBODY.equals(get(row, col))) {
 					if (isInMiddle(row, col)) {
 						in++;
 					} else {
@@ -331,12 +331,12 @@ public class Board implements Cloneable {
 			// The board and all spots must be valid.
 			return false;
 		}
-		if (!team.equals(get(rowStart, colStart)) || !Team.EMPTY.equals(get(rowEnd, colEnd))) {
+		if (!team.equals(get(rowStart, colStart)) || !Team.NOBODY.equals(get(rowEnd, colEnd))) {
 			// The team must be valid, and the jump must start on a spot on the given team and end
 			// on an empty spot.
 			return false;
 		}
-		if (Team.EMPTY.equals(get((rowStart + rowEnd) / 2, (colStart + colEnd) / 2))) {
+		if (Team.NOBODY.equals(get((rowStart + rowEnd) / 2, (colStart + colEnd) / 2))) {
 			// Jumps must not jump over a space.
 			return false;
 		}
@@ -418,8 +418,8 @@ public class Board implements Cloneable {
 			// The board and all spots must be valid.
 			return false;
 		}
-		if (Team.EMPTY.equals(team) || !team.equals(get(rowStart, colStart))
-				|| !Team.EMPTY.equals(get(rowEnd, colEnd))) {
+		if (Team.NOBODY.equals(team) || !team.equals(get(rowStart, colStart))
+				|| !Team.NOBODY.equals(get(rowEnd, colEnd))) {
 			// The team must be valid, and the slide must start on a spot on the given team and end
 			// on an empty spot.
 			return false;
@@ -467,7 +467,7 @@ public class Board implements Cloneable {
 		for (int row = MIN; row <= MAX; row++) {
 			System.out.print(" " + row + "|");
 			for (int col = MIN; col <= MAX; col++) {
-				System.out.print(get(row, col));
+				System.out.print(get(row, col).get());
 				if (row >= MID_MIN && row <= MID_MAX & col >= MID_MIN - 1 && col <= MID_MAX) {
 					System.out.print("#");
 				} else {
@@ -482,11 +482,11 @@ public class Board implements Cloneable {
 	/**
 	 * Reset the board to its default state.
 	 */
-	private void reset() {
+	public void reset() {
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
 				if (isInMiddle(row, col)) {
-					insert(Team.EMPTY, row, col);
+					insert(Team.NOBODY, row, col);
 				} else {
 					if ((row + col) % 2 == 0) {
 						insert(Team.X, row, col);
