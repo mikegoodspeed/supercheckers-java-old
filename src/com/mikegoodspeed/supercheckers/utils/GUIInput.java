@@ -20,8 +20,7 @@ public class GUIInput extends Thread {
 	 * Constructor to create a new imput thread.
 	 */
 	public GUIInput() {
-		super();
-		setName("Supercheckers GUI Waiter");
+		super("Supercheckers GUI Waiter");
 		reset();
 	}
 

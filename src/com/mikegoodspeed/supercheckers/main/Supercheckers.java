@@ -34,10 +34,10 @@ public class Supercheckers extends Thread{
 	 * Constructor to create a new game of Supercheckers.
 	 */
 	public Supercheckers() {
+		super("Supercheckers Main");
 		board = new Board();
 		window = new GameBoardFrm(board);
 		window.setVisible(true);
-		setName("Supercheckers Main");
 		this.start(); // calls run() in a new thread
 	}
 
