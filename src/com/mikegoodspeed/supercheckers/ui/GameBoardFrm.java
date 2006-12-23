@@ -149,7 +149,6 @@ public class GameBoardFrm extends JFrame {
 	 * This method initializes
 	 *
 	 * @param board
-	 * @param manager
 	 */
 	public GameBoardFrm(Board board) {
 		super();

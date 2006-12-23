@@ -59,8 +59,6 @@ public class Supercheckers extends Thread{
 	/**
 	 * Play a single round of supercheckers, where each player gets to make one valid move.
 	 *
-	 * @param p1 player 1
-	 * @param p2 player 2
 	 * @return true if game is over, false otherwise
 	 */
 	private boolean playRound() {
