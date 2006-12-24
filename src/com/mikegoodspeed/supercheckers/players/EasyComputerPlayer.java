@@ -9,8 +9,11 @@ import com.mikegoodspeed.supercheckers.ui.GameBoardFrm;
 
 /**
  * Easy Computer Player
+ * <p>
+ * project Supercheckers <br />
+ * url http://www.mikegoodspeed.com/blog/projects/supercheckers/
  *
- * @author Mike
+ * @author Mike Goodspeed
  * @version $Id$
  */
 public class EasyComputerPlayer extends Player {
@@ -33,7 +36,7 @@ public class EasyComputerPlayer extends Player {
 
 	public Move getMove() {
 		try {
-			Thread.sleep(50); // wait 50 milliseconds to play
+			Thread.sleep(750); // wait 750 milliseconds to play
 		} catch (Exception e) {}
 
 		Move move = new Move();
@@ -770,5 +773,9 @@ public class EasyComputerPlayer extends Player {
 			}
 			return move; // return whatever we got
 		}
+	}
+
+	public String toString() {
+		return "Computer: Easy";
 	}
 }

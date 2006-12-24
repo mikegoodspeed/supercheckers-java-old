@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -25,6 +26,7 @@ import com.mikegoodspeed.supercheckers.datastructures.Board;
 import com.mikegoodspeed.supercheckers.datastructures.Move;
 import com.mikegoodspeed.supercheckers.datastructures.Spot;
 import com.mikegoodspeed.supercheckers.datastructures.Team;
+import com.mikegoodspeed.supercheckers.players.Player;
 import com.mikegoodspeed.supercheckers.utils.GUIInput;
 
 /**
@@ -51,11 +53,22 @@ public class GameBoardFrm extends JFrame {
 	private JPanel boardPnl = null;
 	private JPanel uiPanel = null;
 	private JLabel[][] buttons = null;
+	private JPanel playerPnl = null;
+	private JPanel p1Pnl = null;
+	private JLabel p1IconLbl = null;
+	private JPanel p1InfoPnl = null;
+	private JLabel p1TypeLbl = null;
+	private JLabel p1TotalLbl = null;
+	private JLabel p1MiddleLbl = null;
+	private JPanel p2Pnl = null;
+	private JLabel p2IconLbl = null;
+	private JPanel p2InfoPnl = null;
+	private JLabel p2TypeLbl = null;
+	private JLabel p2TotalLbl = null;
+	private JLabel p2MiddleLbl = null;
+	private JPanel MovePnl = null;
 	private JButton submitBtn = null;
 	private JButton resetBtn = null;
-	private JPanel MovePnl = null;
-	private JPanel turnPnl = null;
-	private JLabel turnLbl = null;
 	private Team currTeam = Team.X;
 	private GUIInput input = new GUIInput();
 	private boolean listenForInput = false;
@@ -78,7 +91,7 @@ public class GameBoardFrm extends JFrame {
 			String[] loc = ((JLabel) e.getSource()).getName().split(",");
 			int row = new Integer(loc[0]).intValue();
 			int col = new Integer(loc[1]).intValue();
-			if (board.isAvailableSpot(currTeam, input.getMove(), row, col)) {
+			if (listenForInput && board.isAvailableSpot(currTeam, input.getMove(), row, col)) {
 				setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
 			hoverSpot = new Spot(row, col);
@@ -185,6 +198,7 @@ public class GameBoardFrm extends JFrame {
 			gridLayout.setRows(8);
 			gridLayout.setColumns(8);
 			boardPnl = new JPanel();
+			boardPnl.setPreferredSize(new Dimension(336, 336));
 			boardPnl.setLayout(gridLayout);
 			populateBoardPnl();
 		}
@@ -298,8 +312,8 @@ public class GameBoardFrm extends JFrame {
 			MovePnl = new JPanel();
 			MovePnl.setLayout(new BorderLayout());
 			MovePnl.setBorder(BorderFactory.createTitledBorder("Move"));
-			MovePnl.add(getSubmitBtn(), BorderLayout.CENTER);
 			MovePnl.add(getResetBtn(), BorderLayout.WEST);
+			MovePnl.add(getSubmitBtn(), BorderLayout.EAST);
 		}
 		return MovePnl;
 	}
@@ -318,6 +332,112 @@ public class GameBoardFrm extends JFrame {
 			newMnuItem.addActionListener(newMnuItemActionListener);
 		}
 		return newMnuItem;
+	}
+
+	/**
+	 * This method initializes p1InfoPnl	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getP1InfoPnl() {
+		if (p1InfoPnl == null) {
+			p1MiddleLbl = new JLabel();
+			p1MiddleLbl.setText("Middle Pieces: 24");
+			p1TotalLbl = new JLabel();
+			p1TotalLbl.setText("Total Pieces: 24");
+			p1TypeLbl = new JLabel();
+			p1TypeLbl.setText("Human");
+			p1InfoPnl = new JPanel();
+			p1InfoPnl.setLayout(new BoxLayout(getP1InfoPnl(), BoxLayout.Y_AXIS));
+			p1InfoPnl.setPreferredSize(new Dimension(86, 42));
+			p1InfoPnl.add(p1TypeLbl, null);
+			p1InfoPnl.add(p1TotalLbl, null);
+			p1InfoPnl.add(p1MiddleLbl, null);
+		}
+		return p1InfoPnl;
+	}
+
+	/**
+	 * This method initializes p1Pnl	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getP1Pnl() {
+		if (p1Pnl == null) {
+			p1IconLbl = new JLabel();
+			p1IconLbl.setIcon(Team.X.getIcon(false));
+			p1IconLbl.setText(" ");
+			p1Pnl = new JPanel();
+			p1Pnl.setLayout(new BorderLayout());
+			p1Pnl.setBorder(BorderFactory.createTitledBorder("Player 1"));
+			p1Pnl.add(p1IconLbl, BorderLayout.WEST);
+			p1Pnl.add(getP1InfoPnl(), BorderLayout.EAST);
+		}
+		return p1Pnl;
+	}
+
+	/**
+	 * This method initializes p2InfoPnl	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getP2InfoPnl() {
+		if (p2InfoPnl == null) {
+			p2MiddleLbl = new JLabel();
+			p2MiddleLbl.setText("Middle Pieces: 24");
+			p2MiddleLbl.setEnabled(false);
+			p2TotalLbl = new JLabel();
+			p2TotalLbl.setText("Total Pieces: 24");
+			p2TotalLbl.setEnabled(false);
+			p2TypeLbl = new JLabel();
+			p2TypeLbl.setText("Easy Computer");
+			p2TypeLbl.setEnabled(false);
+			p2InfoPnl = new JPanel();
+			p2InfoPnl.setLayout(new BoxLayout(getP2InfoPnl(), BoxLayout.Y_AXIS));
+			p2InfoPnl.setName("p2InfoPnl");
+			p2InfoPnl.setPreferredSize(new Dimension(86, 42));
+			p2InfoPnl.add(p2TypeLbl, null);
+			p2InfoPnl.add(p2TotalLbl, null);
+			p2InfoPnl.add(p2MiddleLbl, null);
+		}
+		return p2InfoPnl;
+	}
+
+	/**
+	 * This method initializes p2Pnl	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getP2Pnl() {
+		if (p2Pnl == null) {
+			p2IconLbl = new JLabel();
+			p2IconLbl.setIcon(Team.O.getIcon(false));
+			p2IconLbl.setName("p2IconLbl");
+			p2IconLbl.setDisplayedMnemonic(KeyEvent.VK_UNDEFINED);
+			p2IconLbl.setText(" ");
+			p2IconLbl.setVisible(false);
+			p2Pnl = new JPanel();
+			p2Pnl.setLayout(new BorderLayout());
+			p2Pnl.setBorder(BorderFactory.createTitledBorder("Player 2"));
+			p2Pnl.add(p2IconLbl, BorderLayout.WEST);
+			p2Pnl.add(getP2InfoPnl(), BorderLayout.EAST);
+		}
+		return p2Pnl;
+	}
+
+	/**
+	 * This method initializes playerPnl	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getPlayerPnl() {
+		if (playerPnl == null) {
+			playerPnl = new JPanel();
+			playerPnl.setLayout(new BoxLayout(getPlayerPnl(), BoxLayout.Y_AXIS));
+			playerPnl.add(getP1Pnl(), null);
+			playerPnl.add(getP2Pnl(), null);
+		}
+		return playerPnl;
 	}
 
 	/**
@@ -353,23 +473,6 @@ public class GameBoardFrm extends JFrame {
 	}
 
 	/**
-	 * This method initializes turnPnl
-	 *
-	 * @return JPanel
-	 */
-	private JPanel getTurnPnl() {
-		if (turnPnl == null) {
-			turnLbl = new JLabel();
-			turnLbl.setIcon(Team.X.getIcon(false));
-			turnPnl = new JPanel();
-			turnPnl.setLayout(new BorderLayout());
-			turnPnl.setBorder(BorderFactory.createTitledBorder("Turn"));
-			turnPnl.add(turnLbl, BorderLayout.WEST);
-		}
-		return turnPnl;
-	}
-
-	/**
 	 * This method initializes uiPanel
 	 *
 	 * @return JPanel
@@ -378,7 +481,7 @@ public class GameBoardFrm extends JFrame {
 		if (uiPanel == null) {
 			uiPanel = new JPanel();
 			uiPanel.setLayout(new BorderLayout());
-			uiPanel.add(getTurnPnl(), BorderLayout.NORTH);
+			uiPanel.add(getPlayerPnl(), BorderLayout.NORTH);
 			uiPanel.add(getMovePnl(), BorderLayout.SOUTH);
 		}
 		return uiPanel;
@@ -389,7 +492,7 @@ public class GameBoardFrm extends JFrame {
 	 *
 	 */
 	private void initialize() {
-		this.setSize(new Dimension(400, 400));
+		this.setSize(new Dimension(493, 407));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setJMenuBar(getMenu());
@@ -410,15 +513,52 @@ public class GameBoardFrm extends JFrame {
 		}
 		updateBoard(board);
 	}
+	
+	/**
+	 * Sets the player names on the window.
+	 * 
+	 * @param player1
+	 * @param player2
+	 */
+	public void setPlayers(Player player1, Player player2) {
+		p1TypeLbl.setText(player1.toString());
+		p2TypeLbl.setText(player2.toString());
+	}
 
 	/**
-	 * Set the turn so the game board reflects who'se turn it is.
+	 * Sets the turn so the game board reflects the current player's team
 	 *
-	 * @param team
+	 * @param team current player's team
 	 */
 	public void setTurn(Team team) {
 		this.currTeam = team;
-		turnLbl.setIcon(team.getIcon(false));
+		if (Team.X.equals(team)) {
+			// Enable Player 1
+			getP1Pnl().setEnabled(true);
+			p1IconLbl.setVisible(true);
+			p1TypeLbl.setEnabled(true);
+			p1TotalLbl.setEnabled(true);
+			p1MiddleLbl.setEnabled(true);
+			// Disable Player 2
+			getP2Pnl().setEnabled(false);
+			p2IconLbl.setVisible(false);
+			p2TypeLbl.setEnabled(false);
+			p2TotalLbl.setEnabled(false);
+			p2MiddleLbl.setEnabled(false);
+		} else if (Team.O.equals(team)) {
+			// Enable Player 2
+			getP2Pnl().setEnabled(true);
+			p2IconLbl.setVisible(true);
+			p2TypeLbl.setEnabled(true);
+			p2TotalLbl.setEnabled(true);
+			p2MiddleLbl.setEnabled(true);
+			// Disable Player 1
+			getP1Pnl().setEnabled(false);
+			p1IconLbl.setVisible(false);
+			p1TypeLbl.setEnabled(false);
+			p1TotalLbl.setEnabled(false);
+			p1MiddleLbl.setEnabled(false);
+		}
 	}
 
 	/**

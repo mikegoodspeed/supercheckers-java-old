@@ -51,6 +51,8 @@ public abstract class Player {
 	public Team getTeam() {
 		return team;
 	}
+	
+	public abstract String toString();
 
 	/**
 	 * @return the window

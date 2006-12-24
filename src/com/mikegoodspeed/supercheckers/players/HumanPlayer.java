@@ -30,4 +30,8 @@ public class HumanPlayer extends Player {
 		Move move = getWindow().getMove();
 		return move;
 	}
+
+	public String toString() {
+		return "Human";
+	}
 }
