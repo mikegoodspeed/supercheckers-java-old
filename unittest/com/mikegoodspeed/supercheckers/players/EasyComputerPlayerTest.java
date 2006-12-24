@@ -9,7 +9,6 @@ import org.junit.Test;
 import com.mikegoodspeed.supercheckers.datastructures.Board;
 import com.mikegoodspeed.supercheckers.datastructures.Move;
 import com.mikegoodspeed.supercheckers.datastructures.Team;
-import com.mikegoodspeed.supercheckers.players.EasyComputerPlayer;
 import com.mikegoodspeed.supercheckers.ui.GameBoardFrm;
 
 /**
@@ -54,6 +53,9 @@ public class EasyComputerPlayerTest {
 	@Test
 	public void testGetMove() {
 		Move move;
+//		int x = 0;
+//		int o = 0;
+//		int tie = 0;
 		for (int i = 0; i < 10000; i++) {
 			player1 = new EasyComputerPlayer(window, board, Team.X);
 			player2 = new EasyComputerPlayer(window, board, Team.O);
@@ -62,19 +64,24 @@ public class EasyComputerPlayerTest {
 				move = player1.getMove();
 				assertTrue("Invalid X move: " + move, board.isValidMove(player1.getTeam(), move));
 				board.doMove(player1.getTeam(), move);
-				if (board.isGameOver() && !board.isSecondMove()) {
+				if (board.isGameOver()) {
 					break;
 				}
 				// Player 2
 				move = player2.getMove();
 				assertTrue("Invalid O move: " + move, board.isValidMove(player2.getTeam(), move));
 				board.doMove(player2.getTeam(), move);
-				if (board.isGameOver() && !board.isSecondMove()) {
+				if (board.isGameOver()) {
 					break;
 				}
 			}
+//			switch (board.getWinner()) {
+//				case X: x++; break;
+//				case O: o++; break;
+//				default: tie++; break;
+//			}
 			board = new Board();
 		}
+//		System.out.println("x=" + x + " o=" + o + " tie=" + tie);
 	}
-
 }

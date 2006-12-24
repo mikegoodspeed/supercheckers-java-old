@@ -5,6 +5,7 @@ import com.mikegoodspeed.supercheckers.datastructures.Move;
 import com.mikegoodspeed.supercheckers.datastructures.Players;
 import com.mikegoodspeed.supercheckers.datastructures.Team;
 import com.mikegoodspeed.supercheckers.players.EasyComputerPlayer;
+import com.mikegoodspeed.supercheckers.players.HumanPlayer;
 import com.mikegoodspeed.supercheckers.players.Player;
 import com.mikegoodspeed.supercheckers.ui.GameBoardFrm;
 
@@ -45,7 +46,7 @@ public class Supercheckers extends Thread {
 	 */
 	private void playGame() {
 		board.reset();
-		Players.PLAYER1.set(new EasyComputerPlayer(window, board, Team.X));
+		Players.PLAYER1.set(new HumanPlayer(window, board, Team.X));
 		Players.PLAYER2.set(new EasyComputerPlayer(window, board, Team.O));
 		window.updateBoard(board);
 		window.setPlayers(Players.PLAYER1.get(), Players.PLAYER2.get());

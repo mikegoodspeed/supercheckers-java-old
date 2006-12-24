@@ -341,12 +341,12 @@ public class GameBoardFrm extends JFrame {
 	 */
 	private JPanel getP1InfoPnl() {
 		if (p1InfoPnl == null) {
-			p1MiddleLbl = new JLabel();
-			p1MiddleLbl.setText("Middle Pieces: 24");
-			p1TotalLbl = new JLabel();
-			p1TotalLbl.setText("Total Pieces: 24");
 			p1TypeLbl = new JLabel();
 			p1TypeLbl.setText("Human");
+			p1TotalLbl = new JLabel();
+			p1TotalLbl.setText("Total Pieces: 24");
+			p1MiddleLbl = new JLabel();
+			p1MiddleLbl.setText("Middle Pieces: 0");
 			p1InfoPnl = new JPanel();
 			p1InfoPnl.setLayout(new BoxLayout(getP1InfoPnl(), BoxLayout.Y_AXIS));
 			p1InfoPnl.setPreferredSize(new Dimension(86, 42));
@@ -383,15 +383,15 @@ public class GameBoardFrm extends JFrame {
 	 */
 	private JPanel getP2InfoPnl() {
 		if (p2InfoPnl == null) {
-			p2MiddleLbl = new JLabel();
-			p2MiddleLbl.setText("Middle Pieces: 24");
-			p2MiddleLbl.setEnabled(false);
-			p2TotalLbl = new JLabel();
-			p2TotalLbl.setText("Total Pieces: 24");
-			p2TotalLbl.setEnabled(false);
 			p2TypeLbl = new JLabel();
 			p2TypeLbl.setText("Easy Computer");
 			p2TypeLbl.setEnabled(false);
+			p2TotalLbl = new JLabel();
+			p2TotalLbl.setText("Total Pieces: 24");
+			p2TotalLbl.setEnabled(false);
+			p2MiddleLbl = new JLabel();
+			p2MiddleLbl.setText("Middle Pieces: 0");
+			p2MiddleLbl.setEnabled(false);
 			p2InfoPnl = new JPanel();
 			p2InfoPnl.setLayout(new BoxLayout(getP2InfoPnl(), BoxLayout.Y_AXIS));
 			p2InfoPnl.setName("p2InfoPnl");

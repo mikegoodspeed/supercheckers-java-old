@@ -776,6 +776,6 @@ public class EasyComputerPlayer extends Player {
 	}
 
 	public String toString() {
-		return "Computer: Easy";
+		return "Easy Computer";
 	}
 }
