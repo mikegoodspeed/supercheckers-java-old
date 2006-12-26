@@ -51,6 +51,38 @@ import com.mikegoodspeed.supercheckers.utils.GUIInput;
 /**
  * Supercheckers Game Board
  * <p>
+ * Component Hierarchy:
+ * <pre>
+ * JFrame this
+ * + JPanel content
+ * | + JPanel boardPnl
+ * | | + JLabel[8][8] buttons
+ * | + JPanel uiPnl
+ * | | + JPanel playerPnl
+ * | | | + JPanel p1Pnl
+ * | | | | + JLabel p1IconLbl
+ * | | | | + JPanel p1InfoPnl
+ * | | | | | + JLabel p1TypeLbl
+ * | | | | | + JLabel p1TotalLbl
+ * | | | | | + JLabel p1MiddleLbl
+ * | | | + JPanel p2Pnl
+ * | | | | + JLabel p2IconLbl
+ * | | | | + JPanel p2InfoPnl
+ * | | | | | + JLabel p2TypeLbl
+ * | | | | | + JLabel p2TotalLbl
+ * | | | | | + JLabel p2MiddleLbl
+ * | | + JPanel MovePnl
+ * | | | + JButton resetBtn
+ * | | | + JButton submitBtn
+ * | + JStatusBar statusBar
+ * + JMenuBar menu
+ * | + JMenu gameMnu
+ * | | + JMenuItem newMnuItem
+ * | | + JMenuItem exitMnuItem
+ * | + JMenu helpMnu
+ * | | + JMenuItem aboutMnuItem
+ * </pre>
+ * <p>
  * project Supercheckers <br />
  * url http://www.mikegoodspeed.com/blog/projects/supercheckers/
  *
