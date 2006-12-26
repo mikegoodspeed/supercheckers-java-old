@@ -1,17 +1,17 @@
 /*
  * Supercheckers - the game of Kings Court
  * Copyright (C) 2002-2007 Mike Goodspeed
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -66,6 +66,24 @@ public enum Players {
 	 * @return Player associated with an enumeration
 	 */
 	public abstract Player get();
+
+	/**
+	 * Get player by a specified team
+	 *
+	 * @param team team associated with a player
+	 * @return associated player, or null if none found
+	 */
+	public static Players getByTeam(Team team) {
+		if (team == null) {
+			return null;
+		}
+		if (team.equals(p1.getTeam())) {
+			return PLAYER1;
+		} else if (team.equals(p2.getTeam())) {
+			return PLAYER2;
+		}
+		return null;
+	}
 
 	/**
 	 * Assign a player to an enumeration.

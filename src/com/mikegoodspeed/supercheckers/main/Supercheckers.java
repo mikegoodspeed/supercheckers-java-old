@@ -1,17 +1,17 @@
 /*
  * Supercheckers - the game of Kings Court
  * Copyright (C) 2002-2007 Mike Goodspeed
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -39,7 +39,7 @@ import com.mikegoodspeed.supercheckers.ui.GameBoardFrm;
 public class Supercheckers extends Thread {
 
 	/**
-	 * @param args
+	 * @param args all arguments are ignored
 	 */
 	public static void main(String[] args) {
 		new Supercheckers();
@@ -72,7 +72,7 @@ public class Supercheckers extends Thread {
 		while (!gameOver) {
 			gameOver = playRound();
 		}
-		System.out.println(board.getWinner() + " wins.");
+		window.announceWinner(Players.getByTeam(board.getWinner()));
 	}
 
 	/**

@@ -1,17 +1,17 @@
 /*
  * Supercheckers - the game of Kings Court
  * Copyright (C) 2002-2007 Mike Goodspeed
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -42,6 +42,7 @@ import javax.swing.UIManager;
 
 import com.mikegoodspeed.supercheckers.datastructures.Board;
 import com.mikegoodspeed.supercheckers.datastructures.Move;
+import com.mikegoodspeed.supercheckers.datastructures.Players;
 import com.mikegoodspeed.supercheckers.datastructures.Spot;
 import com.mikegoodspeed.supercheckers.datastructures.Team;
 import com.mikegoodspeed.supercheckers.players.Player;
@@ -87,6 +88,7 @@ public class GameBoardFrm extends JFrame {
 	private JPanel MovePnl = null;
 	private JButton submitBtn = null;
 	private JButton resetBtn = null;
+	private JStatusBar statusBar = null;
 	private Team currTeam = Team.X;
 	private GUIInput input = new GUIInput();
 	private boolean listenForInput = false;
@@ -128,7 +130,7 @@ public class GameBoardFrm extends JFrame {
 			String[] loc = source.getName().split(",");
 			int row = new Integer(loc[0]).intValue();
 			int col = new Integer(loc[1]).intValue();
-			if (listenForInput && new Spot(row, col).equals(hoverSpot) 
+			if (listenForInput && new Spot(row, col).equals(hoverSpot)
 					&& board.isAvailableSpot(currTeam, move, row, col)) {
 				if (move.size() == 0) {
 					source.setIcon(Team.NOBODY.getIcon(board.isInMiddle(row, col)));
@@ -192,6 +194,28 @@ public class GameBoardFrm extends JFrame {
 	}
 
 	/**
+	 * Announce winner through the status bar
+	 * 
+	 * @param winner winning player 
+	 */
+	public void announceWinner(Players winner) {
+		if (winner == null) {
+			getStatusBar().setText("Tie game");
+		} else {
+			switch (winner) {
+				case PLAYER1:
+					getStatusBar().setText("Player 1 wins");
+					break;
+				case PLAYER2:
+					getStatusBar().setText("Player 2 wins");
+					break;
+				default:
+					getStatusBar().setText("Tie game");
+			}
+		}
+	}
+
+	/**
 	 * This method initializes aboutMnuItem
 	 *
 	 * @return JMenuItem
@@ -246,6 +270,7 @@ public class GameBoardFrm extends JFrame {
 			content.setLayout(new BorderLayout());
 			content.add(getBoardPnl(), BorderLayout.WEST);
 			content.add(getUiPanel(), BorderLayout.EAST);
+			content.add(getStatusBar(), BorderLayout.SOUTH);
 		}
 		return content;
 	}
@@ -353,9 +378,9 @@ public class GameBoardFrm extends JFrame {
 	}
 
 	/**
-	 * This method initializes p1InfoPnl	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes p1InfoPnl
+	 *
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getP1InfoPnl() {
 		if (p1InfoPnl == null) {
@@ -376,9 +401,9 @@ public class GameBoardFrm extends JFrame {
 	}
 
 	/**
-	 * This method initializes p1Pnl	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes p1Pnl
+	 *
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getP1Pnl() {
 		if (p1Pnl == null) {
@@ -395,9 +420,9 @@ public class GameBoardFrm extends JFrame {
 	}
 
 	/**
-	 * This method initializes p2InfoPnl	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes p2InfoPnl
+	 *
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getP2InfoPnl() {
 		if (p2InfoPnl == null) {
@@ -422,9 +447,9 @@ public class GameBoardFrm extends JFrame {
 	}
 
 	/**
-	 * This method initializes p2Pnl	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes p2Pnl
+	 *
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getP2Pnl() {
 		if (p2Pnl == null) {
@@ -444,9 +469,9 @@ public class GameBoardFrm extends JFrame {
 	}
 
 	/**
-	 * This method initializes playerPnl	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes playerPnl
+	 *
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getPlayerPnl() {
 		if (playerPnl == null) {
@@ -472,6 +497,20 @@ public class GameBoardFrm extends JFrame {
 			resetBtn.addActionListener(resetBtnActionListener);
 		}
 		return resetBtn;
+	}
+
+
+	/**
+	 * This method initializes statusBar
+	 *
+	 * @return JStatusBar
+	 */
+	private JStatusBar getStatusBar() {
+		if (statusBar == null) {
+			statusBar = new JStatusBar();
+			statusBar.setLayout(new BoxLayout(getStatusBar(), BoxLayout.X_AXIS));
+		}
+		return statusBar;
 	}
 
 	/**
@@ -531,10 +570,10 @@ public class GameBoardFrm extends JFrame {
 		}
 		updateBoard(board);
 	}
-	
+
 	/**
 	 * Sets the player names on the window.
-	 * 
+	 *
 	 * @param player1
 	 * @param player2
 	 */
