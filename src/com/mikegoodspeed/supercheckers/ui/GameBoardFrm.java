@@ -70,7 +70,7 @@ public class GameBoardFrm extends JFrame {
 	private JMenu helpMnu = null;
 	private JMenuItem aboutMnuItem = null;
 	private JPanel boardPnl = null;
-	private JPanel uiPanel = null;
+	private JPanel uiPnl = null;
 	private JLabel[][] buttons = null;
 	private JPanel playerPnl = null;
 	private JPanel p1Pnl = null;
@@ -269,7 +269,7 @@ public class GameBoardFrm extends JFrame {
 			content = new JPanel();
 			content.setLayout(new BorderLayout());
 			content.add(getBoardPnl(), BorderLayout.WEST);
-			content.add(getUiPanel(), BorderLayout.EAST);
+			content.add(getUiPnl(), BorderLayout.EAST);
 			content.add(getStatusBar(), BorderLayout.SOUTH);
 		}
 		return content;
@@ -530,18 +530,18 @@ public class GameBoardFrm extends JFrame {
 	}
 
 	/**
-	 * This method initializes uiPanel
+	 * This method initializes uiPnl
 	 *
 	 * @return JPanel
 	 */
-	private JPanel getUiPanel() {
-		if (uiPanel == null) {
-			uiPanel = new JPanel();
-			uiPanel.setLayout(new BorderLayout());
-			uiPanel.add(getPlayerPnl(), BorderLayout.NORTH);
-			uiPanel.add(getMovePnl(), BorderLayout.SOUTH);
+	private JPanel getUiPnl() {
+		if (uiPnl == null) {
+			uiPnl = new JPanel();
+			uiPnl.setLayout(new BorderLayout());
+			uiPnl.add(getPlayerPnl(), BorderLayout.NORTH);
+			uiPnl.add(getMovePnl(), BorderLayout.SOUTH);
 		}
-		return uiPanel;
+		return uiPnl;
 	}
 
 	/**
