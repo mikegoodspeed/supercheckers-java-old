@@ -540,7 +540,6 @@ public class GameBoardFrm extends JFrame {
 	private JStatusBar getStatusBar() {
 		if (statusBar == null) {
 			statusBar = new JStatusBar();
-			statusBar.setLayout(new BoxLayout(getStatusBar(), BoxLayout.X_AXIS));
 		}
 		return statusBar;
 	}

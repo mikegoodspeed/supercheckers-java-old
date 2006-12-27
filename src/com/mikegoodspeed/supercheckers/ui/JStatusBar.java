@@ -18,9 +18,13 @@
  */
 package com.mikegoodspeed.supercheckers.ui;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.BevelBorder;
 
 /**
  * Status Bar
@@ -39,7 +43,9 @@ public class JStatusBar extends JPanel {
 
 	protected JStatusBar() {
 		super();
-		setBorder(new BevelBorder(BevelBorder.LOWERED));
+		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+		setPreferredSize(new Dimension(0, 18));
+		message.setPreferredSize(new Dimension(336, 14));
 		add(message);
 		clear();
 	}
@@ -49,6 +55,17 @@ public class JStatusBar extends JPanel {
 	 */
 	public void clear() {
 		setText(" ");
+	}
+
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		// Paint a top border
+		int y = 0;
+		g.setColor(new Color(167, 166, 170)); // hard code colors?  HACK!
+		g.drawLine(0, y, getWidth(), y);
+		y++;
+		g.setColor(Color.WHITE); // hard code colors?  HACK!
+		g.drawLine(0, y, getWidth(), y);
 	}
 	
 	/**
