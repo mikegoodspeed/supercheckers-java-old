@@ -52,7 +52,7 @@ public class EasyComputerPlayerTest {
 		board = new Board();
 		window = new GameBoardFrm(board);
 		player1 = new EasyComputerPlayer(window, board, Team.X);
-		player1 = new EasyComputerPlayer(window, board, Team.O);
+		player2 = new EasyComputerPlayer(window, board, Team.O);
 	}
 
 	/**
@@ -62,6 +62,7 @@ public class EasyComputerPlayerTest {
 	public void tearDown() throws Exception {
 		board = null;
 		player1 = null;
+		player2 = null;
 	}
 
 	/**

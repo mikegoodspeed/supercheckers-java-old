@@ -64,7 +64,7 @@ public class Supercheckers extends Thread {
 	 */
 	private void playGame() {
 		board.reset();
-		Players.PLAYER1.set(new HumanPlayer(window, board, Team.X));
+		Players.PLAYER1.set(new EasyComputerPlayer(window, board, Team.X));
 		Players.PLAYER2.set(new EasyComputerPlayer(window, board, Team.O));
 		window.updateBoard(board);
 		window.setPlayers(Players.PLAYER1.get(), Players.PLAYER2.get());
@@ -99,7 +99,7 @@ public class Supercheckers extends Thread {
 	 */
 	private boolean playTurn(Player player) {
 		Move move;
-		window.setTurn(player.getTeam());
+		window.setTurn(player);
 		do {
 			window.updateBoard(board);
 			if (!(player instanceof HumanPlayer)) {

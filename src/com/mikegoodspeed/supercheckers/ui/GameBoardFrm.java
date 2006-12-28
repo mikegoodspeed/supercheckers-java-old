@@ -630,12 +630,12 @@ public class GameBoardFrm extends JFrame {
 
 	/**
 	 * Sets the turn so the game board reflects the current player's team
-	 *
-	 * @param team current player's team
+	 * 
+	 * @param player the current player 
 	 */
-	public void setTurn(Team team) {
-		this.currTeam = team;
-		if (Team.X.equals(team)) {
+	public void setTurn(Player player) {
+		this.currTeam = player.getTeam();
+		if (Team.X.equals(currTeam)) {
 			// Set status bar text
 			statusBar.setText("Current turn: Player 1");
 			// Enable Player 1
@@ -650,7 +650,7 @@ public class GameBoardFrm extends JFrame {
 			p2TypeLbl.setEnabled(false);
 			p2TotalLbl.setEnabled(false);
 			p2MiddleLbl.setEnabled(false);
-		} else if (Team.O.equals(team)) {
+		} else if (Team.O.equals(currTeam)) {
 			// Set status bar text
 			statusBar.setText("Current turn: Player 2");
 			// Enable Player 2
