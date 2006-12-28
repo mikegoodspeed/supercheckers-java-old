@@ -102,8 +102,12 @@ public class Supercheckers extends Thread {
 		window.setTurn(player.getTeam());
 		do {
 			window.updateBoard(board);
+			if (!(player instanceof HumanPlayer)) {
+				window.setProgressBarEnabled(true);
+			}
 			move = player.getMove();
 		} while (!board.isValidMove(player.getTeam(), move));
+		window.setProgressBarEnabled(false);
 		board.doMove(player.getTeam(), move);
 		window.updateBoard(board);
 		return board.isGameOver(); // return game over status

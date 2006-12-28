@@ -126,9 +126,14 @@ public class GameBoardFrm extends JFrame {
 	private boolean listenForInput = false;
 	private Spot hoverSpot = null;
 
+	private ActionListener aboutMnuItemActionListener = new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			statusBar.setText("show about game dialog...");
+		}
+	};
 	private ActionListener newMnuItemActionListener = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("show new game dialog");
+			statusBar.setText("show new game dialog...");
 		}
 	};
 	private ActionListener exitMnuItemActionListener = new ActionListener() {
@@ -246,7 +251,7 @@ public class GameBoardFrm extends JFrame {
 			}
 		}
 	}
-
+	
 	/**
 	 * This method initializes aboutMnuItem
 	 *
@@ -257,6 +262,7 @@ public class GameBoardFrm extends JFrame {
 			aboutMnuItem = new JMenuItem();
 			aboutMnuItem.setText("About Supercheckers");
 			aboutMnuItem.setMnemonic(KeyEvent.VK_A);
+			aboutMnuItem.addActionListener(aboutMnuItemActionListener);
 		}
 		return aboutMnuItem;
 	}
@@ -531,7 +537,6 @@ public class GameBoardFrm extends JFrame {
 		return resetBtn;
 	}
 
-
 	/**
 	 * This method initializes statusBar
 	 *
@@ -543,6 +548,7 @@ public class GameBoardFrm extends JFrame {
 		}
 		return statusBar;
 	}
+
 
 	/**
 	 * This method initializes submitBtn
@@ -614,6 +620,15 @@ public class GameBoardFrm extends JFrame {
 	}
 
 	/**
+	 * Enable progress bar in indeterminate mode
+	 * 
+	 * @param enabled progress bar indeterminate status
+	 */
+	public void setProgressBarEnabled(boolean enabled) {
+		getStatusBar().setProgressBarEnabled(enabled);
+	}
+
+	/**
 	 * Sets the turn so the game board reflects the current player's team
 	 *
 	 * @param team current player's team
@@ -621,6 +636,8 @@ public class GameBoardFrm extends JFrame {
 	public void setTurn(Team team) {
 		this.currTeam = team;
 		if (Team.X.equals(team)) {
+			// Set status bar text
+			statusBar.setText("Current turn: Player 1");
 			// Enable Player 1
 			getP1Pnl().setEnabled(true);
 			p1IconLbl.setVisible(true);
@@ -634,6 +651,8 @@ public class GameBoardFrm extends JFrame {
 			p2TotalLbl.setEnabled(false);
 			p2MiddleLbl.setEnabled(false);
 		} else if (Team.O.equals(team)) {
+			// Set status bar text
+			statusBar.setText("Current turn: Player 2");
 			// Enable Player 2
 			getP2Pnl().setEnabled(true);
 			p2IconLbl.setVisible(true);

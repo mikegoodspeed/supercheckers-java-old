@@ -54,7 +54,7 @@ public class EasyComputerPlayer extends Player {
 
 	public Move getMove() {
 		try {
-			Thread.sleep(750); // wait 750 milliseconds to play
+			Thread.sleep((new Random().nextInt(3) + 1) * 750); // randomize waiting time
 		} catch (Exception e) {}
 
 		Move move = new Move();

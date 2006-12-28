@@ -22,9 +22,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
-import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.SpringLayout;
 
 /**
  * Status Bar
@@ -40,13 +41,23 @@ public class JStatusBar extends JPanel {
 	private static final long serialVersionUID = 2305619542836254904L;
 	
 	private JLabel message = new JLabel();
+	private JProgressBar progressBar = new JProgressBar();
 
 	protected JStatusBar() {
 		super();
-		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		setPreferredSize(new Dimension(0, 18));
-		message.setPreferredSize(new Dimension(336, 14));
+		SpringLayout layout = new SpringLayout();
+		setLayout(layout);
+		setPreferredSize(new Dimension(0, 20));
+		message.setPreferredSize(new Dimension(334, 20));
 		add(message);
+		add(progressBar);
+		layout.putConstraint(SpringLayout.SOUTH, message, -2, SpringLayout.SOUTH, this);
+		layout.putConstraint(SpringLayout.NORTH, message, 4, SpringLayout.NORTH, this);
+		layout.putConstraint(SpringLayout.WEST, message, 2, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.SOUTH, progressBar, -1, SpringLayout.SOUTH, this);
+		layout.putConstraint(SpringLayout.NORTH, progressBar, 4, SpringLayout.NORTH, this);
+		layout.putConstraint(SpringLayout.EAST, progressBar, -1, SpringLayout.EAST, this);
+		layout.putConstraint(SpringLayout.WEST, progressBar, 3, SpringLayout.EAST, message);
 		clear();
 	}
 	
@@ -54,7 +65,7 @@ public class JStatusBar extends JPanel {
 	 * Clear the status bar text
 	 */
 	public void clear() {
-		setText(" ");
+		setText("");
 	}
 
 	protected void paintComponent(Graphics g) {
@@ -67,6 +78,15 @@ public class JStatusBar extends JPanel {
 		g.setColor(Color.WHITE); // hard code colors?  HACK!
 		g.drawLine(0, y, getWidth(), y);
 	}
+
+	/**
+	 * Enable progress bar in indeterminate mode
+	 * 
+	 * @param enabled progress bar indeterminate status
+	 */
+	public void setProgressBarEnabled(boolean enabled) {
+		progressBar.setIndeterminate(enabled);
+	}
 	
 	/**
 	 * Set the status bar text
@@ -74,6 +94,6 @@ public class JStatusBar extends JPanel {
 	 * @param text message to be displayed
 	 */
 	public void setText(String text) {
-		message.setText(" " + text);
+		message.setText(text);
 	}
 }
